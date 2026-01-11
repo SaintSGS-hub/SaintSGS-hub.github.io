@@ -46,6 +46,23 @@
 })();
 
 /* ================================
+   MÚSICA DE FUNDO
+================================ */
+(function() {
+  const audio = document.createElement('audio');
+  audio.src = 'source/musica.mp3'; // Coloque aqui o arquivo de música na pasta source
+  audio.loop = true;
+  audio.volume = 0.15;
+
+  // autoplay pode ser bloqueado, então inicia após o primeiro clique
+  document.addEventListener('click', () => {
+    audio.play().catch(() => {});
+  }, { once: true });
+
+  document.body.appendChild(audio);
+})();
+
+/* ================================
    LOADING ANIMADO PARA BOTÕES DE PAGAMENTO
 ================================ */
 document.querySelectorAll('.btn-comprar, .btn-confirmar').forEach(btn => {
