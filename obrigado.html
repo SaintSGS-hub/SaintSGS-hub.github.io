@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Pagamento Confirmado!</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-black text-white">
+
+<div class="max-w-xl mx-auto p-6">
+
+<h1 class="text-3xl mb-4 text-center">Pagamento recebido!</h1>
+
+<p class="text-center text-gray-400 mb-4">
+Preencha os dados para entrega
+</p>
+
+<!-- AVISO IMPORTANTE -->
+<div class="bg-zinc-900 border border-yellow-500 text-yellow-400 p-4 rounded mb-6 text-sm">
+<strong>Atenção:</strong><br>
+Pedidos enviados sem pagamento confirmado serão automaticamente ignorados.
+A entrega só é realizada após a verificação do pagamento no Mercado Pago.
+</div>
+
+<form action="https://formsubmit.co/SEUEMAIL@gmail.com" method="POST" class="space-y-4">
+<input type="hidden" name="_subject" value="Novo Pedido Echo Beads">
+<input type="hidden" name="_captcha" value="false">
+
+<input class="w-full p-2 rounded bg-zinc-800" name="nick" placeholder="Nome no jogo" required>
+<input class="w-full p-2 rounded bg-zinc-800" name="id" placeholder="ID da conta" required>
+<input class="w-full p-2 rounded bg-zinc-800" name="quantidade" placeholder="Quantidade comprada" required>
+<input class="w-full p-2 rounded bg-zinc-800" name="txid" placeholder="ID do pagamento PIX" required>
+
+<button class="w-full bg-yellow-500 text-black py-2 rounded">
+Confirmar Entrega
+</button>
+</form>
+
+</div>
+</body>
+</html>
