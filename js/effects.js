@@ -17,7 +17,7 @@
       background:
         radial-gradient(circle at top, rgba(255, 200, 0, 0.04), transparent 60%),
         url('img/fundo.png') center center / cover no-repeat;
-      opacity: 0.15; /* ajuste a transparência aqui */
+      opacity: 0.25; /* ajuste a transparência aqui */
       z-index: -1;
       pointer-events: none;
     }
@@ -46,20 +46,22 @@
 })();
 
 /* ================================
-   MÚSICA DE FUNDO
+   MÚSICA DE FUNDO (autoplay silencioso inicial)
 ================================ */
 (function() {
   const audio = document.createElement('audio');
   audio.src = 'source/musica.mp3'; // Coloque aqui o arquivo de música na pasta source
   audio.loop = true;
-  audio.volume = 0.15;
-
-  // autoplay pode ser bloqueado, então inicia após o primeiro clique
-  document.addEventListener('click', () => {
-    audio.play().catch(() => {});
-  }, { once: true });
+  audio.volume = 0; // começa mudo
+  audio.autoplay = true;
+  audio.play().catch(() => {});
 
   document.body.appendChild(audio);
+
+  // Após 500ms, aumenta o volume
+  setTimeout(() => {
+    audio.volume = 0.15;
+  }, 500);
 })();
 
 /* ================================
