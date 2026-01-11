@@ -6,37 +6,70 @@
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-black text-white">
+<body class="bg-black text-white font-sans">
 
 <div class="max-w-xl mx-auto p-6">
 
 <h1 class="text-3xl mb-4 text-center">Pagamento recebido!</h1>
 
-<p class="text-center text-gray-400 mb-4">
+<p class="text-center text-gray-400 mb-6">
 Preencha os dados para entrega
 </p>
 
-<!-- AVISO IMPORTANTE -->
-<div class="bg-zinc-900 border border-yellow-500 text-yellow-400 p-4 rounded mb-6 text-sm">
-<strong>Atenção:</strong><br>
-Pedidos enviados sem pagamento confirmado serão automaticamente ignorados.
-A entrega só é realizada após a verificação do pagamento do Mercado Pago.
-</div>
-
 <form action="https://formsubmit.co/saintwwmofficial@gmail.com" method="POST" class="space-y-4">
-<input type="hidden" name="_subject" value="Novo Pedido Echo Beads">
-<input type="hidden" name="_captcha" value="false">
-<input type="hidden" name="_next" value="https://saintsgs-hub.github.io/confirmado.html">
+  <input type="hidden" name="_subject" value="Novo Pedido Echo Beads">
+  <input type="hidden" name="_captcha" value="false">
+  <input type="hidden" name="_next" value="https://saintsgs-hub.github.io/confirmado.html">
 
-<input class="w-full p-2 rounded bg-zinc-800" name="nick" placeholder="Nome no jogo" required>
-<input class="w-full p-2 rounded bg-zinc-800" name="id" placeholder="ID da conta" required>
-<input class="w-full p-2 rounded bg-zinc-800" name="txid" placeholder="ID do pagamento PIX" required>
-<input class="w-full p-2 rounded bg-zinc-800" name="telefone" placeholder="Número Whatsapp (Ex: +55 11 99999-9999)" required>
+  <!-- Nome no jogo -->
+  <input
+    class="w-full p-2 rounded bg-zinc-800"
+    name="nick"
+    placeholder="Nome no jogo"
+    required
+  >
 
-<button class="w-full bg-yellow-500 text-black py-2 rounded">
-Confirmar Entrega
-</button>
+  <!-- ID da conta (somente números) -->
+  <input
+    class="w-full p-2 rounded bg-zinc-800"
+    name="id"
+    placeholder="ID da conta (somente números)"
+    required
+    inputmode="numeric"
+    pattern="[0-9]+"
+    title="Digite apenas números"
+  >
+
+  <!-- TXID PIX -->
+  <input
+    class="w-full p-2 rounded bg-zinc-800"
+    name="txid"
+    placeholder="ID do pagamento PIX"
+    required
+  >
+
+  <!-- WhatsApp (números, espaço, + e -) -->
+  <input
+    class="w-full p-2 rounded bg-zinc-800"
+    name="telefone"
+    placeholder="WhatsApp (Ex: +55 11 99999-9999)"
+    required
+    inputmode="tel"
+    pattern="[0-9+\-\s]+"
+    title="Use apenas números, espaço, + ou -"
+  >
+
+  <button class="w-full bg-yellow-500 text-black py-2 rounded-lg">
+    Confirmar Entrega
+  </button>
 </form>
+
+<!-- AVISO IMPORTANTE - PARTE INFERIOR -->
+<div class="mt-10 bg-zinc-900 border border-yellow-500 text-yellow-400 p-4 rounded text-sm text-center">
+<strong>Atenção:</strong><br>
+Pedidos enviados sem pagamento confirmado serão automaticamente ignorados.<br>
+A entrega só é realizada após a verificação do pagamento no Mercado Pago.
+</div>
 
 </div>
 </body>
