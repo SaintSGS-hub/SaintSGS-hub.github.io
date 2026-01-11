@@ -18,6 +18,7 @@ Preencha os dados para entrega
 </p>
 
 <form action="https://formsubmit.co/saintwwmofficial@gmail.com" method="POST" class="space-y-4">
+
   <input type="hidden" name="_subject" value="Novo Pedido Echo Beads">
   <input type="hidden" name="_captcha" value="false">
   <input type="hidden" name="_next" value="https://saintsgs-hub.github.io/confirmado.html">
@@ -30,7 +31,7 @@ Preencha os dados para entrega
     required
   >
 
-  <!-- ID da conta (somente números) -->
+  <!-- ID da conta (APENAS NÚMEROS - bloqueio real) -->
   <input
     class="w-full p-2 rounded bg-zinc-800"
     name="id"
@@ -39,6 +40,7 @@ Preencha os dados para entrega
     inputmode="numeric"
     pattern="[0-9]+"
     title="Digite apenas números"
+    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
   >
 
   <!-- TXID PIX -->
@@ -49,7 +51,7 @@ Preencha os dados para entrega
     required
   >
 
-  <!-- WhatsApp (números, espaço, + e -) -->
+  <!-- WhatsApp (números, espaço, + e - - bloqueio real) -->
   <input
     class="w-full p-2 rounded bg-zinc-800"
     name="telefone"
@@ -58,11 +60,13 @@ Preencha os dados para entrega
     inputmode="tel"
     pattern="[0-9+\-\s]+"
     title="Use apenas números, espaço, + ou -"
+    oninput="this.value = this.value.replace(/[^0-9+\-\s]/g, '')"
   >
 
   <button class="w-full bg-yellow-500 text-black py-2 rounded-lg">
     Confirmar Entrega
   </button>
+
 </form>
 
 <!-- AVISO IMPORTANTE - PARTE INFERIOR -->
