@@ -181,6 +181,7 @@ if (window.matchMedia("(max-width: 640px)").matches) {
   disclaimer.style.pointerEvents = 'none';
   disclaimer.style.lineHeight = '1.2em';
   disclaimer.innerHTML = `
+    2026©
     Este site não é oficial do <strong>Where Winds Meet</strong>. Serviço de fã e revenda de Echo Beads.<br>
     Música de fundo: "An Addictive Hit Song :Way of the Sword" por Liu Siyuan / RICORAY / Niko Cat - Em todas as plataformas digitais.
   `;
