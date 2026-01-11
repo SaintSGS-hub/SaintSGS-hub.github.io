@@ -5,11 +5,35 @@
 <title>Pedido Recebido!</title>
 <link rel="icon" type="image/png" href="img/favicon.png">
 <script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body {
+    background:
+      radial-gradient(
+        circle at top,
+        rgba(255, 200, 0, 0.04),
+        transparent 60%
+      ),
+      #000;
+  }
+
+  #parallax-wrapper {
+    perspective: 1200px;
+    transform-style: preserve-3d;
+  }
+
+  .card-depth {
+    transition: transform 0.2s ease-out;
+    will-change: transform;
+  }
+</style>
 </head>
 
-<body class="bg-black text-white">
+<body class="bg-black text-white font-sans">
 
-<div class="min-h-screen flex items-center justify-center px-4">
+<!-- PARALLAX WRAPPER -->
+<div id="parallax-wrapper">
+
+<div class="min-h-screen flex items-center justify-center px-4 card-depth">
 
 <div class="max-w-lg w-full bg-zinc-900 border border-zinc-800 rounded-2xl p-8 text-center">
 
@@ -30,13 +54,14 @@ Após a confirmação, as Echo Beads serão entregues na conta informada.
 Prazo médio de entrega: até <strong>30 minutos</strong> após a confirmação do pagamento pelo sistema do Mercado Pago.
 </p>
 
-<a href="index.html" class="inline-block bg-yellow-500 text-black px-6 py-2 rounded-full hover:bg-yellow-400 transition">
+<a href="index.html" class="inline-block bg-yellow-500 text-black px-6 py-2 rounded-full hover:bg-yellow-400 transition btn-comprar">
 Voltar ao site
 </a>
 
 </div>
-
+</div>
 </div>
 
+<script src="js/effects.js"></script>
 </body>
 </html>
