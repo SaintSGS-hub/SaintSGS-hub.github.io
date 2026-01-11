@@ -22,15 +22,26 @@
   .product-card {
     opacity: 0;
     transform: translateY(30px);
-    transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease;
+    transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease;
     will-change: transform;
   }
   .product-card.card-visible { opacity: 1; transform: translateY(0); }
 
-  /* ===== PROFUNDIDADE NO HOVER ===== */
+  /* ===== ESTILO GLASS/iOS PARA OS CARDS ===== */
+  .product-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    color: white;
+  }
+
+  /* ===== HOVER PROFUNDIDADE ===== */
   .product-card:hover {
-    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
     transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
   }
 
   /* ===== LOADER ===== */
@@ -44,6 +55,24 @@
     0% { top: 28px; left: 28px; width: 0; height: 0; opacity: 1; }
     100% { top: -1px; left: -1px; width: 58px; height: 58px; opacity: 0; }
   }
+
+  /* ===== ANIMAÇÃO GLOW + FLUTUAÇÃO ===== */
+  .glow-float {
+    display: inline-block;
+    position: relative;
+    animation: floatGlow 3s ease-in-out infinite;
+    text-shadow:
+      0 0 4px rgba(255,255,255,0.3),
+      0 0 8px rgba(255,255,255,0.2),
+      0 0 12px rgba(255,255,0,0.1);
+  }
+
+  @keyframes floatGlow {
+    0% { transform: translateY(0px); text-shadow: 0 0 4px rgba(255,255,255,0.3),0 0 8px rgba(255,255,255,0.2),0 0 12px rgba(255,255,0,0.1); }
+    50% { transform: translateY(-3px); text-shadow: 0 0 6px rgba(255,255,255,0.4),0 0 10px rgba(255,255,255,0.3),0 0 14px rgba(255,255,0,0.15); }
+    100% { transform: translateY(0px); text-shadow: 0 0 4px rgba(255,255,255,0.3),0 0 8px rgba(255,255,255,0.2),0 0 12px rgba(255,255,0,0.1); }
+  }
+
 </style>
 </head>
 
@@ -51,9 +80,13 @@
 
 <div id="parallax-wrapper" class="max-w-6xl mx-auto p-6">
 
-<h1 class="text-4xl font-bold mb-4 text-center">
+<h1 class="text-4xl font-bold mb-1 text-center glow-float">
 Echo Beads • Top-Up
 </h1>
+
+<p class="text-center text-white font-bold mb-6 glow-float">
+Saint<span style="color:#FFD700;">WWM</span>
+</p>
 
 <p class="text-center text-gray-400 mb-10">
 Pagamento via PIX • Entrega manual • Seguro e confiável
@@ -62,66 +95,66 @@ Pagamento via PIX • Entrega manual • Seguro e confiável
 <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
 
 <!-- 60 Echo Beads -->
-<div class="bg-zinc-900 rounded-xl p-6 text-center border border-yellow-500 product-card">
-  <h2 class="text-xl mb-2">60 Echo Beads</h2>
-  <p class="text-gray-400 mb-4">R$ 9,90</p>
-  <a href="pagamento-60-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar">COMPRAR</a>
+<div class="product-card text-center">
+  <h2 class="text-xl mb-2 font-bold glow-float">🦪 60 Echo Beads 🦪</h2>
+  <p class="text-gray-200 mb-4 font-bold glow-float">R$ 9,90</p>
+  <a href="pagamento-60-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 font-bold glow-float btn-comprar">COMPRAR</a>
 </div>
 
 <!-- 180 Echo Beads -->
-<div class="bg-zinc-900 rounded-xl p-6 text-center border border-yellow-500 product-card">
-  <h2 class="text-xl mb-2">180 Echo Beads</h2>
-  <p class="text-gray-400 mb-4">R$ 24,90</p>
-  <a href="pagamento-180-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar">COMPRAR</a>
+<div class="product-card text-center">
+  <h2 class="text-xl mb-2 font-bold glow-float">🦪 180 Echo Beads 🦪</h2>
+  <p class="text-gray-200 mb-4 font-bold glow-float">R$ 24,90</p>
+  <a href="pagamento-180-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 font-bold glow-float btn-comprar">COMPRAR</a>
 </div>
 
 <!-- 300 Echo Beads -->
-<div class="bg-zinc-900 rounded-xl p-6 text-center border border-yellow-500 product-card">
-  <h2 class="text-xl mb-2">300 Echo Beads</h2>
-  <p class="text-gray-400 mb-4">R$ 39,90</p>
-  <a href="pagamento-300-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar">COMPRAR</a>
+<div class="product-card text-center">
+  <h2 class="text-xl mb-2 font-bold glow-float">🦪 300 Echo Beads 🦪</h2>
+  <p class="text-gray-200 mb-4 font-bold glow-float">R$ 39,90</p>
+  <a href="pagamento-300-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 font-bold glow-float btn-comprar">COMPRAR</a>
 </div>
 
 <!-- 600 Echo Beads -->
-<div class="bg-zinc-900 rounded-xl p-6 text-center border border-yellow-500 product-card">
-  <h2 class="text-xl mb-2">600 Echo Beads</h2>
-  <p class="text-gray-400 mb-4">R$ 74,90</p>
-  <a href="pagamento-600-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar">COMPRAR</a>
+<div class="product-card text-center">
+  <h2 class="text-xl mb-2 font-bold glow-float">🦪 600 Echo Beads 🦪</h2>
+  <p class="text-gray-200 mb-4 font-bold glow-float">R$ 74,90</p>
+  <a href="pagamento-600-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 font-bold glow-float btn-comprar">COMPRAR</a>
 </div>
 
 <!-- 900 Echo Beads -->
-<div class="bg-zinc-900 rounded-xl p-6 text-center border border-yellow-500 product-card">
-  <h2 class="text-xl mb-2">900 Echo Beads</h2>
-  <p class="text-gray-400 mb-4">R$ 109,90</p>
-  <a href="pagamento-900-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar">COMPRAR</a>
+<div class="product-card text-center">
+  <h2 class="text-xl mb-2 font-bold glow-float">🦪 900 Echo Beads 🦪</h2>
+  <p class="text-gray-200 mb-4 font-bold glow-float">R$ 109,90</p>
+  <a href="pagamento-900-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 font-bold glow-float btn-comprar">COMPRAR</a>
 </div>
 
 <!-- 1800 Echo Beads -->
-<div class="bg-zinc-900 rounded-xl p-6 text-center border border-yellow-500 product-card">
-  <h2 class="text-xl mb-2">1800 Echo Beads</h2>
-  <p class="text-gray-400 mb-4">R$ 219,90</p>
-  <a href="pagamento-1800-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar">COMPRAR</a>
+<div class="product-card text-center">
+  <h2 class="text-xl mb-2 font-bold glow-float">🦪 1800 Echo Beads 🦪</h2>
+  <p class="text-gray-200 mb-4 font-bold glow-float">R$ 219,90</p>
+  <a href="pagamento-1800-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 font-bold glow-float btn-comprar">COMPRAR</a>
 </div>
 
 <!-- 3000 Echo Beads -->
-<div class="bg-zinc-900 rounded-xl p-6 text-center border border-yellow-500 product-card">
-  <h2 class="text-xl mb-2">3000 Echo Beads</h2>
-  <p class="text-gray-400 mb-4">R$ 369,90</p>
-  <a href="pagamento-3000-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar">COMPRAR</a>
+<div class="product-card text-center">
+  <h2 class="text-xl mb-2 font-bold glow-float">🦪 3000 Echo Beads 🦪</h2>
+  <p class="text-gray-200 mb-4 font-bold glow-float">R$ 369,90</p>
+  <a href="pagamento-3000-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 font-bold glow-float btn-comprar">COMPRAR</a>
 </div>
 
 <!-- 6000 Echo Beads -->
-<div class="bg-zinc-900 rounded-xl p-6 text-center border border-yellow-500 product-card">
-  <h2 class="text-xl mb-2">6000 Echo Beads</h2>
-  <p class="text-gray-400 mb-4">R$ 729,90</p>
-  <a href="pagamento-6000-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar">COMPRAR</a>
+<div class="product-card text-center">
+  <h2 class="text-xl mb-2 font-bold glow-float">🦪 6000 Echo Beads 🦪</h2>
+  <p class="text-gray-200 mb-4 font-bold glow-float">R$ 729,90</p>
+  <a href="pagamento-6000-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 font-bold glow-float btn-comprar">COMPRAR</a>
 </div>
 
 <!-- 12000 Echo Beads -->
-<div class="bg-zinc-900 rounded-xl p-6 text-center border border-yellow-500 product-card">
-  <h2 class="text-xl mb-2">12000 Echo Beads</h2>
-  <p class="text-gray-400 mb-4">R$ 1.399,90</p>
-  <a href="pagamento-12000-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar">COMPRAR</a>
+<div class="product-card text-center">
+  <h2 class="text-xl mb-2 font-bold glow-float">🦪 12000 Echo Beads 🦪</h2>
+  <p class="text-gray-200 mb-4 font-bold glow-float">R$ 1.399,90</p>
+  <a href="pagamento-12000-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 font-bold glow-float btn-comprar">COMPRAR</a>
 </div>
 
 </div>
