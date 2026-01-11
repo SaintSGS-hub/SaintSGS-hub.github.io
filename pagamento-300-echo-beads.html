@@ -5,32 +5,27 @@
 <title>Pagamento • 300 Echo Beads</title>
 <link rel="icon" type="image/png" href="img/favicon.png">
 <script src="https://cdn.tailwindcss.com"></script>
+<style>
+  .card-depth { transition: transform 0.2s ease-out; will-change: transform; }
+</style>
 </head>
 
 <body class="bg-black text-white font-sans">
+
 <a href="index.html"
-   class="fixed top-4 left-4 text-sm text-gray-500 hover:text-white
-          transition duration-200">
+   class="fixed top-4 left-4 text-sm text-gray-500 hover:text-white transition duration-200">
 ← Home
 </a>
 
 <div class="min-h-screen flex items-center justify-center p-6">
 
-<div class="bg-zinc-900 max-w-md w-full rounded-2xl p-8 text-center">
+<div class="bg-zinc-900 max-w-md w-full rounded-2xl p-8 text-center card-depth">
 
-<h1 class="text-2xl font-bold mb-2">
-300 Echo Beads
-</h1>
+<h1 class="text-2xl font-bold mb-2">300 Echo Beads</h1>
+<p class="text-gray-400 mb-6">Pagamento via PIX • Entrega manual</p>
 
-<p class="text-gray-400 mb-6">
-Pagamento via PIX • Entrega manual
-</p>
-
-<img src="img/qr300pix.png"
-     alt="QR Code PIX 300 Echo Beads"
-     class="mx-auto mb-6 rounded-lg"
-     width="320"
-     height="320">
+<img src="img/qr300pix.png" alt="QR Code PIX 300 Echo Beads"
+     class="mx-auto mb-6 rounded-lg" width="320" height="320">
 
 <p class="text-lg mb-4">
 Valor: <span class="font-bold text-yellow-400">R$ 39,90</span>
@@ -49,13 +44,14 @@ Valor: <span class="font-bold text-yellow-400">R$ 39,90</span>
 <p>• Após confirmar, você será redirecionado para informar seus dados.</p>
 </div>
 
-<a href="confirmado.html"
-   class="block bg-yellow-500 text-black font-bold py-3 rounded-lg hover:opacity-90">
+<a href="obrigado.html"
+   class="block bg-yellow-500 text-black font-bold py-3 rounded-lg hover:opacity-90 btn-comprar">
 CLIQUE AQUI APÓS O PAGAMENTO
 </a>
 
 </div>
 </div>
 
+<script src="js/effects.js"></script>
 </body>
 </html>
