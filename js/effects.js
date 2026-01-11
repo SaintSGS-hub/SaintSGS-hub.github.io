@@ -161,3 +161,26 @@ if (window.matchMedia("(max-width: 640px)").matches) {
     card.style.transform = "none";
   });
 }
+
+/* ================================
+   DISCLAIMER E CRÉDITOS (todas as páginas)
+================================ */
+(function() {
+  const disclaimer = document.createElement('div');
+  disclaimer.style.position = 'fixed';
+  disclaimer.style.bottom = '4px';
+  disclaimer.style.left = '50%';
+  disclaimer.style.transform = 'translateX(-50%)';
+  disclaimer.style.fontSize = '10px';
+  disclaimer.style.color = 'rgba(255, 255, 255, 0.6)';
+  disclaimer.style.textAlign = 'center';
+  disclaimer.style.zIndex = '999';
+  disclaimer.style.fontFamily = 'sans-serif';
+  disclaimer.style.pointerEvents = 'none';
+  disclaimer.style.lineHeight = '1.2em';
+  disclaimer.innerHTML = `
+    Este site não é oficial do <strong>Where Winds Meet</strong>. Serviço de fã e revenda de Echo Beads.<br>
+    Música de fundo: "An Addictive Hit Song :Way of the Sword" por Liu Siyuan / RICORAY / Niko Cat - Em todas as plataformas digitais.
+  `;
+  document.body.appendChild(disclaimer);
+})();
