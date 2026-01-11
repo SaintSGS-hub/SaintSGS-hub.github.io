@@ -5,9 +5,34 @@
 <title>Pagamento Confirmado!</title>
 <link rel="icon" type="image/png" href="img/favicon.png">
 <script src="https://cdn.tailwindcss.com"></script>
+<style>
+  /* ===== PASSO 4 — BASE VISUAL GLOBAL ===== */
+  body {
+    background:
+      radial-gradient(
+        circle at top,
+        rgba(255, 200, 0, 0.04),
+        transparent 60%
+      ),
+      #000;
+  }
+
+  #parallax-wrapper {
+    perspective: 1200px;
+    transform-style: preserve-3d;
+  }
+
+  .card-depth {
+    transition: transform 0.2s ease-out;
+    will-change: transform;
+  }
+</style>
 </head>
 
 <body class="bg-black text-white font-sans">
+
+<!-- PARALLAX WRAPPER -->
+<div id="parallax-wrapper">
 
 <div class="max-w-xl mx-auto p-6">
 
@@ -17,65 +42,35 @@
 Preencha os dados para entrega
 </p>
 
-<form action="https://formsubmit.co/saintwwmofficial@gmail.com" method="POST" class="space-y-4">
+<form action="https://formsubmit.co/saintwwmofficial@gmail.com" method="POST" class="space-y-4 card-depth">
 
   <input type="hidden" name="_subject" value="Novo Pedido Echo Beads">
   <input type="hidden" name="_captcha" value="false">
   <input type="hidden" name="_next" value="https://saintsgs-hub.github.io/confirmado.html">
 
-  <!-- Nome no jogo -->
-  <input
-    class="w-full p-2 rounded bg-zinc-800"
-    name="nick"
-    placeholder="Nome no jogo"
-    required
-  >
+  <input class="w-full p-2 rounded bg-zinc-800" name="nick" placeholder="Nome no jogo" required>
 
-  <!-- ID da conta (APENAS NÚMEROS - bloqueio real) -->
-  <input
-    class="w-full p-2 rounded bg-zinc-800"
-    name="id"
-    placeholder="ID da conta (somente números)"
-    required
-    inputmode="numeric"
-    pattern="[0-9]+"
-    title="Digite apenas números"
-    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-  >
+  <input class="w-full p-2 rounded bg-zinc-800" name="id" placeholder="ID da conta (somente números)" required inputmode="numeric" pattern="[0-9]+" title="Digite apenas números" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
 
-  <!-- TXID PIX -->
-  <input
-    class="w-full p-2 rounded bg-zinc-800"
-    name="txid"
-    placeholder="ID do pagamento PIX"
-    required
-  >
+  <input class="w-full p-2 rounded bg-zinc-800" name="txid" placeholder="ID do pagamento PIX" required>
 
-  <!-- WhatsApp (números, espaço, + e - - bloqueio real) -->
-  <input
-    class="w-full p-2 rounded bg-zinc-800"
-    name="telefone"
-    placeholder="WhatsApp (Ex: +55 11 99999-9999)"
-    required
-    inputmode="tel"
-    pattern="[0-9+\-\s]+"
-    title="Use apenas números, espaço, + ou -"
-    oninput="this.value = this.value.replace(/[^0-9+\-\s]/g, '')"
-  >
+  <input class="w-full p-2 rounded bg-zinc-800" name="telefone" placeholder="WhatsApp (Ex: +55 11 99999-9999)" required inputmode="tel" pattern="[0-9+\-\s]+" title="Use apenas números, espaço, + ou -" oninput="this.value=this.value.replace(/[^0-9+\-\s]/g,'')">
 
-  <button class="w-full bg-yellow-500 text-black py-2 rounded-lg">
+  <button class="w-full bg-yellow-500 text-black py-2 rounded-lg btn-comprar">
     Confirmar Entrega
   </button>
 
 </form>
 
-<!-- AVISO IMPORTANTE - PARTE INFERIOR -->
-<div class="mt-10 bg-zinc-900 border border-yellow-500 text-yellow-400 p-4 rounded text-sm text-center">
+<div class="mt-10 bg-zinc-900 border border-yellow-500 text-yellow-400 p-4 rounded text-sm text-center card-depth">
 <strong>Atenção:</strong><br>
 Pedidos enviados sem pagamento confirmado serão automaticamente ignorados.<br>
-A entrega só é realizada após a verificação do pagamento no Mercado Pago.
+A entrega só é realizada após a verificação do pagamento pelo Mercado Pago.
 </div>
 
 </div>
+</div>
+
+<script src="js/effects.js"></script>
 </body>
 </html>
