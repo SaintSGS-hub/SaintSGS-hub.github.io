@@ -306,15 +306,19 @@ CNPJ • Pagamento via PIX / Mercado Pago • Entrega após confirmação manual
 <script>
 (function () {
   const accepted = localStorage.getItem("saintwwm_consent");
+
   if (accepted === "true") {
     document.getElementById("consent-overlay").style.display = "none";
     document.getElementById("site-content").style.display = "block";
+    if (window.startBackgroundMusic) window.startBackgroundMusic();
   }
 
   document.getElementById("accept-consent").addEventListener("click", function () {
     localStorage.setItem("saintwwm_consent", "true");
     document.getElementById("consent-overlay").style.display = "none";
     document.getElementById("site-content").style.display = "block";
+
+    if (window.startBackgroundMusic) window.startBackgroundMusic();
   });
 })();
 </script>
