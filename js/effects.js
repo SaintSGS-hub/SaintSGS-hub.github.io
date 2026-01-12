@@ -58,10 +58,10 @@
 
   document.body.appendChild(audio);
 
-  // Após 500ms, aumenta o volume
+  // Após 300ms, aumenta o volume
   setTimeout(() => {
     audio.volume = 0.15;
-  }, 500);
+  }, 300);
 })();
 
 /* ================================
