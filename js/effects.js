@@ -165,12 +165,12 @@ if (window.matchMedia("(max-width: 640px)").matches) {
 }
 
 /* ================================
-   DISCLAIMER E CRÉDITOS (todas as páginas)
+   DISCLAIMER + ToS + PRIVACIDADE (todas as páginas)
 ================================ */
 (function() {
   const disclaimer = document.createElement('div');
   disclaimer.style.position = 'fixed';
-  disclaimer.style.bottom = '4px';
+  disclaimer.style.bottom = '6px';
   disclaimer.style.left = '50%';
   disclaimer.style.transform = 'translateX(-50%)';
   disclaimer.style.fontSize = '10px';
@@ -178,12 +178,37 @@ if (window.matchMedia("(max-width: 640px)").matches) {
   disclaimer.style.textAlign = 'center';
   disclaimer.style.zIndex = '999';
   disclaimer.style.fontFamily = 'sans-serif';
-  disclaimer.style.pointerEvents = 'none';
-  disclaimer.style.lineHeight = '1.2em';
+  disclaimer.style.lineHeight = '1.3em';
+  disclaimer.style.pointerEvents = 'auto';
+  disclaimer.style.maxWidth = '95%';
+
   disclaimer.innerHTML = `
-    Este site não é oficial do <strong>Where Winds Meet</strong>. Serviço de fã e revenda de Echo Beads.<br>
-    Música de fundo: "An Addictive Hit Song :Way of the Sword" por Liu Siyuan / RICORAY / Niko Cat - Em todas as plataformas digitais.
-    2026© Dados técnicos básicos podem ser coletados para fins de segurança e prevenção a fraudes 2026©
+    <div>
+      Este site não é oficial do <strong>Where Winds Meet</strong>. Serviço de fã e revenda de Echo Beads.
+    </div>
+    <div>
+      Música: "An Addictive Hit Song : Way of the Sword" — Liu Siyuan / RICORAY / Niko Cat.
+    </div>
+    <div>
+      2026© Dados técnicos básicos podem ser coletados para segurança e prevenção a fraudes.
+    </div>
+    <div style="margin-top:2px;">
+      <a href="tos.html"
+         style="text-decoration: underline; opacity:0.75; margin-right:8px;"
+         onmouseover="this.style.opacity='1'"
+         onmouseout="this.style.opacity='0.75'">
+        Termos de Serviço
+      </a>
+      |
+      <a href="privacidade.html"
+         style="text-decoration: underline; opacity:0.75; margin-left:8px;"
+         onmouseover="this.style.opacity='1'"
+         onmouseout="this.style.opacity='0.75'">
+        Política de Privacidade
+      </a>
+    </div>
   `;
+
   document.body.appendChild(disclaimer);
 })();
+
