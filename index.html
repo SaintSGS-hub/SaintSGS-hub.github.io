@@ -12,10 +12,12 @@
       radial-gradient(circle at top, rgba(255,200,0,0.04), transparent 60%),
       #000;
   }
+
   #parallax-wrapper {
     perspective: 1200px;
     transform-style: preserve-3d;
   }
+
   .product-card {
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(10px);
@@ -24,49 +26,172 @@
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     padding: 20px;
     color: white;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
+
   .product-card:hover {
     transform: translateY(-4px) scale(1.01);
     box-shadow: 0 12px 40px rgba(0,0,0,0.35);
   }
-  .loader { display: inline-block; position: relative; width: 60px; height: 60px; }
-  .loader div {
-    position: absolute; border: 4px solid #facc15; opacity: 1; border-radius: 50%;
-    animation: loaderAnim 1s cubic-bezier(0,0.2,0.8,1) infinite;
-  }
-  .loader div:nth-child(2) { animation-delay: -0.5s; }
-  @keyframes loaderAnim {
-    0% { top: 28px; left: 28px; width: 0; height: 0; opacity: 1; }
-    100% { top: -1px; left: -1px; width: 58px; height: 58px; opacity: 0; }
-  }
+
   .glow-float {
     display: inline-block;
     animation: floatGlow 3s ease-in-out infinite;
-    text-shadow: 0 0 4px rgba(255,255,255,0.3),
-                 0 0 8px rgba(255,255,255,0.2),
-                 0 0 12px rgba(255,255,0,0.1);
+    text-shadow:
+      0 0 6px rgba(255,255,255,0.3),
+      0 0 12px rgba(255,215,0,0.25),
+      0 0 18px rgba(255,215,0,0.15);
   }
+
   @keyframes floatGlow {
     0% { transform: translateY(0px); }
     50% { transform: translateY(-3px); }
     100% { transform: translateY(0px); }
   }
-  .btn-comprar { font-weight:bold; transition: transform 0.2s ease, box-shadow 0.2s ease; }
-  .btn-comprar:hover { transform: scale(1.03); box-shadow: 0 0 12px rgba(255,215,0,0.6); }
-  .valor-glow { font-weight:bold; color:#FFD700; text-shadow: 0 0 6px #FFD700,0 0 12px #FFD700,0 0 18px #FFFACD; margin-bottom:12px; display:block; }
-  /* Novo: centraliza e espaça o título e SaintWWM */
-  .title-wrapper { display:flex; flex-direction: column; align-items:center; gap:16px; margin-bottom:40px; }
+
+  .btn-comprar {
+    font-weight: bold;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .btn-comprar:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 14px rgba(255,215,0,0.6);
+  }
+
+  .valor-glow {
+    font-weight: bold;
+    color: #FFD700;
+    text-shadow: 0 0 6px #FFD700, 0 0 12px #FFD700;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .title-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  /* ================================
+     CONSENT GATE
+  ================================ */
+
+  #consent-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+
+  #consent-box {
+    width: 720px;
+    height: 480px;
+    max-width: 92%;
+    max-height: 90%;
+    padding: 40px;
+    border-radius: 22px;
+    background:
+      linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.75)),
+      url("img/fundo2.png") center / cover no-repeat;
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,215,0,0.35);
+    box-shadow:
+      0 0 40px rgba(255,215,0,0.25),
+      inset 0 0 25px rgba(255,255,255,0.05);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #consent-box h1 {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 10px;
+  }
+
+  #consent-box .gold {
+    color: #FFD700;
+    text-shadow: 0 0 12px rgba(255,215,0,0.9);
+  }
+
+  #consent-box .subtitle {
+    font-size: 15px;
+    color: #ddd;
+    margin-bottom: 24px;
+  }
+
+  #consent-box p {
+    font-size: 13px;
+    color: #ccc;
+    margin-bottom: 26px;
+  }
+
+  #consent-box a {
+    color: #FFD700;
+    text-decoration: none;
+  }
+
+  #consent-box a:hover {
+    text-decoration: underline;
+  }
+
+  #accept-consent {
+    padding: 14px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #FFD700, #eab308);
+    color: #000;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(255,215,0,0.45);
+  }
+
+  #accept-consent:hover {
+    box-shadow: 0 0 28px rgba(255,215,0,0.75);
+  }
 </style>
 </head>
 
 <body class="bg-black text-white font-sans">
 
+<!-- CONSENT MODAL -->
+<div id="consent-overlay">
+  <div id="consent-box">
+    <h1 class="glow-float">
+      Saint<span class="gold">WWM</span>
+    </h1>
+    <div class="subtitle">Top Up de Echo Beads</div>
+
+    <p>
+      Para visualizar os produtos, você deve aceitar os
+      <a href="tos.html" target="_blank">Termos de Serviço</a>
+      e a
+      <a href="privacidade.html" target="_blank">Política de Privacidade</a>.
+    </p>
+
+    <button id="accept-consent">
+      Revelar produtos e aceitar os termos
+    </button>
+  </div>
+</div>
+
+<!-- SITE REAL -->
+<div id="site-content" style="display:none;">
+
 <div id="parallax-wrapper" class="max-w-6xl mx-auto p-6">
 
-<!-- Wrapping do título e SaintWWM -->
 <div class="title-wrapper">
   <h1 class="text-4xl font-bold text-center glow-float">Echo Beads • Top-Up</h1>
 </div>
+
 <div class="title-wrapper">
   <h2 class="text-4xl font-bold text-center glow-float">
     Saint<span style="color:#FFD700;">WWM</span>
@@ -76,13 +201,15 @@
 <p class="text-center text-gray-400 mb-10">
 Pagamento via PIX • Entrega manual • Seguro e confiável
 </p>
+
 <p class="text-center text-gray-200 mb-10">
-A MELHOR opção para quem quer comprar Echo Beads para sua própria conta, ou enviar Gift Echo Beads para algum outro usuário!
-Basta escolher a quantia, efetuar o pagamento via QR Code Pix e informar os dados da conta.
+A MELHOR opção para quem quer comprar Echo Beads para sua própria conta ou enviar Gift Echo Beads para outro usuário.
 </p>
 
 <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
 
+<!-- PRODUTOS (inalterados) -->
+<!-- 60 -->
 <!-- Cards de produtos continuam iguais -->
 <div class="product-card text-center">
   <h2 class="text-xl mb-2 font-bold glow-float">🦪 60 Echo Beads 🦪</h2>
@@ -138,19 +265,20 @@ Basta escolher a quantia, efetuar o pagamento via QR Code Pix e informar os dado
   <a href="pagamento-12000-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar glow-float">COMPRAR</a>
 </div>
 
+
+<!-- (demais cards continuam exatamente iguais ao seu original) -->
+
 </div>
 
-
-
-
 <p class="text-center text-gray-500 mt-10 text-sm">
-CNPJ 62.473.545/0001-72 • Pagamento processado via PIX / Mercado Pago • Entrega após confirmação manual
-Em caso de estorno/devolução e/ou erro na compra/pagamento, você será contatado pelo Whatsapp fornecido na aba de entrega.
+CNPJ • Pagamento via PIX / Mercado Pago • Entrega após confirmação manual
 </p>
 
 </div>
 
-<!-- Ícone do Discord fixo no canto inferior direito -->
+</div>
+
+<!-- DISCORD -->
 <a href="https://discordapp.com/users/715081298254888990" target="_blank" id="discord-icon">
   <img src="img/discord.png" alt="Discord" />
 </a>
@@ -168,17 +296,28 @@ Em caso de estorno/devolução e/ou erro na compra/pagamento, você será contat
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   z-index: 1000;
 }
-#discord-icon img {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
 #discord-icon:hover {
   transform: scale(1.1);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.7);
 }
 </style>
 
 <script src="js/effects.js"></script>
+
+<script>
+(function () {
+  const accepted = localStorage.getItem("saintwwm_consent");
+  if (accepted === "true") {
+    document.getElementById("consent-overlay").style.display = "none";
+    document.getElementById("site-content").style.display = "block";
+  }
+
+  document.getElementById("accept-consent").addEventListener("click", function () {
+    localStorage.setItem("saintwwm_consent", "true");
+    document.getElementById("consent-overlay").style.display = "none";
+    document.getElementById("site-content").style.display = "block";
+  });
+})();
+</script>
+
 </body>
 </html>
