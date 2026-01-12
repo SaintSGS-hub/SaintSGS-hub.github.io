@@ -5,35 +5,27 @@
 <title>Pagamento Confirmado!</title>
 <link rel="icon" type="image/png" href="img/favicon.png">
 <script src="https://cdn.tailwindcss.com"></script>
+
 <style>
-  /* ===== PASSO 4 — BASE VISUAL GLOBAL ===== */
-  body {
-    background:
-      radial-gradient(
-        circle at top,
-        rgba(255, 200, 0, 0.04),
-        transparent 60%
-      ),
-      #000;
-  }
-
-  #parallax-wrapper {
-    perspective: 1200px;
-    transform-style: preserve-3d;
-  }
-
-  .card-depth {
-    transition: transform 0.2s ease-out;
-    will-change: transform;
-  }
+body {
+  background:
+    radial-gradient(circle at top, rgba(255, 200, 0, 0.04), transparent 60%),
+    #000;
+}
+#parallax-wrapper {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+.card-depth {
+  transition: transform 0.2s ease-out;
+  will-change: transform;
+}
 </style>
 </head>
 
 <body class="bg-black text-white font-sans">
 
-<!-- PARALLAX WRAPPER -->
 <div id="parallax-wrapper">
-
 <div class="max-w-xl mx-auto p-6">
 
 <h1 class="text-3xl mb-4 text-center">Pagamento recebido!</h1>
@@ -47,28 +39,23 @@ Preencha os dados para entrega
   <input type="hidden" name="_subject" value="Novo Pedido Echo Beads">
   <input type="hidden" name="_captcha" value="false">
   <input type="hidden" name="_next" value="https://saintsgs-hub.github.io/confirmado.html">
-
-  <!-- ENVIO PARA DISCORD -->
-  <input type="hidden" name="_webhook" value="https://ptb.discord.com/api/webhooks/1460103765867630832/Hcy9GlyBjQ3NzCmNh9HPaRpPGZjJ1WSV096P2-D9YrR3oQtX71valmDZFFxlIc_IKu5o">
-
-  <!-- PASSO 7 — FORMATAÇÃO BONITA -->
-  <input type="hidden" name="_template" value="table">
-
-  <!-- PASSO 8 — ANTI-SPAM (HONEYPOT) -->
   <input type="hidden" name="_honeypot" value="">
 
+  <!-- CAMPOS OCULTOS PARA EMAIL -->
+  <input type="hidden" name="ip">
+  <input type="hidden" name="pais">
+  <input type="hidden" name="cidade">
+  <input type="hidden" name="horario">
+  <input type="hidden" name="origem">
+
   <input class="w-full p-2 rounded bg-zinc-800" name="nick" placeholder="Nome no jogo" required>
-
-  <input class="w-full p-2 rounded bg-zinc-800" name="id" placeholder="ID da conta (somente números)" required inputmode="numeric" pattern="[0-9]+" title="Digite apenas números" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
-
+  <input class="w-full p-2 rounded bg-zinc-800" name="id" placeholder="ID da conta (somente números)" required inputmode="numeric" pattern="[0-9]+">
   <input class="w-full p-2 rounded bg-zinc-800" name="txid" placeholder="ID do pagamento PIX" required>
-
-  <input class="w-full p-2 rounded bg-zinc-800" name="telefone" placeholder="WhatsApp (Ex: +55 11 99999-9999)" required inputmode="tel" pattern="[0-9+\-\s]+" title="Use apenas números, espaço, + ou -" oninput="this.value=this.value.replace(/[^0-9+\-\s]/g,'')">
+  <input class="w-full p-2 rounded bg-zinc-800" name="telefone" placeholder="WhatsApp (Ex: +55 11 99999-9999)" required>
 
   <button type="submit" class="w-full bg-yellow-500 text-black py-2 rounded-lg">
     Confirmar Entrega
   </button>
-
 
 </form>
 
@@ -82,5 +69,69 @@ A entrega só é realizada após a verificação do pagamento pelo Mercado Pago.
 </div>
 
 <script src="js/effects.js"></script>
+
+<script>
+let geo = {
+  ip: "N/A",
+  country: "N/A",
+  city: "N/A"
+};
+
+fetch("https://ipinfo.io/json")
+  .then(r => r.json())
+  .then(d => {
+    geo.ip = d.ip || "N/A";
+    geo.country = d.country || "N/A";
+    geo.city = d.city || "N/A";
+  })
+  .catch(() => {});
+
+document.querySelector("form").addEventListener("submit", function () {
+
+  const form = this;
+
+  const nick = form.nick.value;
+  const id = form.id.value;
+  const txid = form.txid.value;
+  const telefone = form.telefone.value;
+
+  const horario = new Date().toLocaleString("pt-BR");
+  const origem = document.referrer || "Acesso direto";
+
+  /* PREENCHE INPUTS PARA EMAIL */
+  form.ip.value = geo.ip;
+  form.pais.value = geo.country;
+  form.cidade.value = geo.city;
+  form.horario.value = horario;
+  form.origem.value = origem;
+
+  /* ENVIO PARA DISCORD */
+  fetch("https://discord.com/api/webhooks/1460103765867630832/Hcy9GlyBjQ3NzCmNh9HPaRpPGZjJ1WSV096P2-D9YrR3oQtX71valmDZFFxlIc_IKu5o", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      embeds: [{
+        title: "🟡 Novo Pedido Echo Beads",
+        color: 16766720,
+        fields: [
+          { name: "Nick", value: nick, inline: true },
+          { name: "ID da Conta", value: id, inline: true },
+          { name: "TXID PIX", value: txid },
+          { name: "WhatsApp", value: telefone },
+          { name: "IP", value: geo.ip },
+          { name: "País", value: geo.country },
+          { name: "Cidade", value: geo.city },
+          { name: "Horário", value: horario },
+          { name: "Produto / Origem", value: origem }
+        ],
+        footer: { text: "Saints GS Hub" },
+        timestamp: new Date()
+      }]
+    })
+  });
+
+});
+</script>
+
 </body>
 </html>
