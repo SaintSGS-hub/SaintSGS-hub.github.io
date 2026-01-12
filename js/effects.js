@@ -46,22 +46,32 @@
 })();
 
 /* ================================
-   MÚSICA DE FUNDO (autoplay silencioso inicial)
+   MÚSICA DE FUNDO (controlada por consentimento)
 ================================ */
-(function() {
-  const audio = document.createElement('audio');
-  audio.src = 'source/musica.mp3'; // Coloque aqui o arquivo de música na pasta source
+(function () {
+  const audio = document.createElement("audio");
+  audio.src = "source/musica.mp3";
   audio.loop = true;
-  audio.volume = 0; // começa mudo
-  audio.autoplay = true;
-  audio.play().catch(() => {});
+  audio.volume = 0;
+  audio.preload = "auto";
 
   document.body.appendChild(audio);
 
-  // Após 300ms, aumenta o volume
-  setTimeout(() => {
-    audio.volume = 0.15;
-  }, 300);
+  let started = false;
+
+  window.startBackgroundMusic = function () {
+    if (started) return;
+    started = true;
+
+    audio.play().then(() => {
+      let vol = 0;
+      const fade = setInterval(() => {
+        vol += 0.02;
+        audio.volume = Math.min(vol, 0.15);
+        if (vol >= 0.15) clearInterval(fade);
+      }, 60);
+    }).catch(() => {});
+  };
 })();
 
 /* ================================
@@ -88,7 +98,7 @@ document.querySelectorAll('.btn-comprar, .btn-confirmar').forEach(btn => {
       <div class="loader">
         <div></div><div></div><div></div><div></div>
       </div>
-      <p style="color:white; margin-top:20px; font-family:sans-serif;">Carregando...</p>
+      <p style="color:gold; margin-top:20px; font-family:sans-serif;">Carregando...</p>
     `;
     document.body.appendChild(overlay);
 
