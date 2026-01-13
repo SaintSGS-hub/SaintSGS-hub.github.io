@@ -10,34 +10,45 @@
 <script src="https://sdk.mercadopago.com/js/v2"></script>
 
 <style>
+html, body {
+  min-height: 100vh;
+}
+
 body {
-  background: radial-gradient(circle at top, rgba(255,200,0,0.04), transparent 80%), #000;
+  background:
+    radial-gradient(circle at top, rgba(255,200,0,0.06), transparent 80%),
+    #000;
   font-family: sans-serif;
 }
+
 .glass-card {
   background: rgba(255,255,255,0.15);
   backdrop-filter: blur(10px);
   border-radius: 20px;
-  border: 1px solid rgba(255,255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.2);
   box-shadow: 0 8px 32px rgba(0,0,0,0.25);
   padding: 24px;
   color: white;
 }
+
 .glow-float {
   animation: floatGlow 3s ease-in-out infinite;
   text-shadow: 0 0 6px rgba(255,255,255,0.3);
 }
+
 .valor-glow {
   font-size: 1.6rem;
   font-weight: bold;
   color: #FFD700;
-  text-shadow: 0 0 8px #FFD700;
+  text-shadow: 0 0 8px #FFD700, 0 0 14px #FFD700;
 }
+
 @keyframes floatGlow {
   0% { transform: translateY(0px); }
   50% { transform: translateY(-3px); }
   100% { transform: translateY(0px); }
 }
+
 .btn-comprar {
   background: #FFD700;
   color: #000;
@@ -45,13 +56,37 @@ body {
   padding: 14px;
   border-radius: 14px;
   width: 100%;
-  margin-top: 12px;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
+
+.btn-comprar:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 16px rgba(255,215,0,0.6);
+}
+
+/* Home discreto */
+.home-link {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  transition: color 0.2s;
+  z-index: 50;
+}
+
+.home-link:hover {
+  color: #fff;
+}
+
+/* Ajustes leves no overlay MP */
 .mercadopago-overlay {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
 }
+
 .mercadopago-checkout {
   max-width: 420px !important;
 }
@@ -60,32 +95,43 @@ body {
 
 <body>
 
+<a href="https://saintsgs-hub.github.io/index.html" class="home-link">← Home</a>
+
 <div class="min-h-screen flex items-center justify-center p-6">
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl w-full">
 
+    <!-- CARD PRODUTO -->
     <div class="glass-card text-center glow-float">
       <h1 class="text-2xl font-bold mb-2">🦪 60 Echo Beads 🦪</h1>
 
-     <p class="text-gray-300 mb-4">
-       Este pacote adiciona <strong>60 Echo Beads</strong> diretamente na sua conta.
-     </p>
+      <p class="text-gray-300 mb-4">
+        Este pacote adiciona <strong>60 Echo Beads</strong> diretamente na sua conta.
+      </p>
 
       <img src="img/echo60.png" class="mx-auto w-32 mb-4">
+
       <span class="valor-glow">R$ 10,40</span>
 
-    <p class="text-xs text-gray-400 mt-4">
+      <p class="text-xs text-gray-400 mt-4">
         • Entrega manual após confirmação<br>
         • Pagamento 100% seguro
       </p>
     </div>
 
-   <div class="glass-card glow-float">
-      <h2 class="text-xl font-bold mb-4 text-center">Escolher Método</h2>
-      <button id="pagar" class="btn-comprar">PAGAR COM MERCADO PAGO</button>
+    <!-- CARD PAGAMENTO -->
+    <div class="glass-card glow-float flex flex-col">
+      <h2 class="text-xl font-bold text-center mb-6">Escolher Método</h2>
 
-    <p class="text-xs text-gray-400 mt-4 text-center">
-        • PIX • Cartão • Saldo MP • E muito mais
-      </p>
+      <!-- BLOCO CENTRAL -->
+      <div class="flex flex-col items-center justify-center flex-1">
+        <button id="pagar" class="btn-comprar max-w-sm">
+          PAGAR COM MERCADO PAGO
+        </button>
+
+        <p class="text-xs text-gray-400 mt-3 text-center">
+          • PIX • Cartão • Saldo MP • E muito mais
+        </p>
+      </div>
     </div>
 
   </div>
@@ -101,7 +147,6 @@ document.getElementById("pagar").addEventListener("click", async () => {
   const produto = "60 Echo Beads";
   const valor = 10.40;
 
-  // 🔴 PERSISTE O PRODUTO (ESSENCIAL)
   localStorage.setItem("produto", produto);
 
   const response = await fetch(
