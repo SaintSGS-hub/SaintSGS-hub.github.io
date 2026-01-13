@@ -49,9 +49,33 @@ Preencha os dados para entrega
   <input type="hidden" name="origem">
   <input type="hidden" name="txid">
 
-  <input class="w-full p-2 rounded bg-zinc-800" name="nick" placeholder="Nome no jogo" required>
-  <input class="w-full p-2 rounded bg-zinc-800" name="id" placeholder="ID da conta (somente números)" required inputmode="numeric" pattern="[0-9]+">
-  <input class="w-full p-2 rounded bg-zinc-800" name="telefone" placeholder="WhatsApp (Ex: +55 11 99999-9999)" required>
+  <!-- CAMPOS VISÍVEIS -->
+  <input class="w-full p-2 rounded bg-zinc-800"
+         name="nick"
+         placeholder="Nome no jogo"
+         required>
+
+  <input class="w-full p-2 rounded bg-zinc-800"
+         name="id"
+         placeholder="ID da conta (somente números)"
+         required
+         inputmode="numeric"
+         pattern="[0-9]+"
+         oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+
+  <input class="w-full p-2 rounded bg-zinc-800"
+         name="telefone"
+         placeholder="WhatsApp (Ex: +55 11 99999-9999)"
+         required
+         inputmode="tel"
+         pattern="[0-9+\-\s]+"
+         oninput="this.value = this.value.replace(/[^0-9+\-\s]/g, '')">
+
+  <input class="w-full p-2 rounded bg-zinc-800"
+         type="email"
+         name="email_cliente"
+         placeholder="Seu e-mail"
+         required>
 
   <button type="submit" class="w-full bg-yellow-500 text-black py-2 rounded-lg">
     Confirmar Entrega
@@ -86,7 +110,7 @@ fetch("https://ipinfo.io/json")
   })
   .catch(() => {});
 
-/* CAPTURA AUTOMÁTICA DA ID DA TRANSAÇÃO DO MERCADO PAGO */
+/* CAPTURA AUTOMÁTICA DA ID DA TRANSAÇÃO */
 const params = new URLSearchParams(window.location.search);
 const txidAuto =
   params.get("payment_id") ||
@@ -101,6 +125,7 @@ document.querySelector("form").addEventListener("submit", function () {
   const nick = form.nick.value;
   const id = form.id.value;
   const telefone = form.telefone.value;
+  const email = form.email_cliente.value;
 
   const now = new Date();
   const horario = now.toLocaleTimeString("pt-BR");
@@ -131,7 +156,7 @@ document.querySelector("form").addEventListener("submit", function () {
       ip: geo.ip,
       valor_pago: null,
       whatsapp: telefone,
-      email_cliente: "saintwwmofficial@gmail.com",
+      email_cliente: email,
       txid: txidAuto
     })
   });
