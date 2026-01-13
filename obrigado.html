@@ -46,7 +46,7 @@ Preencha os dados para entrega
   <input type="hidden" name="pais">
   <input type="hidden" name="cidade">
   <input type="hidden" name="horario">
-  <input type="hidden" name="origem">
+  <input type="hidden" name="produto">
   <input type="hidden" name="txid">
 
   <!-- CAMPOS VISÍVEIS -->
@@ -90,7 +90,7 @@ Pedidos enviados sem pagamento confirmado serão automaticamente ignorados.<br>
 A entrega só é realizada após a verificação do pagamento pelo Mercado Pago.
 </div>
 
-<!-- NOVO PAINEL DE INSTRUÇÃO -->
+<!-- PAINEL DE INSTRUÇÃO -->
 <div class="mt-6 bg-zinc-900 border border-zinc-700 p-4 rounded text-sm text-center card-depth">
   <strong class="text-white block mb-2 font-bold text-center glow-float">
     Onde encontrar seu Nome e ID no jogo?!
@@ -109,11 +109,10 @@ A entrega só é realizada após a verificação do pagamento pelo Mercado Pago.
 <script src="js/effects.js"></script>
 
 <script>
-let geo = {
-  ip: "N/A",
-  country: "N/A",
-  city: "N/A"
-};
+/* ================================
+   GEOLOCALIZAÇÃO
+================================ */
+let geo = { ip: "N/A", country: "N/A", city: "N/A" };
 
 fetch("https://ipinfo.io/json")
   .then(r => r.json())
@@ -121,10 +120,16 @@ fetch("https://ipinfo.io/json")
     geo.ip = d.ip || "N/A";
     geo.country = d.country || "N/A";
     geo.city = d.city || "N/A";
-  })
-  .catch(() => {});
+  });
 
-/* CAPTURA AUTOMÁTICA DA ID DA TRANSAÇÃO */
+/* ================================
+   PRODUTO VIA LOCALSTORAGE
+================================ */
+const produtoLS = localStorage.getItem("produto") || "Produto não identificado";
+
+/* ================================
+   TXID DO MERCADO PAGO
+================================ */
 const params = new URLSearchParams(window.location.search);
 const txidAuto =
   params.get("payment_id") ||
@@ -132,45 +137,38 @@ const txidAuto =
   params.get("id") ||
   "N/A";
 
+/* ================================
+   SUBMIT
+================================ */
 document.querySelector("form").addEventListener("submit", function () {
 
   const form = this;
 
-  const nick = form.nick.value;
-  const id = form.id.value;
-  const telefone = form.telefone.value;
-  const email = form.email_cliente.value;
-
   const now = new Date();
-  const horario = now.toLocaleTimeString("pt-BR");
   const dia = now.toLocaleDateString("pt-BR");
+  const horario = now.toLocaleTimeString("pt-BR");
 
-  const origem = document.referrer || "Acesso direto";
-
-  /* PREENCHE INPUTS OCULTOS */
   form.ip.value = geo.ip;
   form.pais.value = geo.country;
   form.cidade.value = geo.city;
   form.horario.value = `${dia} ${horario}`;
-  form.origem.value = origem;
+  form.produto.value = produtoLS;
   form.txid.value = txidAuto;
 
-  /* ENVIO PARA WORKER */
   fetch("https://saint-echo-backend.neuroniosgames.workers.dev/submit-order", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      produto: origem,
-      nick: nick,
-      jogador_id: id,
-      data: dia,
-      horario: horario,
+      produto: produtoLS,
+      nick: form.nick.value,
+      jogador_id: form.id.value,
+      whatsapp: form.telefone.value,
+      email_cliente: form.email_cliente.value,
+      ip: geo.ip,
       pais: geo.country,
       cidade: geo.city,
-      ip: geo.ip,
-      valor_pago: null,
-      whatsapp: telefone,
-      email_cliente: email,
+      data: dia,
+      horario: horario,
       txid: txidAuto
     })
   });
