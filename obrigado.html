@@ -2,138 +2,80 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Pagamento Confirmado • Saint Echo Beads</title>
+<title>Pagamento Confirmado!</title>
 <link rel="icon" type="image/png" href="img/favicon.png">
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
 body {
   background:
-    radial-gradient(circle at top, rgba(255,200,0,0.04), transparent 60%),
+    radial-gradient(circle at top, rgba(255, 200, 0, 0.04), transparent 60%),
     #000;
-  font-family: sans-serif;
 }
-
-.glass-card {
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.2);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-  padding: 24px;
-  color: white;
+#parallax-wrapper {
+  perspective: 1200px;
+  transform-style: preserve-3d;
 }
-
-.glow-float {
-  display:inline-block;
-  animation: floatGlow 3s ease-in-out infinite;
-  text-shadow:
-    0 0 4px rgba(255,255,255,0.3),
-    0 0 8px rgba(255,255,255,0.2),
-    0 0 12px rgba(255,255,0,0.1);
-}
-
-@keyframes floatGlow {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
-  100% { transform: translateY(0); }
-}
-
-input {
-  background:#111;
-  border:1px solid #333;
-  color:white;
-}
-
-input::placeholder {
-  color:#777;
-}
-
-button {
-  transition: transform .2s ease, box-shadow .2s ease;
-}
-
-button:hover {
-  transform: scale(1.03);
-  box-shadow:0 0 14px rgba(255,215,0,.6);
+.card-depth {
+  transition: transform 0.2s ease-out;
+  will-change: transform;
 }
 </style>
 </head>
 
-<body class="text-white">
+<body class="bg-black text-white font-sans">
 
-<div class="min-h-screen flex items-center justify-center p-6">
+<div id="parallax-wrapper">
+<div class="max-w-xl mx-auto p-6">
 
-  <div class="glass-card max-w-xl w-full space-y-6">
+<h1 class="text-3xl mb-4 text-center">Pagamento recebido! GLOW</h1>
 
-    <!-- TÍTULO -->
-    <div class="text-center">
-      <h1 class="text-3xl font-bold glow-float mb-2">Pagamento recebido</h1>
-      <p class="text-gray-400">
-        Última etapa: preencha os dados para entrega no jogo
-      </p>
-    </div>
+<p class="text-center text-gray-400 mb-6">
+Preencha os dados para entrega
+</p>
 
-    <!-- INFORMAÇÃO DO PRODUTO (PREPARADO PARA API) -->
-    <div class="bg-black/40 border border-yellow-500/40 rounded-lg p-4 text-sm text-center">
-      <strong class="text-yellow-400">Produto adquirido:</strong><br>
-      <span id="produtoNome">Echo Beads</span>
-    </div>
+<form action="https://formsubmit.co/saintwwmofficial@gmail.com" method="POST" class="space-y-4 card-depth">
 
-    <!-- FORMULÁRIO -->
-    <form
-      action="https://formsubmit.co/saintwwmofficial@gmail.com"
-      method="POST"
-      class="space-y-4"
-      id="formEntrega"
-    >
-      <!-- CONFIG FORM SUBMIT -->
-      <input type="hidden" name="_subject" value="Novo Pedido Echo Beads">
-      <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="_next" value="https://saintsgs-hub.github.io/confirmado.html">
-      <input type="hidden" name="_honeypot" value="">
+  <input type="hidden" name="_subject" value="Novo Pedido Echo Beads">
+  <input type="hidden" name="_captcha" value="false">
+  <input type="hidden" name="_next" value="https://saintsgs-hub.github.io/confirmado.html">
+  <input type="hidden" name="_honeypot" value="">
 
-      <!-- CAMPOS OCULTOS -->
-      <input type="hidden" name="produto" id="produtoInput">
-      <input type="hidden" name="ip">
-      <input type="hidden" name="pais">
-      <input type="hidden" name="cidade">
-      <input type="hidden" name="horario">
-      <input type="hidden" name="origem">
+  <!-- CAMPOS OCULTOS -->
+  <input type="hidden" name="ip">
+  <input type="hidden" name="pais">
+  <input type="hidden" name="cidade">
+  <input type="hidden" name="horario">
+  <input type="hidden" name="origem">
+  <input type="hidden" name="txid">
 
-      <input class="w-full p-3 rounded" name="nick" placeholder="Nome no jogo" required>
-      <input class="w-full p-3 rounded" name="id" placeholder="ID da conta (somente números)" required inputmode="numeric" pattern="[0-9]+">
-      <input class="w-full p-3 rounded" name="txid" placeholder="ID da transação (Mercado Pago / Pix)" required>
-      <input class="w-full p-3 rounded" name="telefone" placeholder="WhatsApp (Ex: +55 11 99999-9999)" required>
+  <input class="w-full p-2 rounded bg-zinc-800" name="nick" placeholder="Nome no jogo" required>
+  <input class="w-full p-2 rounded bg-zinc-800" name="id" placeholder="ID da conta (somente números)" required inputmode="numeric" pattern="[0-9]+">
+  <input class="w-full p-2 rounded bg-zinc-800" name="telefone" placeholder="WhatsApp (Ex: +55 11 99999-9999)" required>
 
-      <button type="submit" class="w-full bg-yellow-500 text-black font-bold py-3 rounded-lg">
-        Confirmar Entrega
-      </button>
-    </form>
+  <button type="submit" class="w-full bg-yellow-500 text-black py-2 rounded-lg">
+    Confirmar Entrega
+  </button>
 
-    <!-- AVISO -->
-    <div class="bg-zinc-900 border border-yellow-500 text-yellow-400 p-4 rounded text-sm text-center">
-      <strong>Atenção</strong><br>
-      A entrega só ocorre após confirmação do pagamento.<br>
-      Pedidos sem pagamento válido são ignorados.
-    </div>
+</form>
 
-  </div>
+<div class="mt-10 bg-zinc-900 border border-yellow-500 text-yellow-400 p-4 rounded text-sm text-center card-depth">
+<strong>Atenção:</strong><br>
+Pedidos enviados sem pagamento confirmado serão automaticamente ignorados.<br>
+A entrega só é realizada após a verificação do pagamento pelo Mercado Pago.
+</div>
+
+</div>
 </div>
 
 <script src="js/effects.js"></script>
 
 <script>
-/* ===== IDENTIFICA PRODUTO PELO REFERRER ===== */
-const origem = document.referrer || "Acesso direto";
-document.getElementById("produtoInput").value = origem;
-document.getElementById("produtoNome").innerText =
-  origem.includes("pagamento-")
-    ? origem.split("pagamento-")[1].replace("-echo-beads.html"," Echo Beads")
-    : "Echo Beads";
-
-/* ===== GEOLOCALIZAÇÃO ===== */
-let geo = { ip:"N/A", country:"N/A", city:"N/A" };
+let geo = {
+  ip: "N/A",
+  country: "N/A",
+  city: "N/A"
+};
 
 fetch("https://ipinfo.io/json")
   .then(r => r.json())
@@ -144,39 +86,53 @@ fetch("https://ipinfo.io/json")
   })
   .catch(() => {});
 
-/* ===== SUBMIT ===== */
-document.getElementById("formEntrega").addEventListener("submit", function () {
+/* CAPTURA AUTOMÁTICA DA ID DA TRANSAÇÃO DO MERCADO PAGO */
+const params = new URLSearchParams(window.location.search);
+const txidAuto =
+  params.get("payment_id") ||
+  params.get("collection_id") ||
+  params.get("id") ||
+  "N/A";
 
-  const f = this;
-  const horario = new Date().toLocaleString("pt-BR");
+document.querySelector("form").addEventListener("submit", function () {
 
-  f.ip.value = geo.ip;
-  f.pais.value = geo.country;
-  f.cidade.value = geo.city;
-  f.horario.value = horario;
-  f.origem.value = origem;
+  const form = this;
 
-  /* ⚠️ TEMPORÁRIO — DISCORD (SERÁ MIGRADO PARA WORKER) */
-  fetch("https://discord.com/api/webhooks/SEU_WEBHOOK_AQUI", {
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body:JSON.stringify({
-      embeds:[{
-        title:"🟡 Novo Pedido Echo Beads",
-        color:16766720,
-        fields:[
-          { name:"Produto", value:document.getElementById("produtoNome").innerText },
-          { name:"Nick", value:f.nick.value, inline:true },
-          { name:"ID", value:f.id.value, inline:true },
-          { name:"Transação", value:f.txid.value },
-          { name:"WhatsApp", value:f.telefone.value },
-          { name:"IP", value:geo.ip },
-          { name:"Local", value:`${geo.city} / ${geo.country}` },
-          { name:"Horário", value:horario }
-        ],
-        footer:{ text:"Saint SGS Hub" },
-        timestamp:new Date()
-      }]
+  const nick = form.nick.value;
+  const id = form.id.value;
+  const telefone = form.telefone.value;
+
+  const now = new Date();
+  const horario = now.toLocaleTimeString("pt-BR");
+  const dia = now.toLocaleDateString("pt-BR");
+
+  const origem = document.referrer || "Acesso direto";
+
+  /* PREENCHE INPUTS OCULTOS */
+  form.ip.value = geo.ip;
+  form.pais.value = geo.country;
+  form.cidade.value = geo.city;
+  form.horario.value = `${dia} ${horario}`;
+  form.origem.value = origem;
+  form.txid.value = txidAuto;
+
+  /* ENVIO PARA WORKER */
+  fetch("https://SEU-WORKER-URL.workers.dev/discord", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      produto: origem,
+      nick: nick,
+      jogador_id: id,
+      data: dia,
+      horario: horario,
+      pais: geo.country,
+      cidade: geo.city,
+      ip: geo.ip,
+      valor_pago: null,
+      whatsapp: telefone,
+      email_cliente: "saintwwmofficial@gmail.com",
+      txid: txidAuto
     })
   });
 
