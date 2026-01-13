@@ -156,7 +156,7 @@ document.querySelector("form").addEventListener("submit", function () {
   form.txid.value = txidAuto;
 
   /* ENVIO PARA WORKER */
-  fetch("https://SEU-WORKER-URL.workers.dev/discord", {
+  fetch("https://saint-echo-backend.neuroniosgames.workers.dev/submit-order", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
