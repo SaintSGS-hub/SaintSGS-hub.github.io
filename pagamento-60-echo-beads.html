@@ -61,6 +61,20 @@ body::before {
   width: 100%;
   margin-top: 12px;
 }
+/* Home discreto */
+.home-link {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  transition: color 0.2s;
+  z-index: 50;
+}
+.home-link:hover {
+  color: #fff;
+}
 .mercadopago-overlay {
   display: flex !important;
   align-items: center !important;
@@ -73,6 +87,8 @@ body::before {
 </head>
 
 <body>
+
+<a href="https://saintsgs-hub.github.io/index.html" class="home-link">← Home</a>
 
 <div class="min-h-screen flex items-center justify-center p-6">
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl w-full">
@@ -93,11 +109,13 @@ body::before {
       </p>
     </div>
 
-   <div class="glass-card glow-float">
+   <div class="glass-card glow-float flex flex-col items-center justify-center flex-1">
       <h2 class="text-xl font-bold mb-4 text-center">Escolher Método</h2>
-      <button id="pagar" class="btn-comprar">PAGAR COM MERCADO PAGO</button>
 
-    <p class="text-xs text-gray-400 mt-4 text-center">
+  <div class="flex flex-col items-center justify-center flex-1">
+      <button id="pagar" class="btn-comprar max-w-sm">PAGAR COM MERCADO PAGO</button>
+
+    <p class="text-xs font-bold text-gray-400 mt-4 text-center">
         • PIX • Cartão • Saldo MP • E muito mais
       </p>
     </div>
