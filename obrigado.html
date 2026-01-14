@@ -34,9 +34,15 @@ body {
 
 <h1 class="text-3xl mb-4 font-bold text-center glow-float">Pagamento recebido!</h1>
 
-<p id="status-msg" class="text-center text-gray-400 mb-6">
-Validando pagamento com o Mercado Pago...
+<p id="status-msg" class="text-center text-yellow-400 mb-4">
+Aguardando confirmação do pagamento...
 </p>
+
+<button
+   id="retry-btn"
+   class="hidden w-full bg-zinc-700 text-white py-2 rounded-lg mb-6">
+  Verificar pagamento novamente
+</button>
 
 <form id="pedido-form"
       action="https://formsubmit.co/saintwwmofficial@gmail.com"
