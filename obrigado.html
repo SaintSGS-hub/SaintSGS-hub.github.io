@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Concluindo Compra!</title>
+<title>Concluindo Compraⵚ..</title>
 <link rel="icon" type="image/png" href="img/favicon.png">
 <script src="https://cdn.tailwindcss.com"></script>
 
@@ -53,7 +53,7 @@ body {
 <div class="max-w-xl mx-auto p-6">
 
 <h1 class="text-3xl mb-2 font-bold text-center glow-float">
-Continuando para entrega
+Continuando para Entrega!
 </h1>
 
 <div id="status-box"
@@ -63,8 +63,8 @@ Pagamento em análise pelo Mercado Pago
 
 <button
   id="retry-btn"
-  class="hidden w-full bg-zinc-700 text-white py-2 rounded-lg mb-6">
-Verificar pagamento novamente
+  class="hidden w-full bg-zinc-900 border-yellow-500 text-gold py-2 rounded-lg mb-6">
+VERIFICAR PAGAMENTO NOVAMENTE
 </button>
 
 <form id="pedido-form"
@@ -157,7 +157,8 @@ function validarPagamento() {
   .catch(() => {
     statusBox.className = "status status-pending text-center";
     statusBox.innerText =
-      "Pagamento ainda não confirmado. Caso tenha pago, tente novamente.";
+      "Pagamento ainda não confirmado."
+      "Caso tenha pago, tente novamente.";
     retryBtn.classList.remove("hidden");
   });
 }
