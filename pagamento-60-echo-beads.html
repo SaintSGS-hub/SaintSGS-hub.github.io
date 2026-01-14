@@ -170,7 +170,14 @@ document.getElementById("pagar").addEventListener("click", async () => {
 });
 </script>
 
-<script src="js/effects.js"></script>
+<script>
+  window.addEventListener("load", () => {
+    const s = document.createElement("script");
+    s.src = "js/effects.js";
+    s.defer = true;
+    document.body.appendChild(s);
+  });
+</script>
 
 </body>
 </html>
