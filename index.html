@@ -307,7 +307,7 @@ CNPJ • Pagamento via Mercado Pago • Entrega após confirmação manual
 
 <script>
 (function () {
-  const accepted = localStorage.getItem("saintwwm_consent");
+  const accepted = localStorage.getItem("saint_consent");
 
   if (accepted === "true") {
     document.getElementById("consent-overlay").style.display = "none";
@@ -316,7 +316,7 @@ CNPJ • Pagamento via Mercado Pago • Entrega após confirmação manual
   }
 
   document.getElementById("accept-consent").addEventListener("click", function () {
-    localStorage.setItem("saintwwm_consent", "true");
+    localStorage.setItem("saint_consent", "true");
     document.getElementById("consent-overlay").style.display = "none";
     document.getElementById("site-content").style.display = "block";
 
@@ -360,6 +360,52 @@ CNPJ • Pagamento via Mercado Pago • Entrega após confirmação manual
   });
 })();
 </script>
-  
+
+<script>
+(async function () {
+  // 1️⃣ Verifica se o usuário já aceitou antes
+  const storedConsent = localStorage.getItem("saint_consent");
+
+  if (storedConsent) {
+    document.getElementById("consent-overlay").style.display = "none";
+    document.getElementById("site-content").style.display = "block";
+    if (window.startBackgroundMusic) window.startBackgroundMusic();
+    return;
+  }
+
+    // 2️⃣ Espera o clique no botão "Aceitar"
+    document.getElementById("accept-consent").addEventListener("click", async () => {
+
+      // 3️⃣ Monta os dados do aceite
+      const consentPayload = {
+        consent_version: "2026-01",
+        accepted_at: new Date().toISOString(),
+        user_agent: navigator.userAgent
+      };
+
+      // 4️⃣ Envia para o seu Worker
+      const response = await fetch(
+        "https://saint-echo-backend.neuroniosgames.workers.dev/register-consent",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(consentPayload)
+        }
+      );
+
+      // 5️⃣ Recebe o consent_id
+      const data = await response.json();
+
+      // 6️⃣ Salva no navegador
+      localStorage.setItem("saint_consent", JSON.stringify(data));
+
+       // 7️⃣ Libera o site
+      document.getElementById("consent-overlay").style.display = "none";
+      document.getElementById("site-content").style.display = "block";
+      if (window.startBackgroundMusic) window.startBackgroundMusic();
+    });
+  })();
+  </script>
+    
 </body>
 </html>
