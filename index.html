@@ -180,6 +180,9 @@
       Revelar produtos e aceitar os termos
     </button>
   </div>
+
+  <div id="site-content" style="display:none;"></div>
+  
 </div>
 
 <!-- SITE REAL -->
@@ -270,7 +273,7 @@ A MELHOR opção para quem quer comprar Echo Beads para sua própria conta ou en
 </div>
 
 <p class="text-center text-gray-500 mt-10 text-sm">
-CNPJ • Pagamento via PIX / Mercado Pago • Entrega após confirmação manual
+CNPJ • Pagamento via Mercado Pago • Entrega após confirmação manual
 </p>
 
 </div>
@@ -322,5 +325,41 @@ CNPJ • Pagamento via PIX / Mercado Pago • Entrega após confirmação manual
 })();
 </script>
 
+<script>
+(async function () {
+  const storedConsent = localStorage.getItem("saint_consent");
+
+  if (storedConsent) {
+    document.getElementById("consent-overlay").style.display = "none";
+    document.getElementById("site-content").style.display = "block";
+    return;
+  }
+
+  document.getElementById("accept-consent").addEventListener("click", async () => {
+    const consentPayload = {
+      consent_version: "2026-01",
+      accepted_at: new Date().toISOString(),
+      user_agent: navigator.userAgent
+    };
+
+    const response = await fetch(
+      "https://saint-echo-backend.neuroniosgames.workers.dev/register-consent",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(consentPayload)
+      }
+    );
+
+    const data = await response.json();
+
+    localStorage.setItem("saint_consent", JSON.stringify(data));
+
+    document.getElementById("consent-overlay").style.display = "none";
+    document.getElementById("site-content").style.display = "block";
+  });
+})();
+</script>
+  
 </body>
 </html>
