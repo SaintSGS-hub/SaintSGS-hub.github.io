@@ -306,28 +306,29 @@ CNPJ • Pagamento via Mercado Pago • Entrega após confirmação manual
 <script src="js/effects.js"></script>
 
 <script>
-(async function () {
-  // 1️⃣ Verifica se o usuário já aceitou antes
-  const storedConsent = localStorage.getItem("saint_consent");
+(function () {
+  const consentKey = "saint_consent";
+  const overlay = document.getElementById("consent-overlay");
+  const site = document.getElementById("site-content");
+  const button = document.getElementById("accept-consent");
 
-  if (storedConsent) {
-    document.getElementById("consent-overlay").style.display = "none";
-    document.getElementById("site-content").style.display = "block";
+  // Já aceitou antes
+  if (localStorage.getItem(consentKey)) {
+    overlay.style.display = "none";
+    site.style.display = "block";
     if (window.startBackgroundMusic) window.startBackgroundMusic();
     return;
   }
 
-    // 2️⃣ Espera o clique no botão "Aceitar"
-    document.getElementById("accept-consent").addEventListener("click", async () => {
-
-      // 3️⃣ Monta os dados do aceite
+  // Clique único
+  button.addEventListener("click", async () => {
+    try {
       const consentPayload = {
         consent_version: "2026-01",
         accepted_at: new Date().toISOString(),
         user_agent: navigator.userAgent
       };
 
-      // 4️⃣ Envia para o seu Worker
       const response = await fetch(
         "https://saint-echo-backend.neuroniosgames.workers.dev/register-consent",
         {
@@ -337,32 +338,22 @@ CNPJ • Pagamento via Mercado Pago • Entrega após confirmação manual
         }
       );
 
-      // 5️⃣ Recebe o consent_id
       const data = await response.json();
 
-      // 6️⃣ Salva no navegador
-      localStorage.setItem("saint_consent", JSON.stringify(data));
+      localStorage.setItem(consentKey, JSON.stringify(data));
 
-       // 7️⃣ Libera o site
-      document.getElementById("consent-overlay").style.display = "none";
-      document.getElementById("site-content").style.display = "block";
+      overlay.style.display = "none";
+      site.style.display = "block";
       if (window.startBackgroundMusic) window.startBackgroundMusic();
 
-       if (accepted === "true") {
-    document.getElementById("consent-overlay").style.display = "none";
-    document.getElementById("site-content").style.display = "block";
-    if (window.startBackgroundMusic) window.startBackgroundMusic();
-  }
+    } catch (err) {
+      alert("Erro ao registrar consentimento. Tente novamente.");
+      console.error(err);
+    }
+  }, { once: true });
+})();
+</script>
 
-    document.getElementById("accept-consent").addEventListener("click", function () {
-    localStorage.setItem("saint_consent", "true");
-    document.getElementById("consent-overlay").style.display = "none";
-    document.getElementById("site-content").style.display = "block";
-
-    if (window.startBackgroundMusic) window.startBackgroundMusic();
-    });
-  })();
-  </script>
     
 </body>
 </html>
