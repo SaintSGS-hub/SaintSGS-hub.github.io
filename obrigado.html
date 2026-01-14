@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Pagamento Confirmado!</title>
+<title>Concluindo Compra!</title>
 <link rel="icon" type="image/png" href="img/favicon.png">
 <script src="https://cdn.tailwindcss.com"></script>
 
@@ -24,6 +24,26 @@ body {
   opacity: 0.4;
   pointer-events: none;
 }
+
+/* STATUS VISUAL */
+.status {
+  font-weight: bold;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+.status-pending {
+  color: #facc15;
+  box-shadow: 0 0 12px rgba(250,204,21,0.5);
+}
+.status-approved {
+  color: #4ade80;
+  box-shadow: 0 0 14px rgba(74,222,128,0.6);
+}
+.status-refused {
+  color: #f87171;
+  box-shadow: 0 0 14px rgba(248,113,113,0.6);
+}
 </style>
 </head>
 
@@ -32,16 +52,19 @@ body {
 <div id="parallax-wrapper">
 <div class="max-w-xl mx-auto p-6">
 
-<h1 class="text-3xl mb-4 font-bold text-center glow-float">Pagamento recebido!</h1>
+<h1 class="text-3xl mb-2 font-bold text-center glow-float">
+Continuando para entrega
+</h1>
 
-<p id="status-msg" class="text-center text-yellow-400 mb-4">
-Aguardando confirmação do pagamento...
-</p>
+<div id="status-box"
+     class="status status-pending text-center">
+Pagamento em análise pelo Mercado Pago
+</div>
 
 <button
-   id="retry-btn"
-   class="hidden w-full bg-zinc-700 text-white py-2 rounded-lg mb-6">
-  Verificar pagamento novamente
+  id="retry-btn"
+  class="hidden w-full bg-zinc-700 text-white py-2 rounded-lg mb-6">
+Verificar pagamento novamente
 </button>
 
 <form id="pedido-form"
@@ -54,7 +77,6 @@ Aguardando confirmação do pagamento...
   <input type="hidden" name="_next" value="https://saintsgs-hub.github.io/confirmado.html">
   <input type="hidden" name="_honeypot" value="">
 
-  <!-- CAMPOS OCULTOS -->
   <input type="hidden" name="ip">
   <input type="hidden" name="pais">
   <input type="hidden" name="cidade">
@@ -62,7 +84,6 @@ Aguardando confirmação do pagamento...
   <input type="hidden" name="produto">
   <input type="hidden" name="txid">
 
-  <!-- CAMPOS VISÍVEIS -->
   <input class="w-full p-2 rounded bg-zinc-800"
          name="nick"
          placeholder="Nome no jogo"
@@ -78,11 +99,8 @@ Aguardando confirmação do pagamento...
 
   <input class="w-full p-2 rounded bg-zinc-800"
          name="telefone"
-         placeholder="WhatsApp (Ex: +55 11 99999-9999)"
-         required
-         inputmode="tel"
-         pattern="[0-9+\-\s]+"
-         oninput="this.value = this.value.replace(/[^0-9+\-\s]/g, '')">
+         placeholder="WhatsApp"
+         required>
 
   <input class="w-full p-2 rounded bg-zinc-800"
          type="email"
@@ -91,15 +109,14 @@ Aguardando confirmação do pagamento...
          required>
 
   <button type="submit" class="w-full bg-yellow-500 text-black py-2 rounded-lg">
-    Confirmar Entrega
+Confirmar Entrega
   </button>
 
 </form>
 
-<!-- AVISO -->
-<div class="mt-10 bg-zinc-900 border border-yellow-500 text-yellow-400 p-4 rounded text-sm text-center card-depth">
+<div class="mt-8 bg-zinc-900 border border-yellow-500 text-yellow-400 p-4 rounded text-sm text-center card-depth">
 <strong>Atenção:</strong><br>
-O formulário só será liberado após confirmação real do pagamento.
+O formulário só é liberado após confirmação real do pagamento.
 </div>
 
 </div>
@@ -108,79 +125,45 @@ O formulário só será liberado após confirmação real do pagamento.
 <script src="js/effects.js"></script>
 
 <script>
-/* ================================
-   BLOQUEIO DE ACESSO DIRETO
-================================ */
-if (!sessionStorage.getItem("checkout_iniciado")) {
-  window.location.href = "index.html";
-}
+const form = document.getElementById("pedido-form");
+const statusBox = document.getElementById("status-box");
+const retryBtn = document.getElementById("retry-btn");
 
-/* ================================
-   GEOLOCALIZAÇÃO
-================================ */
-let geo = { ip: "N/A", country: "N/A", city: "N/A" };
-
-fetch("https://ipinfo.io/json")
-  .then(r => r.json())
-  .then(d => {
-    geo.ip = d.ip || "N/A";
-    geo.country = d.country || "N/A";
-    geo.city = d.city || "N/A";
-  });
-
-/* ================================
-   PRODUTO (LOCALSTORAGE)
-================================ */
-const produtoLS = localStorage.getItem("produto") || "Produto não identificado";
-
-/* ================================
-   TXID (URL)
-================================ */
 const params = new URLSearchParams(window.location.search);
 const txid =
   params.get("payment_id") ||
   params.get("collection_id") ||
   params.get("id");
 
-/* ================================
-   VALIDAÇÃO IMEDIATA (ETAPA 5)
-================================ */
-fetch("https://saint-echo-backend.neuroniosgames.workers.dev/submit-order", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ txid })
-})
-.then(r => {
-  if (!r.ok) throw new Error("Pagamento não aprovado");
-  return r.json();
-})
-.then(() => {
-  document.getElementById("status-msg").innerText =
-    "Pagamento confirmado. Preencha os dados para entrega.";
-  document.getElementById("pedido-form").classList.remove("disabled");
-})
-.catch(() => {
-  alert("Pagamento não validado. Acesso bloqueado.");
-  window.location.href = "index.html";
-});
+function validarPagamento() {
+  statusBox.className = "status status-pending text-center";
+  statusBox.innerText = "Pagamento em análise pelo Mercado Pago";
+  retryBtn.classList.add("hidden");
 
-/* ================================
-   SUBMIT FINAL
-================================ */
-document.getElementById("pedido-form").addEventListener("submit", function () {
+  fetch("https://saint-echo-backend.neuroniosgames.workers.dev/submit-order", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ txid })
+  })
+  .then(r => {
+    if (!r.ok) throw new Error();
+    return r.json();
+  })
+  .then(() => {
+    statusBox.className = "status status-approved text-center";
+    statusBox.innerText = "Pagamento aprovado ✔";
+    form.classList.remove("disabled");
+  })
+  .catch(() => {
+    statusBox.className = "status status-pending text-center";
+    statusBox.innerText =
+      "Pagamento ainda não confirmado. Caso tenha pago, tente novamente.";
+    retryBtn.classList.remove("hidden");
+  });
+}
 
-  const now = new Date();
-  const dia = now.toLocaleDateString("pt-BR");
-  const horario = now.toLocaleTimeString("pt-BR");
-
-  this.ip.value = geo.ip;
-  this.pais.value = geo.country;
-  this.cidade.value = geo.city;
-  this.horario.value = `${dia} ${horario}`;
-  this.produto.value = produtoLS;
-  this.txid.value = txid;
-
-});
+retryBtn.addEventListener("click", validarPagamento);
+validarPagamento();
 </script>
 
 </body>
