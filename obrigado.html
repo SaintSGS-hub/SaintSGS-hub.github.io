@@ -20,6 +20,10 @@ body {
   transition: transform 0.2s ease-out;
   will-change: transform;
 }
+.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
 </style>
 </head>
 
@@ -30,11 +34,14 @@ body {
 
 <h1 class="text-3xl mb-4 font-bold text-center glow-float">Pagamento recebido!</h1>
 
-<p class="text-center text-gray-400 mb-6">
-Preencha os dados para entrega
+<p id="status-msg" class="text-center text-gray-400 mb-6">
+Validando pagamento com o Mercado Pago...
 </p>
 
-<form action="https://formsubmit.co/saintwwmofficial@gmail.com" method="POST" class="space-y-4 card-depth">
+<form id="pedido-form"
+      action="https://formsubmit.co/saintwwmofficial@gmail.com"
+      method="POST"
+      class="space-y-4 card-depth disabled">
 
   <input type="hidden" name="_subject" value="Novo Pedido Echo Beads">
   <input type="hidden" name="_captcha" value="false">
@@ -83,24 +90,10 @@ Preencha os dados para entrega
 
 </form>
 
-<!-- PAINEL ATENÇÃO -->
+<!-- AVISO -->
 <div class="mt-10 bg-zinc-900 border border-yellow-500 text-yellow-400 p-4 rounded text-sm text-center card-depth">
 <strong>Atenção:</strong><br>
-Pedidos enviados sem pagamento confirmado serão automaticamente ignorados.<br>
-A entrega só é realizada após a verificação do pagamento pelo Mercado Pago.
-</div>
-
-<!-- PAINEL DE INSTRUÇÃO -->
-<div class="mt-6 bg-zinc-900 border border-zinc-700 p-4 rounded text-sm text-center card-depth">
-  <strong class="text-white block mb-2 font-bold text-center glow-float">
-    Onde encontrar seu Nome e ID no jogo?!
-  </strong>
-  <p class="text-gray-400 mb-3">
-    Utilize a imagem abaixo como referência para procurar no jogo e preencher corretamente os campos.
-  </p>
-  <img src="img/perfilID.png"
-       alt="Exemplo de onde encontrar o Nome e ID no jogo"
-       class="mx-auto rounded border border-zinc-700 max-w-full">
+O formulário só será liberado após confirmação real do pagamento.
 </div>
 
 </div>
@@ -109,6 +102,13 @@ A entrega só é realizada após a verificação do pagamento pelo Mercado Pago.
 <script src="js/effects.js"></script>
 
 <script>
+/* ================================
+   BLOQUEIO DE ACESSO DIRETO
+================================ */
+if (!sessionStorage.getItem("checkout_iniciado")) {
+  window.location.href = "index.html";
+}
+
 /* ================================
    GEOLOCALIZAÇÃO
 ================================ */
@@ -123,55 +123,56 @@ fetch("https://ipinfo.io/json")
   });
 
 /* ================================
-   PRODUTO VIA LOCALSTORAGE
+   PRODUTO (LOCALSTORAGE)
 ================================ */
 const produtoLS = localStorage.getItem("produto") || "Produto não identificado";
 
 /* ================================
-   TXID DO MERCADO PAGO
+   TXID (URL)
 ================================ */
 const params = new URLSearchParams(window.location.search);
-const txidAuto =
+const txid =
   params.get("payment_id") ||
   params.get("collection_id") ||
-  params.get("id") ||
-  "N/A";
+  params.get("id");
 
 /* ================================
-   SUBMIT
+   VALIDAÇÃO IMEDIATA (ETAPA 5)
 ================================ */
-document.querySelector("form").addEventListener("submit", function () {
+fetch("https://saint-echo-backend.neuroniosgames.workers.dev/submit-order", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ txid })
+})
+.then(r => {
+  if (!r.ok) throw new Error("Pagamento não aprovado");
+  return r.json();
+})
+.then(() => {
+  document.getElementById("status-msg").innerText =
+    "Pagamento confirmado. Preencha os dados para entrega.";
+  document.getElementById("pedido-form").classList.remove("disabled");
+})
+.catch(() => {
+  alert("Pagamento não validado. Acesso bloqueado.");
+  window.location.href = "index.html";
+});
 
-  const form = this;
+/* ================================
+   SUBMIT FINAL
+================================ */
+document.getElementById("pedido-form").addEventListener("submit", function () {
 
   const now = new Date();
   const dia = now.toLocaleDateString("pt-BR");
   const horario = now.toLocaleTimeString("pt-BR");
 
-  form.ip.value = geo.ip;
-  form.pais.value = geo.country;
-  form.cidade.value = geo.city;
-  form.horario.value = `${dia} ${horario}`;
-  form.produto.value = produtoLS;
-  form.txid.value = txidAuto;
-
-  fetch("https://saint-echo-backend.neuroniosgames.workers.dev/submit-order", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      produto: produtoLS,
-      nick: form.nick.value,
-      jogador_id: form.id.value,
-      whatsapp: form.telefone.value,
-      email_cliente: form.email_cliente.value,
-      ip: geo.ip,
-      pais: geo.country,
-      cidade: geo.city,
-      data: dia,
-      horario: horario,
-      txid: txidAuto
-    })
-  });
+  this.ip.value = geo.ip;
+  this.pais.value = geo.country;
+  this.cidade.value = geo.city;
+  this.horario.value = `${dia} ${horario}`;
+  this.produto.value = produtoLS;
+  this.txid.value = txid;
 
 });
 </script>
