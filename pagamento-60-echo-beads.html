@@ -136,12 +136,14 @@ document.getElementById("pagar").addEventListener("click", async () => {
   // 🔴 PERSISTE O PRODUTO (ESSENCIAL)
   localStorage.setItem("produto", produto);
 
+  const consent = JSON.parse(localStorage.getItem("saint_consent"));
+  
   const response = await fetch(
     "https://saint-echo-backend.neuroniosgames.workers.dev/create-payment",
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ produto, valor })
+      body: JSON.stringify({ produto, valor, consent_id: consent.consent_id })
     }
   );
 
