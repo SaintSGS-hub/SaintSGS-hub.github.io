@@ -207,5 +207,13 @@ confirmarBtn.addEventListener("click", async () => {
 });
 </script>
 
+<script>
+  // Verifica se o usuário já aceitou
+  const consent = localStorage.getItem("saint_consent");
+  if (consent && window.startBackgroundMusic) {
+    window.startBackgroundMusic();
+  }
+</script>
+
 </body>
 </html>
