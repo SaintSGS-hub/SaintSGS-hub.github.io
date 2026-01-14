@@ -306,62 +306,6 @@ CNPJ • Pagamento via Mercado Pago • Entrega após confirmação manual
 <script src="js/effects.js"></script>
 
 <script>
-(function () {
-  const accepted = localStorage.getItem("saint_consent");
-
-  if (accepted === "true") {
-    document.getElementById("consent-overlay").style.display = "none";
-    document.getElementById("site-content").style.display = "block";
-    if (window.startBackgroundMusic) window.startBackgroundMusic();
-  }
-
-  document.getElementById("accept-consent").addEventListener("click", function () {
-    localStorage.setItem("saint_consent", "true");
-    document.getElementById("consent-overlay").style.display = "none";
-    document.getElementById("site-content").style.display = "block";
-
-    if (window.startBackgroundMusic) window.startBackgroundMusic();
-  });
-})();
-</script>
-
-<script>
-(async function () {
-  const storedConsent = localStorage.getItem("saint_consent");
-
-  if (storedConsent) {
-    document.getElementById("consent-overlay").style.display = "none";
-    document.getElementById("site-content").style.display = "block";
-    return;
-  }
-
-  document.getElementById("accept-consent").addEventListener("click", async () => {
-    const consentPayload = {
-      consent_version: "2026-01",
-      accepted_at: new Date().toISOString(),
-      user_agent: navigator.userAgent
-    };
-
-    const response = await fetch(
-      "https://saint-echo-backend.neuroniosgames.workers.dev/register-consent",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(consentPayload)
-      }
-    );
-
-    const data = await response.json();
-
-    localStorage.setItem("saint_consent", JSON.stringify(data));
-
-    document.getElementById("consent-overlay").style.display = "none";
-    document.getElementById("site-content").style.display = "block";
-  });
-})();
-</script>
-
-<script>
 (async function () {
   // 1️⃣ Verifica se o usuário já aceitou antes
   const storedConsent = localStorage.getItem("saint_consent");
@@ -403,6 +347,19 @@ CNPJ • Pagamento via Mercado Pago • Entrega após confirmação manual
       document.getElementById("consent-overlay").style.display = "none";
       document.getElementById("site-content").style.display = "block";
       if (window.startBackgroundMusic) window.startBackgroundMusic();
+
+       if (accepted === "true") {
+    document.getElementById("consent-overlay").style.display = "none";
+    document.getElementById("site-content").style.display = "block";
+    if (window.startBackgroundMusic) window.startBackgroundMusic();
+  }
+
+    document.getElementById("accept-consent").addEventListener("click", function () {
+    localStorage.setItem("saint_consent", "true");
+    document.getElementById("consent-overlay").style.display = "none";
+    document.getElementById("site-content").style.display = "block";
+
+    if (window.startBackgroundMusic) window.startBackgroundMusic();
     });
   })();
   </script>
