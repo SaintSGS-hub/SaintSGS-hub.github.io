@@ -64,25 +64,11 @@ Pagamento em análise pelo Mercado Pago
 <button
   id="retry-btn"
   class="hidden w-full bg-zinc-900 border border-yellow-500 text-yellow-400 py-2 rounded-lg mb-6">
-<strong>VERIFICAR PAGAMENTO NOVAMENTE</strong><br>
+<strong>VERIFICAR PAGAMENTO NOVAMENTE</strong>
 </button>
 
-<form id="pedido-form"
-      action="https://formsubmit.co/saintwwmofficial@gmail.com"
-      method="POST"
-      class="space-y-4 card-depth disabled">
-
-  <input type="hidden" name="_subject" value="Novo Pedido Echo Beads">
-  <input type="hidden" name="_captcha" value="false">
-  <input type="hidden" name="_next" value="https://saintsgs-hub.github.io/confirmado.html">
-  <input type="hidden" name="_honeypot" value="">
-
-  <input type="hidden" name="ip">
-  <input type="hidden" name="pais">
-  <input type="hidden" name="cidade">
-  <input type="hidden" name="horario">
-  <input type="hidden" name="produto">
-  <input type="hidden" name="txid">
+<!-- FORM agora é APENAS visual (sem action / submit real) -->
+<form id="pedido-form" class="space-y-4 card-depth disabled">
 
   <input class="w-full p-2 rounded bg-zinc-800"
          name="nick"
@@ -108,7 +94,11 @@ Pagamento em análise pelo Mercado Pago
          placeholder="Seu e-mail"
          required>
 
-  <button type="submit" class="w-full bg-yellow-500 text-black py-2 rounded-lg">
+  <!-- BOTÃO NÃO É SUBMIT -->
+  <button
+    id="confirmar-entrega"
+    type="button"
+    class="w-full bg-yellow-500 text-black py-2 rounded-lg">
 Confirmar Entrega
   </button>
 
@@ -128,6 +118,7 @@ O formulário só é liberado após confirmação real do pagamento.
 const form = document.getElementById("pedido-form");
 const statusBox = document.getElementById("status-box");
 const retryBtn = document.getElementById("retry-btn");
+const confirmarBtn = document.getElementById("confirmar-entrega");
 
 const params = new URLSearchParams(window.location.search);
 const txid =
@@ -135,6 +126,9 @@ const txid =
   params.get("collection_id") ||
   params.get("id");
 
+/* ================================
+   VALIDAÇÃO DE PAGAMENTO
+================================ */
 function validarPagamento() {
   statusBox.className = "status status-pending text-center";
   statusBox.innerText = "Pagamento em análise pelo Mercado Pago";
@@ -164,6 +158,50 @@ function validarPagamento() {
 
 retryBtn.addEventListener("click", validarPagamento);
 validarPagamento();
+
+/* ================================
+   CONFIRMAR ENTREGA (SEM FORM)
+================================ */
+confirmarBtn.addEventListener("click", async () => {
+  try {
+    confirmarBtn.disabled = true;
+    confirmarBtn.innerText = "Processando...";
+
+    const payload = {
+      txid,
+      nick: form.nick.value,
+      jogador_id: form.id.value,
+      whatsapp: form.telefone.value,
+      email_cliente: form.email_cliente.value,
+      horario: new Date().toLocaleString("pt-BR"),
+    };
+
+    if (!payload.nick || !payload.jogador_id || !payload.whatsapp || !payload.email_cliente) {
+      alert("Preencha todos os campos.");
+      confirmarBtn.disabled = false;
+      confirmarBtn.innerText = "Confirmar Entrega";
+      return;
+    }
+
+    const res = await fetch(
+      "https://saint-echo-backend.neuroniosgames.workers.dev/submit-order",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    if (!res.ok) throw new Error();
+
+    window.location.href = "confirmado.html";
+
+  } catch (err) {
+    alert("Erro ao confirmar entrega. Tente novamente.");
+    confirmarBtn.disabled = false;
+    confirmarBtn.innerText = "Confirmar Entrega";
+  }
+});
 </script>
 
 </body>
