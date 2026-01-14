@@ -91,6 +91,14 @@ sem aviso prévio, cabendo ao usuário consultá-la regularmente.
 
 </div>
 
+<script>
+  // Verifica se o usuário já aceitou
+  const consent = localStorage.getItem("saint_consent");
+  if (consent && window.startBackgroundMusic) {
+    window.startBackgroundMusic();
+  }
+</script>
+  
 <script src="js/effects.js"></script>
 </body>
 </html>
