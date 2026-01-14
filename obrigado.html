@@ -167,8 +167,11 @@ confirmarBtn.addEventListener("click", async () => {
     confirmarBtn.disabled = true;
     confirmarBtn.innerText = "Processando...";
 
+    const consent = JSON.parse(localStorage.getItem("saint_consent"));
+    
     const payload = {
       txid,
+      consent_id: consent.consent_id,
       nick: form.nick.value,
       jogador_id: form.id.value,
       whatsapp: form.telefone.value,
