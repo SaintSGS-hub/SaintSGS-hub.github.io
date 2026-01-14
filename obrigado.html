@@ -63,8 +63,8 @@ Pagamento em análise pelo Mercado Pago
 
 <button
   id="retry-btn"
-  class="hidden w-full bg-zinc-900 border-yellow-500 text-gold py-2 rounded-lg mb-6">
-VERIFICAR PAGAMENTO NOVAMENTE
+  class="hidden w-full bg-zinc-900 border border-yellow-500 text-yellow-400 py-2 rounded-lg mb-6">
+<strong>VERIFICAR PAGAMENTO NOVAMENTE</strong><br>
 </button>
 
 <form id="pedido-form"
@@ -157,8 +157,7 @@ function validarPagamento() {
   .catch(() => {
     statusBox.className = "status status-pending text-center";
     statusBox.innerText =
-      "Pagamento ainda não confirmado."
-      "Caso tenha pago, tente novamente.";
+      "Pagamento ainda não confirmado. Verifique novamente.";
     retryBtn.classList.remove("hidden");
   });
 }
