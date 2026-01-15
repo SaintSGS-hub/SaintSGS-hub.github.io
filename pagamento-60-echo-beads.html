@@ -155,8 +155,8 @@ window.addEventListener("DOMContentLoaded", async () => {
     "paymentBrick_container",
     {
       initialization: {
-       // amount: 10.40,              // ← VALOR TOTAL EM REAIS
-        preferenceId: data.preference_id
+        preferenceId: data.preference_id,
+        amount: 10.40              // ← VALOR TOTAL EM REAIS
       },
       paymentMethods: {
         debitCard: "all",
