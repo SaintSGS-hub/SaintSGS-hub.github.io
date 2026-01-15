@@ -150,13 +150,17 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   const bricksBuilder = mp.bricks();
 
+console.log("DEBUG amount:", valor, typeof valor);
+
+console.log("DEBUG preference:", data.preference_id);
+  
   bricksBuilder.create(
     "payment",
     "paymentBrick_container",
     {
       initialization: {
         preferenceId: data.preference_id,
-        amount: 10.40              // ← VALOR TOTAL EM REAIS
+        amount: Number(valor)              // ← VALOR TOTAL EM REAIS
       },
       paymentMethods: {
         debitCard: "all",
