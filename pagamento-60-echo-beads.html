@@ -75,14 +75,6 @@ body::before {
 .home-link:hover {
   color: #fff;
 }
-.mercadopago-overlay {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-.mercadopago-checkout {
-  max-width: 420px !important;
-}
 </style>
 </head>
 
@@ -111,8 +103,8 @@ body::before {
 
    <div class="glass-card glow-float flex flex-col text-center justify-center">
      <h2 class="text-xl font-bold mb-6">Escolher Método</h2>
-   
-   <div id="container-id"></div>
+
+   <div id="paymentBrick_container"></div>
 
     <p class="text-xs font-bold text-gray-400 text-center">
       • PIX • Cartão • Saldo MP • E muito mais
@@ -124,7 +116,7 @@ body::before {
 
 <script>
 const mp = new MercadoPago(
-  "APP_USR-ecd9f6e7-02f7-4bb3-b757-10a0453ab646",
+  "APP_USR-a3850b3c-cecc-496c-9a83-cf4b01237f47",
   { locale: "pt-BR" }
 );
 
@@ -132,13 +124,16 @@ document.getElementById("pagar").addEventListener("click", async () => {
   const produto = "60 Echo Beads";
   const valor = 10.40;
 
-  // 🔴 PERSISTE O PRODUTO (ESSENCIAL)
   localStorage.setItem("produto", produto);
 
   const consent = JSON.parse(localStorage.getItem("saint_consent"));
-  
-  const response = await fetch(
-    "https://saint-echo-backend.neuroniosgames.workers.dev/create-payment",
+  if (!consent?.consent_id) {
+    alert("Consentimento não encontrado.");
+    return;
+  }
+
+  const res = await fetch(
+    "https://saint-echo-backend.neuroniosgames.workers.dev/create-payment-bricks",
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -146,33 +141,34 @@ document.getElementById("pagar").addEventListener("click", async () => {
     }
   );
 
-  const data = await response.json();
+  const data = await res.json();
 
-  if (!data.id) {
-    alert("Erro ao criar pagamento.");
+  if (!data.preference_id) {
+    alert("Erro ao iniciar pagamento.");
     return;
   }
 
-  mp.bricks().create("payment", "container-id", {
-    customization: {
-      visual: {
-        theme: "dark"
+  document.getElementById("pagar").style.display = "none";
+
+  const bricksBuilder = mp.bricks();
+
+  bricksBuilder.create(
+    "payment",
+    "paymentBrick_container",
+    {
+      initialization: {
+        preferenceId: data.preference_id
       },
-      paymentMethods: {
-        pix: true,
-        ticket: false, // boleto off
-        creditCard: true
-      }
-    },
-    callbacks: {
-      onSubmit: async (formData) => {
-        await fetch("/create-payment", {
-          method: "POST",
-          body: JSON.stringify(formData)
-        });
+      customization: {
+        visual: {
+          style: {
+            theme: "dark"
+          }
+        }
       }
     }
-  });
+  );
+});
 </script>
 
 <script>
