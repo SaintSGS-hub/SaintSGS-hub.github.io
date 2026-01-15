@@ -158,6 +158,12 @@ window.addEventListener("DOMContentLoaded", async () => {
         amount: 10.40,              // ← VALOR TOTAL EM REAIS
         preferenceId: data.preference_id
       },
+      paymentMethods: {
+        pix: "all",
+        creditCard: "all",
+        debitCard: "all",
+        mercadoPago: "all"
+      },
       customization: {
         visual: {
           style: { theme: "dark" }
