@@ -115,20 +115,6 @@ body::before {
 </div>
 
 <script>
-console.log("Resposta do worker:", data);
-
-if (
-  !data.preference_id ||
-  typeof data.preference_id !== "string" ||
-  data.preference_id.length < 10
-) {
-  console.error("Preference inválida:", data);
-  alert("Erro ao iniciar pagamento.");
-  return;
-}
-</script>
-
-<script>
 const mp = new MercadoPago(
   "APP_USR-ecd9f6e7-02f7-4bb3-b757-10a0453ab646",
   { locale: "pt-BR" }
