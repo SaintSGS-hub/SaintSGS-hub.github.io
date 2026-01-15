@@ -120,7 +120,7 @@ const mp = new MercadoPago(
   { locale: "pt-BR" }
 );
 
-document.getElementById("pagar").addEventListener("click", async () => {
+window.addEventListener("DOMContentLoaded", async () => {
   const produto = "60 Echo Beads";
   const valor = 10.40;
 
@@ -147,8 +147,6 @@ document.getElementById("pagar").addEventListener("click", async () => {
     alert("Erro ao iniciar pagamento.");
     return;
   }
-
-  document.getElementById("pagar").style.display = "none";
 
   const bricksBuilder = mp.bricks();
 
