@@ -160,9 +160,16 @@ window.addEventListener("DOMContentLoaded", async () => {
       },
       customization: {
         visual: {
-          style: {
-            theme: "dark"
-          }
+          style: { theme: "dark" }
+        }
+      },
+      callbacks: {
+        onReady: () => {
+          console.log("🟢 Payment Brick pronto");
+        },
+        onError: (error) => {
+          console.error("🔴 Erro no Payment Brick", error);
+          alert("Erro ao carregar meios de pagamento. Tente atualizar a página.");
         }
       }
     }
