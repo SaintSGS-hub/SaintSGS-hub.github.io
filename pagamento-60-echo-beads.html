@@ -165,7 +165,7 @@ document.getElementById("pagar").addEventListener("click", async () => {
         creditCard: true
       }
     },
-    callbakcs: {
+    callbacks: {
       onSubmit: async (formData) => {
         await fetch("/create-payment", {
           method: "POST",
