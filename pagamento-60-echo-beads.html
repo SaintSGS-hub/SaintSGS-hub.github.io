@@ -161,14 +161,14 @@ window.addEventListener("DOMContentLoaded", async () => {
   // "paymentBrick_container",          // container
   {
     initialization: {
-      paymentId: data.preference_id    // <- do backend
+      preferenceId: data.preference_id    // <- do backend
     },
     customization: {
       visual: { style: { theme: "dark" } }
     },
     callbacks: {
-      onReady: () => console.log("🟢 Checkout Brick pronto"),
-      onError: (err) => console.error("🔴 Erro no Checkout Brick", err),
+      onReady: () => console.log("🟢 Payment Brick pronto"),
+      onError: (err) => console.error("🔴 Erro no Payment Brick", err),
         // alert("Erro ao carregar o status do pagamento. Atualize a página.");
       onSubmit: (paymentData) => {
           console.log("💰 Dados do pagamento:", paymentData);
