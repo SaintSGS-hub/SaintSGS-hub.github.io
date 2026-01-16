@@ -147,7 +147,138 @@ body::before {
 
   </div>
 </div>
-  
+
+<!-- DISCORD -->
+<a href="https://discordapp.com/users/715081298254888990" target="_blank" id="discord-icon">
+  <img src="img/discord.png" alt="Discord" />
+</a>
+
+<style>
+#discord-icon {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 1000;
+}
+#discord-icon:hover {
+  transform: scale(1.1);
+}
+</style>
+
+<!-- BOTÃO SUPORTE -->
+<div id="support-btn">
+  <img src="https://cdn.discordapp.com/attachments/1460866723610890347/1461617258592735286/Sem_Titulodsadasdsad-1.png?ex=696b34a5&is=6969e325&hm=10f3578530f2f9ed9812a797d8c4da3350a5d2050fefde150f539e6566a7c099&" alt="Suporte" />
+</div>
+
+<style>
+#support-btn {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #FFD700;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0,0,0,.4);
+  z-index: 1000;
+}
+#support-btn:hover {
+  transform: scale(1.08);
+}
+</style>
+
+<div id="support-modal">
+  <form id="support-form">
+    <h2>Contato com Suporte</h2>
+
+    <input name="name" placeholder="Nome completo" required>
+    <input name="whatsapp" placeholder="WhatsApp" required>
+    <input name="email" type="email" placeholder="Email" required>
+    <input name="subject" placeholder="Assunto" required>
+    <textarea name="message" placeholder="Mensagem" required></textarea>
+
+    <button type="submit">Enviar</button>
+  </form>
+</div>
+
+<style>
+#support-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.7);
+  z-index: 1001;
+}
+#support-form {
+  background: #111;
+  color: #fff;
+  max-width: 400px;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+#support-form input,
+#support-form textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+
+  background: #fff;   /* fundo do campo */
+  color: #111;        /* texto que o cliente digita */
+}
+</style>
+
+<script src="js/effects.js"></script>
+
+<script>
+const btn = document.getElementById("support-btn");
+const modal = document.getElementById("support-modal");
+
+btn.onclick = () => modal.style.display = "block";
+modal.onclick = e => {
+  if (e.target === modal) modal.style.display = "none";
+};
+</script>
+
+<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script>
+(function(){
+  emailjs.init("fjXHE6FnezGdisp_s");
+})();
+
+document.getElementById("support-form").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  emailjs.sendForm(
+    "service_cuecopv",
+    "template_m4anla3",
+    this
+  ).then(() => {
+    alert("Mensagem enviada com sucesso!");
+    this.reset();
+    document.getElementById("support-modal").style.display = "none";
+  }, err => {
+    alert("Erro ao enviar mensagem");
+    console.error(err);
+  });
+});
+</script>
+
 <footer class="w-full mt-16 border-t border-gray-700 pt-8 pb-6">
   <div class="max-w-5xl mx-auto text-center text-sm text-gray-300 space-y-4">
 
