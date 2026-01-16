@@ -435,6 +435,10 @@ window.addEventListener("DOMContentLoaded", async () => {
                           console.log("Status Screen carregado!");
                           resolve();
                         },
+                        onFormCompleted: () => {
+                          console.log("Pagamento finalizado pelo usuário!");
+                          window.location.href = `https://saintsgs-hub.github.io{paymentData.id}`;
+                        },
                         onError: (error) => {
                           console.error("Erro no Status Screen", error);
                           reject();
