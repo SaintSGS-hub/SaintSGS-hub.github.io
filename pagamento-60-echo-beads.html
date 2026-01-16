@@ -177,7 +177,7 @@ bricksBuilder.create(
       amount: 10.40
     },
     customization: {
-      visual: { style: { theme: "default" } },
+      visual: { style: { theme: "dark" } },
       paymentMethods: {
         bankTransfer: "all",
         creditCard: "all",
@@ -193,15 +193,51 @@ bricksBuilder.create(
           fetch("https://saint-echo-backend.neuroniosgames.workers.dev/process-payment", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formData),
+            body: JSON.stringify({ ...formData, consent_id: consent.consent_id }),
           })
-          .then((res) => resolve())
-          .catch((err) => reject());
-        }); // fecha o new Promise
-      }, // <--- aqui fecha onSubmit corretamente
-    }, // fecha callbacks
-  } // fecha bricks config
-); // fecha bricksBuilder.create
+          .then((res) => res.json())
+          .then((paymentData) => {
+            if (paymentData.id) {
+
+              // --- 4. Renderizar o Status Screen Brick ---
+             // Isso substitui o formulário atual pelo QR code
+              bricksBuilder.create(
+                "statusScreen",
+                "paymentBrick_container",
+                {
+                  initialization: {
+                    paymentId: paymentData.id
+                  },
+                  callbacks: {
+                    onReady: () => {
+                      console.log("Status Screen (PIX/Boleto) carregado!");
+                      resolve();
+                  },
+                  onError: (error) => {
+                    console.error("Erro no Status Screen", error);
+                    reject();
+                  }
+                }
+              }
+            );
+          } else {
+                  alert("Pagamento não pôde ser processado.");
+                  reject();
+                }
+              })
+              .catch((err) => {
+                console.error("Erro no backend:", err);
+                reject();
+              });
+            });
+          },
+        },
+      }
+    );
+  } catch (err) {
+    console.error(err);
+    alert("Erro ao carregar checkout.");
+  }
 });
 </script>
 
