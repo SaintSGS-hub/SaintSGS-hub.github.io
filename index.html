@@ -46,7 +46,7 @@
 
   .product-card2:hover2 {
     transform: translateY(-4px) scale(1.01);
-    box-shadow: 0 12px 124px rgba(0,0,0,0.35);
+    box-shadow: 0 64px 256px rgba(0,0,0,0.35);
   }
 
   .glow-float {
@@ -88,6 +88,19 @@
     align-items: center;
     gap: 16px;
     margin-bottom: 40px;
+  }
+
+  .price-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  .price-slash {
+    position: absolute;
+    top: -38px;
+    right: -42px;
+    width: 90px;
+    pointer-events: none;
   }
 
   /* ================================
@@ -229,7 +242,14 @@ A MELHOR opção para quem quer comprar Echo Beads para sua própria conta ou en
 <!-- Cards de produtos continuam iguais -->
 <div class="product-card text-center">
   <h2 class="text-xl mb-2 font-bold glow-float">🦪 60 Echo Beads 🦪</h2>
+  <div class="price-wrapper">
   <span class="valor-glow glow-float">R$ 11,45</span>
+    <img
+      src="https://cdn.discordapp.com/attachments/1460866723610890347/1461635013010526230/grok-video-d6862cc6-9f4a-4e53-a393-3ef7497029451-ezgif.com-effects.gif?ex=696b452e&is=6969f3ae&hm=12402ee59796167cd1fc6491602a690b36b8ccd4f1fde05ed309bc11af241509&"
+      alt="10% OFF"
+      class="price-slash"
+    />
+  </div>
   <a href="pagamento-60-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar glow-float">COMPRAR</a>
 </div>
 
@@ -293,8 +313,11 @@ CNPJ • Pagamento via Mercado Pago • Entrega após confirmação manual
 
 </div>
 
+<div class="text-center">
+  <span class="valor-glow">____________________________________________________________________________________________________________________________________________________________________________________________ </span><br>
+</div>
+  
 <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-<span class="valor-glow text-center">____________________________________________________________________________________________________________________________________________________________________________________________ </span>
 
 <div class="product-card2 text-center">
   <span class="text-xl valor-glow font-bold glow-float">EM BREVE.. PASSES DE BATALHA E MAIS!</span>
