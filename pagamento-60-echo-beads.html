@@ -82,6 +82,20 @@ body::before {
 .home-link:hover {
   color: #fff;
 }
+
+.price-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.price-slash {
+  position: absolute;
+  top: -19px;
+  right: 39px;
+  width: 90px;
+  pointer-events: none;
+  }
+  
 </style>
 </head>
 
@@ -100,7 +114,15 @@ body::before {
      </p>
 <!-- EDITAR VALOR AQUI -->
       <img src="img/echo60.png" class="mx-auto w-32 mb-4">
-      <span class="valor-glow">R$ 11,45</span>
+      <div class="price-wrapper">
+  <span class="glow-float text-center font-bold text-red-700">R$ 12,54</span><br>
+    <img
+      src="https://cdn.discordapp.com/attachments/1460866723610890347/1461635013010526230/grok-video-d6862cc6-9f4a-4e53-a393-3ef7497029451-ezgif.com-effects.gif?ex=696b452e&is=6969f3ae&hm=12402ee59796167cd1fc6491602a690b36b8ccd4f1fde05ed309bc11af241509&"
+      alt="10% OFF"
+      class="price-slash"
+    />
+  </div>
+      <span class="valor-glow glow-float text-xl mb-2 font-bold text-center">R$ 11,45</span>
 <!-- EDITAR DESCRICAO AQUI -->
 <p class="text-xs text-gray-200 font-semibold mt-4">
         Comprando você obtem:<br>
