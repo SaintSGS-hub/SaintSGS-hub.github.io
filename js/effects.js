@@ -107,6 +107,28 @@
 })();
 
 /* ================================
+   INICIAR MÚSICA NO PRIMEIRO MOVIMENTO DO MOUSE
+================================ */
+(function () {
+  let activated = false;
+
+  const startOnMouseMove = () => {
+    if (activated) return;
+    activated = true;
+
+    if (typeof window.startBackgroundMusic === "function") {
+      window.startBackgroundMusic();
+    }
+
+    window.removeEventListener("mousemove", startOnMouseMove);
+    window.removeEventListener("touchstart", startOnMouseMove);
+  };
+
+  window.addEventListener("mousemove", startOnMouseMove, { once: true });
+  window.addEventListener("touchstart", startOnMouseMove, { once: true });
+})();
+
+/* ================================
    LOADING ANIMADO PARA BOTÕES DE PAGAMENTO
 ================================ */
 document.querySelectorAll('.btn-comprar, .btn-confirmar').forEach(btn => {
