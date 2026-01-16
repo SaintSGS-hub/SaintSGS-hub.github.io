@@ -101,18 +101,19 @@ body::before {
         • Produtos pagos em boleto levarão de 3 a 4 dias úteis para serem entregues
       </p>
 
-    <p class="text-xs text-gray-300 mt-1">
-        Este pacote é exclusivo para a versão de PC/Computador/Laucher/Steam/EpicGames.
-      </p>
     <p class="text-xs text-gray-300 mt-10">
+        Este pacote é exclusivo para a versão de PC/Computador/Laucher/Steam/EpicGames.
+      
       Echo Beads compradas aqui não aparecerão no PlayStation 5, Android e nem IOS devido as restrições das plataformas.
       </p>
 
-      <span class="valor-glow"> </span>
+      <span class="valor-glow">_______________________________ </span>
       
-      <img src="https://cdn.discordapp.com/attachments/1460866723610890347/1461571663589281963/https3A2F2Fimage.api.playstation.com2Fvulcan2Fap2Frnd2F2025082F25082F874cb839f41995bc8203da590b4cf4556b30ad7f47370b90.png?ex=696b0a2f&is=6969b8af&hm=e491edc41132b414f9d01234c922d2ef7614aab34a6c1bcd831c1a1807f63f27&" class="mx-auto w-70 mb-6">
+      <img src="https://cdn.discordapp.com/attachments/1460866723610890347/1461571663589281963/https3A2F2Fimage.api.playstation.com2Fvulcan2Fap2Frnd2F2025082F25082F874cb839f41995bc8203da590b4cf4556b30ad7f47370b90.png?ex=696b0a2f&is=6969b8af&hm=e491edc41132b414f9d01234c922d2ef7614aab34a6c1bcd831c1a1807f63f27&" class="mx-auto w-40 mb-6">
 
-      <img src="https://cdn.discordapp.com/attachments/1460866723610890347/1461573647415382076/mercado-pago-forma-de-pagamentos-copiar.png?ex=696b0c08&is=6969ba88&hm=0c32521526f3b5059ae19eed1c961e0b81c07146d4f859890f6aefef0c1eabb6&" class="mx-auto w-50">
+      <span class="valor-glow">_______________________________ </span>
+      
+      <img src="https://cdn.discordapp.com/attachments/1460866723610890347/1461573647415382076/mercado-pago-forma-de-pagamentos-copiar.png?ex=696b0c08&is=6969ba88&hm=0c32521526f3b5059ae19eed1c961e0b81c07146d4f859890f6aefef0c1eabb6&" class="mx-auto w-39">
     </div>
 
    <div class="glass-card glow-float flex flex-col text-center justify-center">
@@ -136,7 +137,7 @@ const mp = new MercadoPago(
 
 window.addEventListener("DOMContentLoaded", async () => {
   const produto = "60 Echo Beads";
-  const valor = Number("10.40");
+  const valor = 10.40;
 
   localStorage.setItem("produto", produto);
 
@@ -146,81 +147,79 @@ window.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  const res = await fetch(
-    "https://saint-echo-backend.neuroniosgames.workers.dev/create-payment-bricks",
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ produto, valor, consent_id: consent.consent_id /*, payment_method_id: "pix" */ })
+  try {
+    // 1. Cria a preferência para carregar o Brick
+    const res = await fetch(
+      "https://saint-echo-backend.neuroniosgames.workers.dev/create-payment-bricks",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ produto, valor, consent_id: consent.consent_id })
+      }
+    );
+
+    const data = await res.json();
+
+    if (!data.preference_id) {
+      alert("Erro ao iniciar pagamento.");
+      return;
     }
-  );
 
-  const data = await res.json();
+    const bricksBuilder = mp.bricks();
 
-  if (!data.preference_id) {
-    alert("Erro ao iniciar pagamento.");
-    return;
-  }
-
-  const bricksBuilder = mp.bricks();
-
-// console.log("DEBUG amount:", valor, typeof valor);
-
-// console.log("DEBUG preference:", data.preference_id);
-  
-bricksBuilder.create(
-  "payment",
-  "paymentBrick_container",
-  {
-    initialization: {
-      preferenceId: data.preference_id,
-      amount: 10.40
-    },
-    customization: {
-      visual: { style: { theme: "dark" } },
-      paymentMethods: {
-        bankTransfer: "all",
-        creditCard: "all",
-        debitCard: "all",
-        mercadoPago: "all",
-      },
-    },
-    callbacks: {
-      onReady: () => console.log("🟢 Payment Brick pronto"),
-      onError: (err) => console.error("🔴 Erro no Payment Brick", err),
-      onSubmit: ({ selectedPaymentMethod, formData }) => {
-        return new Promise((resolve, reject) => {
-          fetch("https://saint-echo-backend.neuroniosgames.workers.dev/process-payment", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ ...formData, consent_id: consent.consent_id }),
-          })
-          .then((res) => res.json())
-          .then((paymentData) => {
-            if (paymentData.id) {
-
-              // --- 4. Renderizar o Status Screen Brick ---
-             // Isso substitui o formulário atual pelo QR code
-              bricksBuilder.create(
-                "statusScreen",
-                "paymentBrick_container",
-                {
-                  initialization: {
-                    paymentId: paymentData.id
-                  },
-                  callbacks: {
-                    onReady: () => {
-                      console.log("Status Screen (PIX/Boleto) carregado!");
-                      resolve();
-                  },
-                  onError: (error) => {
-                    console.error("Erro no Status Screen", error);
-                    reject();
-                  }
-                }
-              }
-            );
-          } else {
+    // 2. Renderiza o Payment Brick
+    bricksBuilder.create(
+      "payment",
+      "paymentBrick_container",
+      {
+        initialization: {
+          preferenceId: data.preference_id,
+          amount: valor
+        },
+        customization: {
+          visual: { style: { theme: "dark" } },
+          paymentMethods: {
+            bankTransfer: "all",
+            creditCard: "all",
+            debitCard: "all",
+            mercadoPago: "all",
+          },
+        },
+        callbacks: {
+          onReady: () => console.log("🟢 Payment Brick pronto"),
+          onError: (err) => console.error("🔴 Erro no Payment Brick", err),
+          onSubmit: ({ selectedPaymentMethod, formData }) => {
+            return new Promise((resolve, reject) => {
+              // 3. Processa o pagamento no seu backend
+              fetch("https://saint-echo-backend.neuroniosgames.workers.dev/process-payment", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ ...formData, consent_id: consent.consent_id }),
+              })
+              .then((res) => res.json())
+              .then((paymentData) => {
+                if (paymentData.id) {
+                  // 4. Se deu certo, mostra o QR Code / Status na mesma tela
+                  bricksBuilder.create(
+                    "statusScreen",
+                    "paymentBrick_container",
+                    {
+                      initialization: {
+                        paymentId: paymentData.id
+                      },
+                      callbacks: {
+                        onReady: () => {
+                          console.log("Status Screen carregado!");
+                          resolve();
+                        },
+                        onError: (error) => {
+                          console.error("Erro no Status Screen", error);
+                          reject();
+                        }
+                      }
+                    }
+                  );
+                } else {
                   alert("Pagamento não pôde ser processado.");
                   reject();
                 }
@@ -235,8 +234,8 @@ bricksBuilder.create(
       }
     );
   } catch (err) {
-    console.error(err);
-    alert("Erro ao carregar checkout.");
+    console.error("Erro geral:", err);
+    alert("Erro ao carregar o checkout.");
   }
 });
 </script>
