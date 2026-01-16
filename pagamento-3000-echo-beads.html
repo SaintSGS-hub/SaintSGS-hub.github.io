@@ -2,44 +2,313 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<!-- EDITAR NOME AQUI -->
 <title>Pagamento • 3000 Echo Beads</title>
 <link rel="icon" type="image/png" href="img/favicon.png">
 <script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Mercado Pago SDK -->
+<script src="https://sdk.mercadopago.com/js/v2"></script>
+
 <style>
-body { background: radial-gradient(circle at top, rgba(255,200,0,0.04), transparent 60%), #000; font-family: sans-serif; }
-.glass-card { background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius: 15px; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 8px 32px rgba(0,0,0,0.2); padding: 20px; color: white; max-width:400px; width:100%; text-align:center; }
-.glass-card:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 12px 40px rgba(0,0,0,0.35); transition: transform 0.2s, box-shadow 0.2s; }
-.glow-float { display:inline-block; animation: floatGlow 3s ease-in-out infinite; text-shadow:0 0 4px rgba(255,255,255,0.3),0 0 8px rgba(255,255,255,0.2),0 0 12px rgba(255,255,0,0.1);}
-.valor-glow { font-weight:bold; color:#FFD700; text-shadow:0 0 6px #FFD700,0 0 12px #FFD700,0 0 18px #FFFACD; display:block; margin-bottom:12px; }
-@keyframes floatGlow { 0% { transform: translateY(0px); } 50% { transform: translateY(-3px); } 100% { transform: translateY(0px); } }
-.btn-comprar { font-weight:bold; background-color:#FFD700; color:#000; padding:12px 0; border-radius:12px; display:block; width:100%; margin-top:8px; text-decoration:none; transition: transform 0.2s ease, box-shadow 0.2s ease; }
-.btn-comprar:hover { transform: scale(1.03); box-shadow:0 0 12px rgba(255,215,0,0.6);}
-a.home-link { position:fixed; top:16px; left:16px; color:#888; font-size:14px; text-decoration:none; transition: color 0.2s;}
-a.home-link:hover { color:#fff; }
-img.package-img { margin:12px 0; width:120px; height:auto; border-radius:8px; }
+body {
+  background: #000; /* fundo preto sólido */
+  font-family: sans-serif;
+}
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+   radial-gradient(circle at top, rgba(255,200,0,0.04), transparent 80%),
+   url('img/fundo.png') center center / cover no-repeat;
+  opacity: 0.25;
+  z-index: -1;
+  pointer-events: none;
+}
+.glass-card {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,255,0.2);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  padding: 24px;
+  color: white;
+}
+.glow-float {
+  animation: floatGlow 3s ease-in-out infinite;
+  text-shadow: 0 0 6px rgba(255,255,255,0.3);
+}
+.valor-glow {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #FFD700;
+  text-shadow: 0 0 8px #FFD700;
+  }
+.valor-glow2 {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #FFD700;
+  text-shadow: 0 0 8px #FFD700;
+}
+@keyframes floatGlow {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-3px); }
+  100% { transform: translateY(0px); }
+}
+.btn-comprar {
+  background: #FFD700;
+  color: #000;
+  font-weight: bold;
+  padding: 14px;
+  border-radius: 14px;
+  width: 100%;
+  margin-top: 12px;
+}
+/* Home discreto */
+.home-link {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  transition: color 0.2s;
+  z-index: 50;
+}
+.home-link:hover {
+  color: #fff;
+}
 </style>
 </head>
+
 <body>
-<a href="index.html" class="home-link">← Home</a>
+
+<a href="https://saintsgs-hub.github.io/index.html" class="home-link">← Home</a>
+
 <div class="min-h-screen flex items-center justify-center p-6">
-  <div class="glass-card glow-float">
-    <h1 class="text-2xl font-bold mb-2 glow-float">🦪 3000 Echo Beads 🦪</h1>
-    <p class="text-gray-400 mb-4 glow-float">Comprando esse pacote, será adicionado <strong>3000 Echo Beads</strong> na sua conta.</p>
-    <img src="img/echo3000.png" alt="3000 Echo Beads" class="package-img glow-float">
-    <img src="img/qr3000pix.png" alt="QR Code PIX 3000 Echo Beads" class="package-img glow-float">
-    <span class="valor-glow glow-float">R$ 369,90</span>
-    <div class="bg-black border border-zinc-700 rounded-lg p-4 mb-4 text-left text-sm break-all">
-      <p class="text-gray-400 mb-1">Pix Copia & Cola:</p>
-      <p class="select-all">00020126580014br.gov.bcb.pix01360317d120-947f-4dde-9bed-20b06985bead5204000053039865406369.905802BR592462.473.545 LUAN ANTONIO 6009Sao Paulo62240520daqr26544720330977496304EDFE</p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl w-full">
+
+    <div class="glass-card text-center glow-float">
+      <h1 class="text-2xl font-bold mb-2">🦪 3000 Echo Beads 🦪</h1>
+<!-- EDITAR QUANTIDADE AQUI -->
+     <p class="text-gray-300 text-center mb-4">
+       Este pacote adiciona <strong>3000 Echo Beads</strong> diretamente na sua conta do jogo Where Winds Meet.
+     </p>
+<!-- EDITAR VALOR AQUI -->
+      <img src="img/echo60.png" class="mx-auto w-32 mb-4">
+      <span class="valor-glow">R$ 408,35</span>
+<!-- EDITAR DESCRICAO AQUI -->
+<p class="text-xs text-gray-200 font-semibold mt-4">
+        Comprando você obtem:<br>
+        • 3000 Echo Beads<br>
+        As Echo Beads podem ser utilizadas na loja interna do jogo para:<br>
+        • Desbloquear skins premium, montarias, armas, efeitos visuais e outros itens cosméticos.<br>
+        • Participar de sorteios (draws) com chance de obter itens cosméticos raros.<br>
+      </p>
+<p class="text-xs text-gray-500 mt-4">
+        Informações obtidas a partir dos materiais oficiais do jogo Where Winds Meet, desenvolvido pela Everstone Studio e publicado pela NetEase Games, criadora e distribuidora oficial das Echo Beads. Todos os direitos reservados.<br>
+      </p>
+      
+     <span class="valor-glow">_______________________________ </span>
+      
+    <p class="text-xs text-gray-400 mt-4">
+        • Entrega manual após confirmação do Mercado Pago<br>
+        • Pagamento 100% seguro<br>
+        • Produtos pagos em boleto levarão de 3 a 4 dias úteis para serem entregues<br>
+      </p>
+
+     <span class="valor-glow">_______________________________ </span>
+      
+    <p class="text-xs text-gray-300 mt-10">
+        Este pacote é exclusivo para a versão de PC/Computador/Laucher/Steam/EpicGames.<br>
+      Echo Beads compradas aqui não aparecerão no PlayStation 5, Android e nem IOS devido as restrições das plataformas.
+      </p>
+
+      <span class="valor-glow">_______________________________ </span><br>
+      <!-- EDITAR FOTO AQUI -->
+      <img src="https://cdn.discordapp.com/attachments/1460866723610890347/1461608922166198355/Sem_Titulo-7.png?ex=696b2ce2&is=6969db62&hm=60f4b2922c7fe0fe3fb4d82833aeb48e0649a5234691543dc9310a049faf0eb3&" class="mx-auto w-45 mb-10"><br>
+          
+      <span class="valor-glow">_______________________________ </span>
     </div>
-    <div class="text-xs text-gray-400 mb-4 space-y-2">
-      <p>• Não clique no botão sem realizar o pagamento.</p>
-      <p>• O sistema verifica manualmente cada PIX.</p>
-      <p>• Após confirmar, você será redirecionado para informar seus dados.</p>
+
+   <div class="glass-card glow-float flex flex-col text-center justify-center">
+     <h2 class="text-xl font-bold mb-6">Escolher Método</h2>
+
+   <div id="paymentBrick_container"></div>
+
+    <p class="text-xs font-bold text-gray-400 text-center">
+      • PIX • Cartão • Saldo MP • E muito mais
+      </p>
     </div>
-    <a href="obrigado.html" class="btn-comprar glow-float">CLIQUE AQUI APÓS O PAGAMENTO</a>
+
   </div>
 </div>
-<script src="js/effects.js"></script>
+  
+<footer class="w-full mt-16 border-t border-gray-700 pt-8 pb-6">
+  <div class="max-w-5xl mx-auto text-center text-sm text-gray-300 space-y-4">
+
+    <!-- Linha 2: Métodos de pagamento -->
+    <div class="flex flex-wrap justify-center items-center gap-4 mt-4">
+      <img src="https://cdn.discordapp.com/attachments/1460866723610890347/1461587430980190431/7406-pix.png?ex=696b18de&is=6969c75e&hm=418533400fbf11e255f184bae771727e2b94c4608a0cac832a638daf88441193&" alt="Pix" class="h-6">
+      <img src="https://cdn.discordapp.com/attachments/1460866723610890347/1461588101267718319/visa-4-logo-png-transparent.png?ex=696b197e&is=6969c7fe&hm=e8c145468f1a9e96c3f2306377245e9d0db946a192049ae8e4af82bc44e0a1f9&" alt="Visa" class="h-6">
+      <img src="https://cdn.discordapp.com/attachments/1460866723610890347/1461588456345043005/master-card-icon.png?ex=696b19d2&is=6969c852&hm=ffdca7ea0aabfa8ccbdb41806f725909fb166c2ab0ebdb4fc5da11588635c146&" alt="MasterCard" class="h-6">
+      <img src="https://cdn.discordapp.com/attachments/1460866723610890347/1461588579871494154/mercado-pago-logo-png_seeklogo-342347.png?ex=696b19f0&is=6969c870&hm=1f7b995220f75a4510570b320ba810ddca91904181b640081aba14f026dad79f&" alt="Mercado Pago" class="h-6">
+    </div>
+    
+    <!-- Linha 1: Segurança básica -->
+    <div class="flex flex-wrap justify-center font-semibold gap-6">
+      <span>🔒 Pagamento seguro</span>
+      <span>🧾 Compra protegida</span>
+      <span>⚡ Entrega digital automática / Verificação manual</span>
+    </div>
+
+    <!-- Linha 3: Selos textuais (subconsciente trabalha aqui) -->
+    <div class="flex flex-wrap justify-center gap-6 mt-4 text-xs font-semibold uppercase tracking-wide">
+      <span>🔐 SSL Secure Checkout</span>
+      <span>🧾 Terms Accepted</span>
+      <span>⚙️ Entrega manual após confirmação</span>
+      <span>⏱️ Atendimento 24 horas ON</span>
+    </div>
+
+    <!-- Linha 4: Claims de confiança (estilo marketplaces grandes) -->
+    <div class="valor-glow2 flex flex-wrap justify-center gap-6 mt-4 font-semibold">
+      <span>✔ Secure Digital Delivery</span>
+      <span>✔ Verified Payment Flow</span>
+      <span>✔ Manual In-Game Delivery</span>
+      <span>✔ Terms Accepted & Logged</span>
+    </div>
+
+    <!-- Linha 5: Legal -->
+    <div class="mt-6 text-xs text-gray-400">
+      <a href="https://saintsgs-hub.github.io/tos.html" class="underline">Termos de Uso</a> •
+      <a href="https://saintsgs-hub.github.io/privacidade.html" class="underline">Política de Privacidade</a>
+    </div>
+
+  </div>
+</footer>
+
+<script>
+const mp = new MercadoPago(
+  "APP_USR-ecd9f6e7-02f7-4bb3-b757-10a0453ab646",
+  { locale: "pt-BR" }
+);
+
+window.addEventListener("DOMContentLoaded", async () => {
+  const produto = "3000 Echo Beads"; //EDITAR QUANTIDADE AQUI
+  const valor = 408.35; //EDITAR VALOR AQUI
+
+  localStorage.setItem("produto", produto);
+
+  const consent = JSON.parse(localStorage.getItem("saint_consent"));
+  if (!consent?.consent_id) {
+    alert("Consentimento não encontrado.");
+    return;
+  }
+
+  try {
+    // 1. Cria a preferência para carregar o Brick
+    const res = await fetch(
+      "https://saint-echo-backend.neuroniosgames.workers.dev/create-payment-bricks",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ produto, valor, consent_id: consent.consent_id })
+      }
+    );
+
+    const data = await res.json();
+
+    if (!data.preference_id) {
+      alert("Erro ao iniciar pagamento.");
+      return;
+    }
+
+    const bricksBuilder = mp.bricks();
+
+    // 2. Renderiza o Payment Brick
+    bricksBuilder.create(
+      "payment",
+      "paymentBrick_container",
+      {
+        initialization: {
+          preferenceId: data.preference_id,
+          amount: valor
+        },
+        customization: {
+          visual: { style: { theme: "dark" } },
+          paymentMethods: {
+            bankTransfer: "all",
+            creditCard: "all",
+            debitCard: "all",
+            mercadoPago: "all",
+          },
+        },
+        callbacks: {
+          onReady: () => console.log("🟢 Payment Brick pronto"),
+          onError: (err) => console.error("🔴 Erro no Payment Brick", err),
+          onSubmit: ({ selectedPaymentMethod, formData }) => {
+            return new Promise((resolve, reject) => {
+              // 3. Processa o pagamento no seu backend
+              fetch("https://saint-echo-backend.neuroniosgames.workers.dev/process-payment", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ ...formData, consent_id: consent.consent_id }),
+              })
+              .then((res) => res.json())
+              .then((paymentData) => {
+                if (paymentData.id) {
+                  // 4. Se deu certo, mostra o QR Code / Status na mesma tela
+                  bricksBuilder.create(
+                    "statusScreen",
+                    "paymentBrick_container",
+                    {
+                      initialization: {
+                        paymentId: paymentData.id
+                      },
+                      callbacks: {
+                        onReady: () => {
+                          console.log("Status Screen carregado!");
+                          resolve();
+                        },
+                        onError: (error) => {
+                          console.error("Erro no Status Screen", error);
+                          reject();
+                        }
+                      }
+                    }
+                  );
+                } else {
+                  alert("Pagamento não pôde ser processado.");
+                  reject();
+                }
+              })
+              .catch((err) => {
+                console.error("Erro no backend:", err);
+                reject();
+              });
+            });
+          },
+        },
+      }
+    );
+  } catch (err) {
+    console.error("Erro geral:", err);
+    alert("Erro ao carregar o checkout.");
+  }
+});
+</script>
+
+<script>
+  // Verifica se o usuário já aceitou
+  const consent = localStorage.getItem("saint_consent");
+  if (consent && window.startBackgroundMusic) {
+    window.startBackgroundMusic();
+  }
+</script>
+
 </body>
 </html>
