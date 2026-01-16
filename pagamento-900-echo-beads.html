@@ -82,6 +82,20 @@ body::before {
 .home-link:hover {
   color: #fff;
 }
+
+.price-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.price-slash {
+  position: absolute;
+  top: -19px;
+  right: 43px;
+  width: 90px;
+  pointer-events: none;
+  }
+  
 </style>
 </head>
 
@@ -98,10 +112,26 @@ body::before {
      <p class="text-gray-300 text-center mb-4">
        Este pacote adiciona <strong>900 Echo Beads</strong> diretamente na sua conta do jogo Where Winds Meet.
      </p>
-<!-- EDITAR VALOR AQUI -->
-      <img src="img/echo60.png" class="mx-auto w-32 mb-4">
-      <span class="valor-glow">R$ 121,70</span>
-<!-- EDITAR DESCRICAO AQUI -->
+<!-- EDITAR VALOR E IMAGEM AQUI -->
+      <img src="img/echo900.png" class="mx-auto w-32 mb-4">
+      <div class="price-wrapper">
+  <span class="glow-float text-center font-bold text-red-500">R$ 133,29</span><br>
+    <img
+      src="https://cdn.discordapp.com/attachments/1460866723610890347/1461635013010526230/grok-video-d6862cc6-9f4a-4e53-a393-3ef7497029451-ezgif.com-effects.gif?ex=696b452e&is=6969f3ae&hm=12402ee59796167cd1fc6491602a690b36b8ccd4f1fde05ed309bc11af241509&"
+      alt="10% OFF"
+      class="price-slash"
+    />
+      <!-- EDITAR VALOR AQUI -->
+      <span class="valor-glow glow-float text-xl mb-2 font-extrabold text-center">R$ 121,70</span><br>
+</div>
+
+<p class="valor-glow glow-float text-xl mb-2 font-bold text-center">
+  10% OFF COMPRANDO DENTRO DE <span id="timer">07:00:00</span>
+</p><br>
+
+<span class="valor-glow">_______________________________ </span>
+      
+      <!-- EDITAR DESCRICAO AQUI -->
 <p class="text-xs text-gray-200 font-semibold mt-4">
         Comprando você obtem:<br>
         • 900 Echo Beads<br>
@@ -147,7 +177,138 @@ body::before {
 
   </div>
 </div>
-  
+
+<!-- DISCORD -->
+<a href="https://discordapp.com/users/715081298254888990" target="_blank" id="discord-icon">
+  <img src="img/discord.png" alt="Discord" />
+</a>
+
+<style>
+#discord-icon {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 1000;
+}
+#discord-icon:hover {
+  transform: scale(1.1);
+}
+</style>
+
+<!-- BOTÃO SUPORTE -->
+<div id="support-btn">
+  <img src="https://cdn.discordapp.com/attachments/1460866723610890347/1461617258592735286/Sem_Titulodsadasdsad-1.png?ex=696b34a5&is=6969e325&hm=10f3578530f2f9ed9812a797d8c4da3350a5d2050fefde150f539e6566a7c099&" alt="Suporte" />
+</div>
+
+<style>
+#support-btn {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #FFD700;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0,0,0,.4);
+  z-index: 1000;
+}
+#support-btn:hover {
+  transform: scale(1.08);
+}
+</style>
+
+<div id="support-modal">
+  <form id="support-form">
+    <h2>Contato com Suporte</h2>
+
+    <input name="name" placeholder="Nome completo" required>
+    <input name="whatsapp" placeholder="WhatsApp" required>
+    <input name="email" type="email" placeholder="Email" required>
+    <input name="subject" placeholder="Assunto" required>
+    <textarea name="message" placeholder="Mensagem" required></textarea>
+
+    <button type="submit">Enviar</button>
+  </form>
+</div>
+
+<style>
+#support-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.7);
+  z-index: 1001;
+}
+#support-form {
+  background: #111;
+  color: #fff;
+  max-width: 400px;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+#support-form input,
+#support-form textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+
+  background: #fff;   /* fundo do campo */
+  color: #111;        /* texto que o cliente digita */
+}
+</style>
+
+<script src="js/effects.js"></script>
+
+<script>
+const btn = document.getElementById("support-btn");
+const modal = document.getElementById("support-modal");
+
+btn.onclick = () => modal.style.display = "block";
+modal.onclick = e => {
+  if (e.target === modal) modal.style.display = "none";
+};
+</script>
+
+<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script>
+(function(){
+  emailjs.init("fjXHE6FnezGdisp_s");
+})();
+
+document.getElementById("support-form").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  emailjs.sendForm(
+    "service_cuecopv",
+    "template_m4anla3",
+    this
+  ).then(() => {
+    alert("Mensagem enviada com sucesso!");
+    this.reset();
+    document.getElementById("support-modal").style.display = "none";
+  }, err => {
+    alert("Erro ao enviar mensagem");
+    console.error(err);
+  });
+});
+</script>
+
 <footer class="w-full mt-16 border-t border-gray-700 pt-8 pb-6">
   <div class="max-w-5xl mx-auto text-center text-sm text-gray-300 space-y-4">
 
@@ -308,6 +469,39 @@ window.addEventListener("DOMContentLoaded", async () => {
   if (consent && window.startBackgroundMusic) {
     window.startBackgroundMusic();
   }
+</script>
+
+<script>
+  const DURATION = 7 * 60 * 60; // 7 horas em segundos
+  const STORAGE_KEY = "promoTimerStart";
+
+  function getStartTime() {
+    let start = localStorage.getItem(STORAGE_KEY);
+    if (!start) {
+      start = Date.now();
+      localStorage.setItem(STORAGE_KEY, start);
+    }
+    return parseInt(start, 10);
+  }
+
+  function updateTimer() {
+    const startTime = getStartTime();
+    const now = Date.now();
+
+    let elapsed = Math.floor((now - startTime) / 1000);
+    let remaining = DURATION - (elapsed % DURATION);
+
+    if (remaining <= 0) remaining = DURATION;
+
+    const h = String(Math.floor(remaining / 3600)).padStart(2, "0");
+    const m = String(Math.floor((remaining % 3600) / 60)).padStart(2, "0");
+    const s = String(remaining % 60).padStart(2, "0");
+
+    document.getElementById("timer").textContent = `${h}:${m}:${s}`;
+  }
+
+  updateTimer();
+  setInterval(updateTimer, 1000);
 </script>
 
 </body>
