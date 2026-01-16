@@ -133,11 +133,11 @@ window.addEventListener("DOMContentLoaded", async () => {
   }
 
   const res = await fetch(
-    "https://saint-echo-backend.neuroniosgames.workers.dev/create-payment",
+    "https://saint-echo-backend.neuroniosgames.workers.dev/create-payment-bricks",
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ produto, valor, consent_id: consent.consent_id, payment_method_id: "pix" })
+      body: JSON.stringify({ produto, valor, consent_id: consent.consent_id /*, payment_method_id: "pix" */ })
     }
   );
 
@@ -155,20 +155,23 @@ window.addEventListener("DOMContentLoaded", async () => {
 // console.log("DEBUG preference:", data.preference_id);
   
   bricksBuilder.create(
-  "statusScreen",                    // Status Screen Brick
-  "paymentBrick_container",          // container
+    "checkout",
+    "paymentBrick_container",
+  // "statusScreen",                    // Status Screen Brick
+  // "paymentBrick_container",          // container
   {
     initialization: {
-      paymentId: data.payment_id    // <- do backend
+      paymentId: data.preference_id    // <- do backend
     },
     customization: {
       visual: { style: { theme: "dark" } }
     },
     callbacks: {
-      onReady: () => console.log("🟢 Status Screen Brick pronto"),
-      onError: (err) => {
-        console.error("🔴 Erro no Status Screen Brick", err);
-        alert("Erro ao carregar o status do pagamento. Atualize a página.");
+      onReady: () => console.log("🟢 Checkout Brick pronto"),
+      onError: (err) => console.error("🔴 Erro no Checkout Brick", err),
+        // alert("Erro ao carregar o status do pagamento. Atualize a página.");
+      onSubmit: (paymentData) => {
+          console.log("💰 Dados do pagamento:", paymentData);
         }
       }
     }
