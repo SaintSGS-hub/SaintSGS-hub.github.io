@@ -143,7 +143,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   const data = await res.json();
 
-  if (!data.payment_id) {
+  if (!data.preference_id) {
     alert("Erro ao iniciar pagamento.");
     return;
   }
