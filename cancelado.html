@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Pedido Cancelado!</title>
+<link rel="icon" type="image/png" href="img/favicon.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body {
+    background:
+      radial-gradient(
+        circle at top,
+        rgba(255, 200, 0, 0.04),
+        transparent 60%
+      ),
+      #000;
+  }
+
+  #parallax-wrapper {
+    perspective: 1200px;
+    transform-style: preserve-3d;
+  }
+
+  .card-depth {
+    transition: transform 0.2s ease-out;
+    will-change: transform;
+  }
+</style>
+</head>
+
+<body class="bg-black text-white font-sans">
+
+<!-- PARALLAX WRAPPER -->
+<div id="parallax-wrapper">
+
+<div class="min-h-screen flex items-center justify-center px-4 card-depth">
+
+<div class="max-w-lg w-full bg-zinc-900 border border-zinc-800 rounded-2xl p-8 text-center">
+
+<h1 class="text-3xl font-semibold mb-4 text-white">
+Pedido Cancelado!
+</h1>
+
+<p class="text-gray-400 mb-6">
+Por algum motivo, seu pagamento não passou na análise.
+</p>
+
+<div class="bg-black border border-yellow-500 rounded-xl p-4 mb-6 text-sm text-yellow-400">
+Pode ter sido cancelado ou recusado por alguma questão de segurança.<br>
+Mas não se preocupe, as suas Echo Beads estão esperando somente seu pagamento.
+</div>
+
+<p class="text-gray-500 text-sm mb-8">
+Em até <strong>1 minuto</strong> você será redirecionado pelo sistema para a página principal para tentar realizar a compra novamente.
+</p>
+
+<a href="index.html" class="inline-block bg-yellow-500 text-black px-6 py-2 rounded-full hover:bg-yellow-400 transition btn-comprar">
+Voltar ao site
+</a>
+
+</div>
+</div>
+</div>
+
+ <!-- DISCORD -->
+<a href="https://discordapp.com/users/715081298254888990" target="_blank" id="discord-icon">
+  <img src="img/discord.png" alt="Discord" />
+</a>
+
+<style>
+#discord-icon {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 1000;
+}
+#discord-icon:hover {
+  transform: scale(1.1);
+}
+</style>
+
+<!-- BOTÃO SUPORTE -->
+<div id="support-btn">
+  <img src="https://cdn.discordapp.com/attachments/1460866723610890347/1461617258592735286/Sem_Titulodsadasdsad-1.png?ex=696b34a5&is=6969e325&hm=10f3578530f2f9ed9812a797d8c4da3350a5d2050fefde150f539e6566a7c099&" alt="Suporte" />
+</div>
+
+<style>
+#support-btn {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #FFD700;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0,0,0,.4);
+  z-index: 1000;
+}
+#support-btn:hover {
+  transform: scale(1.08);
+}
+</style>
+
+<div id="support-modal">
+  <form id="support-form">
+    <h2>Contato com Suporte</h2>
+
+    <input name="name" placeholder="Nome completo" required>
+    <input name="whatsapp" placeholder="WhatsApp" required>
+    <input name="email" type="email" placeholder="Email" required>
+    <input name="subject" placeholder="Assunto" required>
+    <textarea name="message" placeholder="Mensagem" required></textarea>
+
+    <button type="submit">Enviar</button>
+  </form>
+</div>
+
+<style>
+#support-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.7);
+  z-index: 1001;
+}
+#support-form {
+  background: #111;
+  color: #fff;
+  max-width: 400px;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+#support-form input,
+#support-form textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+
+  background: #fff;   /* fundo do campo */
+  color: #111;        /* texto que o cliente digita */
+}
+</style>
+
+<script>
+const btn = document.getElementById("support-btn");
+const modal = document.getElementById("support-modal");
+
+btn.onclick = () => modal.style.display = "block";
+modal.onclick = e => {
+  if (e.target === modal) modal.style.display = "none";
+};
+</script>
+
+<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script>
+(function(){
+  emailjs.init("fjXHE6FnezGdisp_s");
+})();
+
+document.getElementById("support-form").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  emailjs.sendForm(
+    "service_cuecopv",
+    "template_m4anla3",
+    this
+  ).then(() => {
+    alert("Mensagem enviada com sucesso!");
+    this.reset();
+    document.getElementById("support-modal").style.display = "none";
+  }, err => {
+    alert("Erro ao enviar mensagem");
+    console.error(err);
+  });
+});
+</script>
+
+<footer class="w-full mt-16 border-t border-gray-700 pt-8 pb-6">
+  <div class="max-w-5xl mx-auto text-center text-sm text-gray-300 space-y-4">
+
+    <!-- Linha 2: Métodos de pagamento -->
+    <div class="flex flex-wrap justify-center items-center gap-4 mt-4">
+      <img src="https://cdn.discordapp.com/attachments/1460866723610890347/1461587430980190431/7406-pix.png?ex=696b18de&is=6969c75e&hm=418533400fbf11e255f184bae771727e2b94c4608a0cac832a638daf88441193&" alt="Pix" class="h-6">
+      <img src="https://cdn.discordapp.com/attachments/1460866723610890347/1461588101267718319/visa-4-logo-png-transparent.png?ex=696b197e&is=6969c7fe&hm=e8c145468f1a9e96c3f2306377245e9d0db946a192049ae8e4af82bc44e0a1f9&" alt="Visa" class="h-6">
+      <img src="https://cdn.discordapp.com/attachments/1460866723610890347/1461588456345043005/master-card-icon.png?ex=696b19d2&is=6969c852&hm=ffdca7ea0aabfa8ccbdb41806f725909fb166c2ab0ebdb4fc5da11588635c146&" alt="MasterCard" class="h-6">
+      <img src="https://cdn.discordapp.com/attachments/1460866723610890347/1461588579871494154/mercado-pago-logo-png_seeklogo-342347.png?ex=696b19f0&is=6969c870&hm=1f7b995220f75a4510570b320ba810ddca91904181b640081aba14f026dad79f&" alt="Mercado Pago" class="h-6">
+    </div>
+    
+    <!-- Linha 1: Segurança básica -->
+    <div class="flex flex-wrap justify-center font-semibold gap-6">
+      <span>🔒 Pagamento seguro</span>
+      <span>🧾 Compra protegida</span>
+      <span>⚡ Entrega digital automática / Verificação manual</span>
+    </div>
+
+    <!-- Linha 3: Selos textuais (subconsciente trabalha aqui) -->
+    <div class="flex flex-wrap justify-center gap-6 mt-4 text-xs font-semibold uppercase tracking-wide">
+      <span>🔐 SSL Secure Checkout</span>
+      <span>🧾 Terms Accepted</span>
+      <span>⚙️ Entrega manual após confirmação</span>
+      <span>⏱️ Atendimento 24 horas ON</span>
+    </div>
+
+    <!-- Linha 4: Claims de confiança (estilo marketplaces grandes) -->
+    <div class="valor-glow2 flex flex-wrap justify-center gap-6 mt-4 font-semibold">
+      <span>✔ Secure Digital Delivery</span>
+      <span>✔ Verified Payment Flow</span>
+      <span>✔ Manual In-Game Delivery</span>
+      <span>✔ Terms Accepted & Logged</span>
+    </div>
+
+    <!-- Linha 5: Legal -->
+    <div class="mt-6 text-xs text-gray-400">
+      <a href="https://saintsgs-hub.github.io/tos.html" class="underline">Termos de Uso</a> •
+      <a href="https://saintsgs-hub.github.io/privacidade.html" class="underline">Política de Privacidade</a>
+    </div>
+
+  </div>
+</footer>
+
+<script>
+  // Verifica se o usuário já aceitou
+  const consent = localStorage.getItem("saint_consent");
+  if (consent && window.startBackgroundMusic) {
+    window.startBackgroundMusic();
+  }
+</script>
+  
+<script src="js/effects.js"></script>
+</body>
+</html>
