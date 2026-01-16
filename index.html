@@ -33,6 +33,22 @@
     box-shadow: 0 12px 40px rgba(0,0,0,0.35);
   }
 
+  .product-card2 {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    color: white;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .product-card2:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 12px 124px rgba(0,0,0,0.35);
+  }
+
   .glow-float {
     display: inline-block;
     animation: floatGlow 3s ease-in-out infinite;
@@ -265,7 +281,12 @@ A MELHOR opção para quem quer comprar Echo Beads para sua própria conta ou en
   <a href="pagamento-12000-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar glow-float">COMPRAR</a>
 </div>
 
+<span class="valor-glow">_______________________________________________________________________ </span>
 
+<div class="product-card2 text-center">
+  <span class="text-xl valor-glow font-bold glow-float">EM BREVE.. PASSES DE BATALHA E MAIS!</span>
+</div>
+  
 <!-- (demais cards continuam exatamente iguais ao seu original) -->
 
 </div>
