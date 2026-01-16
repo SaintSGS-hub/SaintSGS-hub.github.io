@@ -309,7 +309,7 @@ CNPJ • Pagamento via Mercado Pago • Entrega após confirmação manual
 <style>
 #support-btn {
   position: fixed;
-  bottom: 20px;
+  bottom: 90px;
   right: 20px;
   width: 55px;
   height: 55px;
@@ -380,6 +380,30 @@ btn.onclick = () => modal.style.display = "block";
 modal.onclick = e => {
   if (e.target === modal) modal.style.display = "none";
 };
+</script>
+
+<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script>
+(function(){
+  emailjs.init("fjXHE6FnezGdisp_s");
+})();
+
+document.getElementById("support-form").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  emailjs.sendForm(
+    "service_cuecopv",
+    "template_m4anla3",
+    this
+  ).then(() => {
+    alert("Mensagem enviada com sucesso!");
+    this.reset();
+    document.getElementById("support-modal").style.display = "none";
+  }, err => {
+    alert("Erro ao enviar mensagem");
+    console.error(err);
+  });
+});
 </script>
 
 <script>
