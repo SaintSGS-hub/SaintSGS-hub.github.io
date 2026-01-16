@@ -154,14 +154,12 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 // console.log("DEBUG preference:", data.preference_id);
   
-  bricksBuilder.create(
-    "payment",
-    "paymentBrick_container",
-  // "statusScreen",                    // Status Screen Brick
-  // "paymentBrick_container",          // container
+bricksBuilder.create(
+  "payment",
+  "paymentBrick_container",
   {
     initialization: {
-      preferenceId: data.preference_id,    // <- do backend
+      preferenceId: data.preference_id,
       amount: 10.40
     },
     customization: {
@@ -171,27 +169,25 @@ window.addEventListener("DOMContentLoaded", async () => {
         creditCard: "all",
         debitCard: "all",
         mercadoPago: "all",
-    },
+      },
     },
     callbacks: {
       onReady: () => console.log("🟢 Payment Brick pronto"),
       onError: (err) => console.error("🔴 Erro no Payment Brick", err),
-        // alert("Erro ao carregar o status do pagamento. Atualize a página.");
       onSubmit: ({ selectedPaymentMethod, formData }) => {
         return new Promise((resolve, reject) => {
-          fetch("/process_payment", {
+          fetch("https://saint-echo-backend.neuroniosgames.workers.dev", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(formData),
           })
-            .then((res) => resolve())
-            .catch((err) => reject());
-         }); // fecha o new Promise
-        } // fecha o onSubmit      
-        }
-      }
-    }
-  );
+          .then((res) => resolve())
+          .catch((err) => reject());
+        }); // fecha o new Promise
+      }, // <--- aqui fecha onSubmit corretamente
+    }, // fecha callbacks
+  } // fecha bricks config
+); // fecha bricksBuilder.create
 });
 </script>
 
