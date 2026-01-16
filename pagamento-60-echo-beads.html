@@ -150,36 +150,25 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   const bricksBuilder = mp.bricks();
 
-console.log("DEBUG amount:", valor, typeof valor);
+// console.log("DEBUG amount:", valor, typeof valor);
 
-console.log("DEBUG preference:", data.preference_id);
+// console.log("DEBUG preference:", data.preference_id);
   
   bricksBuilder.create(
-    "payment",
-    "paymentBrick_container",
-    {
-      initialization: {
-        // preferenceId: data.preference_id,
-        amount: Number(valor)             //← VALOR TOTAL EM REAIS
-      },
-        paymentMethods: {
-        debitCard: "all",
-        creditCard: "all",
-        bankTransfer: "all", // PIX
-        accountMoney: "all" // Saldo Mercado Pago
-      },
-      customization: {
-        visual: {
-          style: { theme: "dark" }
-        }
-      },
-      callbacks: {
-        onReady: () => {
-          console.log("🟢 Payment Brick pronto");
-        },
-        onError: (error) => {
-          console.error("🔴 Erro no Payment Brick", error);
-          alert("Erro ao carregar meios de pagamento. Tente atualizar a página.");
+  "statusScreen",                    // Status Screen Brick
+  "paymentBrick_container",          // container
+  {
+    initialization: {
+      paymentId: data.payment_id    // <- do backend
+    },
+    customization: {
+      visual: { style: { theme: "dark" } }
+    },
+    callbacks: {
+      onReady: () => console.log("🟢 Status Screen Brick pronto"),
+      onError: (err) => {
+        console.error("🔴 Erro no Status Screen Brick", err);
+        alert("Erro ao carregar o status do pagamento. Atualize a página.");
         }
       }
     }
