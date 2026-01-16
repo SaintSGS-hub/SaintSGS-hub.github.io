@@ -161,17 +161,31 @@ window.addEventListener("DOMContentLoaded", async () => {
   // "paymentBrick_container",          // container
   {
     initialization: {
-      preferenceId: data.preference_id    // <- do backend
+      preferenceId: data.preference_id,    // <- do backend
+      amount: 10.40
     },
     customization: {
-      visual: { style: { theme: "dark" } }
+      visual: { style: { theme: "dark" } },
+      paymentMethods: {
+        bankTransfer: "all",
+        creditCard: "all",
+        debitCard: "all",
+        mercadoPago: "all",
+    },
     },
     callbacks: {
       onReady: () => console.log("🟢 Payment Brick pronto"),
       onError: (err) => console.error("🔴 Erro no Payment Brick", err),
         // alert("Erro ao carregar o status do pagamento. Atualize a página.");
-      onSubmit: (paymentData) => {
-          console.log("💰 Dados do pagamento:", paymentData);
+      onSubmit: ({ selectedPaymentMethod, formData }) => {
+        return new Promise((resolve, reject) => {
+          fetch("/process_payment", {
+            method: "POST",
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify(formData),
+          })
+            .then((res) => resolve ())
+            .catch((err) => reject());      
         }
       }
     }
