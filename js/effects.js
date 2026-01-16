@@ -46,16 +46,25 @@
 })();
 
 /* ================================
-   MÚSICA DE FUNDO (controlada por consentimento)
+   MÚSICA DE FUNDO (persistente entre páginas)
 ================================ */
 (function () {
   const audio = document.createElement("audio");
   audio.src = "source/musica.mp3";
   audio.loop = true;
-  audio.volume = 0;
   audio.preload = "auto";
+  audio.volume = 0;
 
   document.body.appendChild(audio);
+
+  // 🔁 Restaurar tempo salvo
+  const savedTime = localStorage.getItem("bgMusicTime");
+  if (savedTime) {
+    audio.currentTime = parseFloat(savedTime);
+  }
+
+  // ▶️ Restaurar estado play/pause
+  const wasPlaying = localStorage.getItem("bgMusicPlaying") === "true";
 
   let started = false;
 
@@ -64,14 +73,37 @@
     started = true;
 
     audio.play().then(() => {
+      localStorage.setItem("bgMusicPlaying", "true");
+
+      // Fade-in suave
       let vol = 0;
+      const target = 0.15;
       const fade = setInterval(() => {
         vol += 0.02;
-        audio.volume = Math.min(vol, 0.15);
-        if (vol >= 0.15) clearInterval(fade);
+        audio.volume = Math.min(vol, target);
+        if (vol >= target) clearInterval(fade);
       }, 60);
     }).catch(() => {});
   };
+
+  // ⏱️ Salvar progresso a cada 1s
+  setInterval(() => {
+    if (!audio.paused) {
+      localStorage.setItem("bgMusicTime", audio.currentTime);
+    }
+  }, 1000);
+
+  // ⏸️ Se o usuário pausar manualmente
+  audio.addEventListener("pause", () => {
+    localStorage.setItem("bgMusicPlaying", "false");
+  });
+
+  // 🔄 Auto-retomar se já estava tocando
+  if (wasPlaying) {
+    window.addEventListener("click", () => {
+      window.startBackgroundMusic();
+    }, { once: true });
+  }
 })();
 
 /* ================================
@@ -98,7 +130,7 @@ document.querySelectorAll('.btn-comprar, .btn-confirmar').forEach(btn => {
       <div class="loader">
         <div></div><div></div><div></div><div></div>
       </div>
-      <p style="color:gold; margin-top:20px; font-family:sans-serif;">Carregando...</p>
+      <p style="color:yellow-700; margin-top:20px; font-family:sans-serif;">Carregando...</p>
     `;
     document.body.appendChild(overlay);
 
