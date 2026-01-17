@@ -152,7 +152,7 @@ document.querySelectorAll('.btn-comprar, .btn-confirmar').forEach(btn => {
       <div class="loader">
         <div></div><div></div><div></div><div></div>
       </div>
-      <p style="color:yellow-700; margin-top:20px; font-family:sans-serif;">Carregando...</p>
+      <p style="color:yellow; margin-top:20px; font-family:sans-serif;">Carregando...</p>
     `;
     document.body.appendChild(overlay);
 
