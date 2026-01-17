@@ -315,16 +315,17 @@ function validarPagamento() {
     if (!r.ok) throw new Error();
     return r.json();
   })
-  .then(() => {
+  .then(data => {
+    if (data.status === "approved") {
     statusBox.className = "status status-approved text-center";
     statusBox.innerText = "Pagamento aprovado ✔";
     form.classList.remove("disabled");
-  })
-  .catch(() => {
+  } else {
     statusBox.className = "status status-pending text-center";
     statusBox.innerText =
       "Pagamento ainda não confirmado. Verifique novamente.";
     retryBtn.classList.remove("hidden");
+    }
   });
 }
 
