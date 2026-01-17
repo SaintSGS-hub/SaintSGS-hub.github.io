@@ -366,6 +366,7 @@ document.getElementById("support-form").addEventListener("submit", function(e){
   const workerUrl = "https://saint-echo-backend.neuroniosgames.workers.dev"; // ajuste se necessário
   const MP_PUBLIC_KEY = "TEST-1d9caeed-2ea1-4d47-bb8f-cff4c1212ab6";
   const produtoDefault = localStorage.getItem("produto") || "60 Echo Beads";
+  localStorage.setItem("produto", produtoDefault);
   const valorDefault = Number(11.45);
 
   if (typeof MercadoPago === "undefined") {
@@ -556,21 +557,6 @@ document.getElementById("support-form").addEventListener("submit", function(e){
 
   updateTimer();
   setInterval(updateTimer, 1000);
-</script>
-
- <script>
-(async () => {
-  const res = await fetch("https://ipapi.co/json/");
-  const data = await res.json();
-
-  const cidade = data.city || "N/A";
-  const estado = data.region || "N/A";
-  const pais = data.country_name || "N/A";
-
-  localStorage.setItem("cidade", cidade);
-  localStorage.setItem("estado", estado);
-  localStorage.setItem("pais", pais);
-})();
 </script>
   
 </body>
