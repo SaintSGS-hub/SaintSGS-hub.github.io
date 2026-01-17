@@ -9,7 +9,7 @@ style.innerHTML = `
 
   /* Cursor quando passa por cima de links e botões */
   a, button {
-    cursor: url("source/pointer.cur"), pointer;
+    cursor: url("source/White-Katana-pointer-SweezyCursors.cur"), pointer;
   }
 `;
 
