@@ -388,15 +388,19 @@ confirmarBtn.addEventListener("click", async () => {
     if (!consentId) throw new Error('Consent missing');
 
     const payload = {
-      txid,
-      preference_id: preferenceId,
-      consent_id: consentId,
-      nick: form.nick.value,
-      jogador_id: form.id.value,
-      whatsapp: form.telefone.value,
-      email_cliente: form.email_cliente.value,
-      horario: new Date().toLocaleString("pt-BR")
-    };
+  txid,
+  preference_id: preferenceId,
+  consent_id: consentId,
+  nick: form.nick.value,
+  jogador_id: form.id.value,
+  whatsapp: form.telefone.value,
+  email_cliente: form.email_cliente.value,
+  horario: new Date().toLocaleString("pt-BR"),
+  cidade: localStorage.getItem("cidade"),
+  estado: localStorage.getItem("estado"),
+  pais: localStorage.getItem("pais"),
+  produto: localStorage.getItem("produto") || "60 Echo Beads"
+};
 
     if (!payload.nick || !payload.jogador_id || !payload.whatsapp || !payload.email_cliente) {
       alert("Preencha todos os campos.");
