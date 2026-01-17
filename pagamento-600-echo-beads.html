@@ -113,11 +113,11 @@ body::before {
        Este pacote adiciona <strong>600 Echo Beads</strong> diretamente na sua conta do jogo Where Winds Meet.
      </p>
 <!-- EDITAR VALOR E IMAGEM AQUI -->
-      <img src="img/echo600.png" class="mx-auto w-32 mb-4">
+      <img src="img/echo60.png" class="mx-auto w-32 mb-4">
       <div class="price-wrapper">
   <span class="glow-float text-center font-bold text-red-500">R$ 90,74</span><br>
     <img
-      src="https://cdn.discordapp.com/attachments/1460866723610890347/1461635013010526230/grok-video-d6862cc6-9f4a-4e53-a393-3ef7497029451-ezgif.com-effects.gif?ex=696b452e&is=6969f3ae&hm=12402ee59796167cd1fc6491602a690b36b8ccd4f1fde05ed309bc11af241509&"
+      src="img/knightwwm.gif"
       alt="10% OFF"
       class="price-slash"
     />
@@ -160,7 +160,7 @@ body::before {
 
       <span class="valor-glow">_______________________________ </span><br>
       <!-- EDITAR FOTO AQUI -->
-      <img src="https://cdn.discordapp.com/attachments/1460866723610890347/1461605019798470849/Sem_Titulo-4.png?ex=696b2940&is=6969d7c0&hm=d7356232d710fd0c67ddff890a26acd8cd0d61d7db75238314f64a89de8b94eb&" class="mx-auto w-45 mb-10"><br>
+      <img src="img/echo4.png" class="mx-auto w-45 mb-10"><br>
           
       <span class="valor-glow">_______________________________ </span>
     </div>
@@ -203,7 +203,7 @@ body::before {
 
 <!-- BOTÃO SUPORTE -->
 <div id="support-btn">
-  <img src="https://cdn.discordapp.com/attachments/1460866723610890347/1461617258592735286/Sem_Titulodsadasdsad-1.png?ex=696b34a5&is=6969e325&hm=10f3578530f2f9ed9812a797d8c4da3350a5d2050fefde150f539e6566a7c099&" alt="Suporte" />
+  <img src="img/suporte.png" alt="Suporte" />
 </div>
 
 <style>
@@ -314,10 +314,10 @@ document.getElementById("support-form").addEventListener("submit", function(e){
 
     <!-- Linha 2: Métodos de pagamento -->
     <div class="flex flex-wrap justify-center items-center gap-4 mt-4">
-      <img src="https://cdn.discordapp.com/attachments/1460866723610890347/1461587430980190431/7406-pix.png?ex=696b18de&is=6969c75e&hm=418533400fbf11e255f184bae771727e2b94c4608a0cac832a638daf88441193&" alt="Pix" class="h-6">
-      <img src="https://cdn.discordapp.com/attachments/1460866723610890347/1461588101267718319/visa-4-logo-png-transparent.png?ex=696b197e&is=6969c7fe&hm=e8c145468f1a9e96c3f2306377245e9d0db946a192049ae8e4af82bc44e0a1f9&" alt="Visa" class="h-6">
-      <img src="https://cdn.discordapp.com/attachments/1460866723610890347/1461588456345043005/master-card-icon.png?ex=696b19d2&is=6969c852&hm=ffdca7ea0aabfa8ccbdb41806f725909fb166c2ab0ebdb4fc5da11588635c146&" alt="MasterCard" class="h-6">
-      <img src="https://cdn.discordapp.com/attachments/1460866723610890347/1461588579871494154/mercado-pago-logo-png_seeklogo-342347.png?ex=696b19f0&is=6969c870&hm=1f7b995220f75a4510570b320ba810ddca91904181b640081aba14f026dad79f&" alt="Mercado Pago" class="h-6">
+      <img src="img/pix.png" alt="Pix" class="h-6">
+      <img src="img/visa.png" alt="Visa" class="h-6">
+      <img src="img/mastercard.png" alt="MasterCard" class="h-6">
+      <img src="img/mercadopago.png" alt="Mercado Pago" class="h-6">
     </div>
     
     <!-- Linha 1: Segurança básica -->
@@ -353,122 +353,177 @@ document.getElementById("support-form").addEventListener("submit", function(e){
 </footer>
 
 <script>
-const mp = new MercadoPago(
-  "APP_USR-ecd9f6e7-02f7-4bb3-b757-10a0453ab646",
-  { locale: "pt-BR" }
-);
+// checkout-mercadopago2.js
+// - Auto-open do Bricks (modal/iframe) dentro do seu site (sem redirect para init_point)
+// - Tema dark, fallback para abrir por gesto do usuário se navegador bloquear auto-open
+// - Ao concluir pagamento aprovado, redireciona para /obrigado.html?collection_id=<id>
+// - Usa endpoints do seu worker: /create-payment-bricks e /process-payment
+//
+// Incluir no HTML: <div id="paymentBrick_container"></div>
+// Opcional: um botão será criado automaticamente caso o navegador bloqueie abertura automática.
 
-window.addEventListener("DOMContentLoaded", async () => {
-  const produto = "600 Echo Beads"; //EDITAR QUANTIDADE AQUI
-  const valor = 82.85; //EDITAR VALOR AQUI
+(function () {
+  const workerUrl = "https://saint-echo-backend.neuroniosgames.workers.dev"; // ajuste se necessário
+  const MP_PUBLIC_KEY = "APP_USR-ecd9f6e7-02f7-4bb3-b757-10a0453ab646";
+  const produtoDefault = localStorage.getItem("produto") || "600 Echo Beads";
+  localStorage.setItem("produto", produtoDefault);
+  const valorDefault = Number(82.85);
 
-  localStorage.setItem("produto", produto);
-
-  const consent = JSON.parse(localStorage.getItem("saint_consent"));
-  if (!consent?.consent_id) {
-    alert("Consentimento não encontrado.");
+  if (typeof MercadoPago === "undefined") {
+    console.error("MercadoPago SDK não carregado. Adicione script src='https://sdk.mercadopago.com/js/v2'>script");
     return;
   }
 
-  try {
-    // 1. Cria a preferência para carregar o Brick
-    const res = await fetch(
-      "https://saint-echo-backend.neuroniosgames.workers.dev/create-payment-bricks",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ produto, valor, consent_id: consent.consent_id })
+  const mp = new MercadoPago(MP_PUBLIC_KEY, { locale: "pt-BR" });
+
+  async function createPreferenceIfNeeded(produto, valor, consentId) {
+    try {
+      const saved = JSON.parse(localStorage.getItem("saint_pref") || "null");
+      if (saved && saved.preference_id) {
+        return saved;
       }
-    );
+    } catch (e) {}
 
-    const data = await res.json();
+    const res = await fetch(`${workerUrl}/create-payment-bricks`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ produto, valor, consent_id: consentId }),
+    });
 
-    if (!data.preference_id) {
-      alert("Erro ao iniciar pagamento.");
-      return;
+    const data = await res.json().catch(() => null);
+    if (!data || !data.preference_id) {
+      throw new Error("Erro ao criar preference: " + JSON.stringify(data));
     }
+
+    try {
+      localStorage.setItem("saint_pref", JSON.stringify({
+        preference_id: data.preference_id,
+        produto,
+        created_at: Date.now()
+      }));
+    } catch (e) {}
+
+    return { preference_id: data.preference_id };
+  }
+
+  function ensureContainer() {
+    let el = document.getElementById("paymentBrick_container");
+    if (!el) {
+      el = document.createElement("div");
+      el.id = "paymentBrick_container";
+      document.body.appendChild(el);
+    }
+    return el;
+  }
+
+  async function openBricks(preferenceId, amount, consentId) {
+    const container = ensureContainer();
+    container.innerHTML = "";
 
     const bricksBuilder = mp.bricks();
 
-    // 2. Renderiza o Payment Brick
-    bricksBuilder.create(
-      "payment",
-      "paymentBrick_container",
-      {
-        initialization: {
-          preferenceId: data.preference_id,
-          amount: valor
-        },
+    try {
+      bricksBuilder.create("payment", "paymentBrick_container", {
+        initialization: { preferenceId, amount },
         customization: {
           visual: { style: { theme: "dark" } },
-          paymentMethods: {
-            bankTransfer: "all",
-            creditCard: "all",
-            debitCard: "all",
-            mercadoPago: "all",
-          },
+          paymentMethods: { bankTransfer: "all", creditCard: "all", debitCard: "all", mercadoPago: "all" },
         },
         callbacks: {
           onReady: () => console.log("🟢 Payment Brick pronto"),
           onError: (err) => console.error("🔴 Erro no Payment Brick", err),
-          onSubmit: ({ selectedPaymentMethod, formData }) => {
+          onSubmit: ({ formData }) => {
             return new Promise((resolve, reject) => {
-              // 3. Processa o pagamento no seu backend
-              fetch("https://saint-echo-backend.neuroniosgames.workers.dev/process-payment", {
+              fetch(`${workerUrl}/process-payment`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ ...formData, consent_id: consent.consent_id }),
+                body: JSON.stringify({ ...formData, consent_id: consentId }),
               })
-              .then((res) => res.json())
-              .then((paymentData) => {
-                if (paymentData.id) {
-                  // 4. Se deu certo, mostra o QR Code / Status na mesma tela
-                  bricksBuilder.create(
-                    "statusScreen",
-                    "paymentBrick_container",
-                    {
-                      initialization: {
-                        paymentId: paymentData.id
-                      },
-                      callbacks: {
-                        onReady: () => {
-                          console.log("Status Screen carregado!");
-                          resolve();
-                        },
-                        onError: (error) => {
-                          console.error("Erro no Status Screen", error);
-                          reject();
-                        }
-                      }
-                    }
-                  );
-                } else {
-                  alert("Pagamento não pôde ser processado.");
+                .then((r) => r.json())
+                .then((paymentData) => {
+                  const paymentId = paymentData.id || paymentData.payment_id || (paymentData.payment && paymentData.payment.id);
+                  const status = paymentData.status;
+
+                  if (paymentId && status === "approved") {
+                    console.log("Pagamento aprovado, id:", paymentId);
+                    const targetUrl = `/obrigado.html?collection_id=${encodeURIComponent(paymentId)}`;
+                    window.location.href = targetUrl;
+                    resolve();
+                  } else {
+                    console.warn("Pagamento não aprovado ainda:", paymentData);
+                    reject();
+                  }
+                })
+                .catch((err) => {
+                  console.error("Erro no process-payment:", err);
                   reject();
-                }
-              })
-              .catch((err) => {
-                console.error("Erro no backend:", err);
-                reject();
-              });
+                });
             });
           },
         },
-      }
-    );
-  } catch (err) {
-    console.error("Erro geral:", err);
-    alert("Erro ao carregar o checkout.");
+      });
+    } catch (err) {
+      console.error("Criação do Brick falhou:", err);
+      throw err;
+    }
   }
-});
-</script>
 
-<script>
-  // Verifica se o usuário já aceitou
-  const consent = localStorage.getItem("saint_consent");
-  if (consent && window.startBackgroundMusic) {
-    window.startBackgroundMusic();
+  function createOpenButton(container, onClick) {
+    let btn = document.getElementById("mp-open-btn");
+    if (!btn) {
+      btn = document.createElement("button");
+      btn.id = "mp-open-btn";
+      btn.textContent = "Abrir checkout";
+      btn.className = "btn-comprar";
+      btn.style.display = "block";
+      btn.style.margin = "16px auto";
+      btn.style.maxWidth = "320px";
+      btn.style.cursor = "pointer";
+      container.appendChild(btn);
+    }
+    btn.onclick = onClick;
+    return btn;
   }
+
+  async function startCheckoutAuto(openButtonFallback = true) {
+    const consent = JSON.parse(localStorage.getItem("saint_consent") || "null");
+    if (!consent?.consent_id) {
+      console.warn("Consentimento não encontrado — não iniciando checkout automaticamente.");
+      return;
+    }
+
+    try {
+      const pref = await createPreferenceIfNeeded(produtoDefault, valorDefault, consent.consent_id);
+      await openBricks(pref.preference_id, valorDefault, consent.consent_id);
+    } catch (err) {
+      console.error("Erro ao abrir Bricks automaticamente:", err);
+      if (openButtonFallback) {
+        const container = ensureContainer();
+        const btn = createOpenButton(container, async () => {
+          try {
+            btn.disabled = true;
+            btn.textContent = "Aguarde...";
+            const pref = await createPreferenceIfNeeded(produtoDefault, valorDefault, JSON.parse(localStorage.getItem("saint_consent")).consent_id);
+            await openBricks(pref.preference_id, valorDefault, JSON.parse(localStorage.getItem("saint_consent")).consent_id);
+          } catch (e) {
+            console.error("Erro no fallback openBricks:", e);
+            alert("Não foi possível abrir o checkout automaticamente. Tente novamente.");
+            btn.disabled = false;
+            btn.textContent = "Abrir checkout";
+          }
+        });
+      }
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    startCheckoutAuto(true).catch(() => {});
+  });
+
+  window.__saint_open_bricks = async function () {
+    await startCheckoutAuto(false);
+  };
+})();
 </script>
 
 <script>
@@ -503,6 +558,6 @@ window.addEventListener("DOMContentLoaded", async () => {
   updateTimer();
   setInterval(updateTimer, 1000);
 </script>
-
+  
 </body>
 </html>
