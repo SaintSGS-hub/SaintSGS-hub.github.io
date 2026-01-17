@@ -359,8 +359,8 @@ const mp = new MercadoPago(
 );
 
 window.addEventListener("DOMContentLoaded", async () => {
-  const produto = "60 Echo Beads"; //EDITAR QUANTIDADE AQUI
-  const valor = 11.45; //EDITAR VALOR AQUI
+  const produto = "60 Echo Beads";
+  const valor = 11.45;
 
   localStorage.setItem("produto", produto);
 
@@ -371,95 +371,74 @@ window.addEventListener("DOMContentLoaded", async () => {
   }
 
   try {
-    // 1. Cria a preferência para carregar o Brick
-    const res = await fetch(
-      "https://saint-echo-backend.neuroniosgames.workers.dev/create-payment-bricks",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ produto, valor, consent_id: consent.consent_id })
-      }
-    );
+    // 1) Cria a preferência no backend
+    const res = await fetch("https://saint-echo-backend.neuroniosgames.workers.dev/create-payment-bricks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ produto, valor, consent_id: consent.consent_id })
+    });
 
     const data = await res.json();
-
     if (!data.preference_id) {
       alert("Erro ao iniciar pagamento.");
       return;
     }
 
-    const bricksBuilder = mp.bricks();
+    // 2) Salva preference em localStorage para o obrigado.html (fallback)
+    try { localStorage.setItem('saint_pref', JSON.stringify({ preference_id: data.preference_id, produto })); } catch(e) { console.warn(e); }
 
-    // 2. Renderiza o Payment Brick
-    bricksBuilder.create(
-      "payment",
-      "paymentBrick_container",
-      {
-        initialization: {
-          preferenceId: data.preference_id,
-          amount: valor
-        },
-        customization: {
-          visual: { style: { theme: "dark" } },
-          paymentMethods: {
-            bankTransfer: "all",
-            creditCard: "all",
-            debitCard: "all",
-            mercadoPago: "all",
-          },
-        },
-        callbacks: {
-          onReady: () => console.log("🟢 Payment Brick pronto"),
-          onError: (err) => console.error("🔴 Erro no Payment Brick", err),
-          onSubmit: ({ selectedPaymentMethod, formData }) => {
-            return new Promise((resolve, reject) => {
-              // 3. Processa o pagamento no seu backend
-              fetch("https://saint-echo-backend.neuroniosgames.workers.dev/process-payment", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ ...formData, consent_id: consent.consent_id }),
-              })
-              .then((res) => res.json())
-              .then((paymentData) => {
-                if (paymentData.id) {
-                  // 4. Se deu certo, mostra o QR Code / Status na mesma tela
-                  bricksBuilder.create(
-                    "statusScreen",
-                    "paymentBrick_container",
-                    {
-                      initialization: {
-                        paymentId: paymentData.id
-                      },
-                      callbacks: {
-                        onReady: () => {
-                          console.log("Status Screen carregado!");
-                          resolve();
-                        },
-                        onFormCompleted: () => {
-                          console.log("Pagamento finalizado pelo usuário!");
-                          window.location.href = `https://saintsgs-hub.github.io{paymentData.id}`;
-                        },
-                        onError: (error) => {
-                          console.error("Erro no Status Screen", error);
-                          reject();
-                        }
-                      }
-                    }
-                  );
-                } else {
-                  alert("Pagamento não pôde ser processado.");
-                  reject();
-                }
-              })
-              .catch((err) => {
-                console.error("Erro no backend:", err);
+    // 3) Se init_point está disponível: usar Checkout Pro (REDIRECT) — recomendado
+    if (data.init_point) {
+      window.location.href = data.init_point;
+      return;
+    }
+
+    // 4) Fallback: renderiza o Payment Brick (modal) quando init_point não existe
+    const bricksBuilder = mp.bricks();
+    bricksBuilder.create("payment", "paymentBrick_container", {
+      initialization: { preferenceId: data.preference_id, amount: valor },
+      customization: {
+        visual: { style: { theme: "dark" } },
+        paymentMethods: { bankTransfer: "all", creditCard: "all", debitCard: "all", mercadoPago: "all" }
+      },
+      callbacks: {
+        onReady: () => console.log("🟢 Payment Brick pronto"),
+        onError: (err) => console.error("🔴 Erro no Payment Brick", err),
+        onSubmit: ({ selectedPaymentMethod, formData }) => {
+          return new Promise((resolve, reject) => {
+            // envia ao backend para processar (card token flow)
+            fetch("https://saint-echo-backend.neuroniosgames.workers.dev/process-payment", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ ...formData, consent_id: consent.consent_id })
+            })
+            .then(r => r.json())
+            .then(paymentData => {
+              if (paymentData.id) {
+                // mostra statusScreen e redireciona para obrigado.html com collection_id quando concluído
+                bricksBuilder.create("statusScreen", "paymentBrick_container", {
+                  initialization: { paymentId: paymentData.id },
+                  callbacks: {
+                    onReady: () => { console.log("Status Screen carregado!"); resolve(); },
+                    onFormCompleted: () => {
+                      console.log("Pagamento finalizado pelo usuário!");
+                      // REDIRECT correto para obrigado.html com collection_id (txid)
+                      window.location.href = `https://saintsgs-hub.github.io/obrigado.html?collection_id=${paymentData.id}`;
+                    },
+                    onError: (error) => { console.error("Erro no Status Screen", error); reject(); }
+                  }
+                });
+              } else {
+                alert("Pagamento não pôde ser processado.");
                 reject();
-              });
-            });
-          },
-        },
+              }
+            })
+            .catch(err => { console.error("Erro no backend:", err); reject(); });
+          });
+        }
       }
-    );
+    });
+
   } catch (err) {
     console.error("Erro geral:", err);
     alert("Erro ao carregar o checkout.");
