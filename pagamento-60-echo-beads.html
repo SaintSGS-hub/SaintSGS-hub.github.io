@@ -353,96 +353,140 @@ document.getElementById("support-form").addEventListener("submit", function(e){
 </footer>
 
 <script>
-const mp = new MercadoPago(
-  "TEST-1d9caeed-2ea1-4d47-bb8f-cff4c1212ab6",
-  { locale: "pt-BR" }
-);
+/*
+  checkout-mercadopago.js
+  - NÃO redireciona para init_point
+  - Inicia o fluxo apenas quando usuário clica no botão #buy-btn
+  - Usa o Payment Brick (modal/iframe) com tema dark
+  - Ao finalizar (statusScreen onFormCompleted) redireciona para obrigado?collection_id=...
+  - Mantém o fluxo token -> /process-payment (se seu backend espera isso)
+*/
 
-window.addEventListener("DOMContentLoaded", async () => {
-  const produto = "60 Echo Beads";
-  const valor = 11.45;
+const workerUrl = "https://saint-echo-backend.neuroniosgames.workers.dev"; // ajuste se necessário
+const mp = new MercadoPago("TEST-1d9caeed-2ea1-4d47-bb8f-cff4c1212ab6", { locale: "pt-BR" });
 
-  localStorage.setItem("produto", produto);
+// Função que cria preferência no backend e retorna o objeto
+async function createPreference(produto, valor, consentId) {
+  const res = await fetch(`${workerUrl}/create-payment-bricks`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ produto, valor, consent_id: consentId })
+  });
+  return await res.json();
+}
 
-  const consent = JSON.parse(localStorage.getItem("saint_consent"));
+// Função que inicia o modal Bricks (sempre dentro do seu site)
+async function openBricksModal(preferenceId, amount, consentId) {
+  const bricksBuilder = mp.bricks();
+
+  // Cria o payment brick dentro do elemento #paymentBrick_container
+  bricksBuilder.create("payment", "paymentBrick_container", {
+    initialization: { preferenceId: preferenceId, amount: amount },
+    customization: {
+      visual: { style: { theme: "dark" } }, // tema escuro
+      paymentMethods: {
+        bankTransfer: "all",
+        creditCard: "all",
+        debitCard: "all",
+        mercadoPago: "all",
+      },
+    },
+    callbacks: {
+      onReady: () => console.log("🟢 Payment Brick pronto"),
+      onError: (err) => console.error("🔴 Erro no Payment Brick", err),
+      onSubmit: ({ selectedPaymentMethod, formData }) => {
+        // Se você usa token/card flow via backend -> process-payment
+        // Caso contrário, Bricks pode cuidar do fluxo; mantenho o seu process-payment call
+        return new Promise((resolve, reject) => {
+          fetch(`${workerUrl}/process-payment`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ...formData, consent_id: consentId })
+          })
+          .then(r => r.json())
+          .then(paymentData => {
+            if (paymentData && paymentData.id) {
+              // Cria a statusScreen dentro do mesmo container
+              bricksBuilder.create("statusScreen", "paymentBrick_container", {
+                initialization: { paymentId: paymentData.id },
+                callbacks: {
+                  onReady: () => { console.log("Status Screen carregado!"); resolve(); },
+                  onFormCompleted: () => {
+                    console.log("Pagamento finalizado pelo usuário! Redirecionando para entrega...");
+                    // Redireciona somente após o fluxo do Brick indicar conclusão
+                    window.location.href = `/obrigado?collection_id=${paymentData.id}`;
+                  },
+                  onError: (error) => {
+                    console.error("Erro no Status Screen", error);
+                    reject();
+                  }
+                }
+              });
+            } else {
+              // Caso o backend retorne algo inesperado, rejeita e deixa o Brick mostrar erro
+              console.error("process-payment sem payment id:", paymentData);
+              reject();
+            }
+          })
+          .catch(err => { console.error("Erro no process-payment:", err); reject(); });
+        });
+      }
+    }
+  });
+}
+
+// Função que inicia o fluxo (chamada pelo botão)
+async function startCheckoutFlow(buttonEl) {
+  const produto = localStorage.getItem("produto") || "60 Echo Beads";
+  const valor = Number(11.45); // ajuste se necessário
+
+  const consent = JSON.parse(localStorage.getItem("saint_consent") || "null");
   if (!consent?.consent_id) {
-    alert("Consentimento não encontrado.");
+    alert("Consentimento não encontrado. Volte e aceite os termos.");
     return;
   }
 
   try {
-    // 1) Cria a preferência no backend
-    const res = await fetch("https://saint-echo-backend.neuroniosgames.workers.dev/create-payment-bricks", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ produto, valor, consent_id: consent.consent_id })
-    });
+    buttonEl.disabled = true;
+    buttonEl.textContent = "Aguarde...";
 
-    const data = await res.json();
-    if (!data.preference_id) {
-      alert("Erro ao iniciar pagamento.");
+    // 1) criar preferência no backend
+    const pref = await createPreference(produto, valor, consent.consent_id);
+    if (!pref || !pref.preference_id) {
+      console.error("create-payment-bricks erro:", pref);
+      alert("Erro ao iniciar pagamento. Tente novamente.");
       return;
     }
 
-    // 2) Salva preference em localStorage para o obrigado.html (fallback)
-    try { localStorage.setItem('saint_pref', JSON.stringify({ preference_id: data.preference_id, produto })); } catch(e) { console.warn(e); }
+    // 2) salva preference em localStorage para fallback no obrigado.html
+    try { localStorage.setItem('saint_pref', JSON.stringify({ preference_id: pref.preference_id, produto })); } catch(e){}
 
-    // 3) Se init_point está disponível: usar Checkout Pro (REDIRECT) — recomendado
-    if (data.init_point) {
-      window.location.href = data.init_point;
-      return;
-    }
-
-    // 4) Fallback: renderiza o Payment Brick (modal) quando init_point não existe
-    const bricksBuilder = mp.bricks();
-    bricksBuilder.create("payment", "paymentBrick_container", {
-      initialization: { preferenceId: data.preference_id, amount: valor },
-      customization: {
-        visual: { style: { theme: "dark" } },
-        paymentMethods: { bankTransfer: "all", creditCard: "all", debitCard: "all", mercadoPago: "all" }
-      },
-      callbacks: {
-        onReady: () => console.log("🟢 Payment Brick pronto"),
-        onError: (err) => console.error("🔴 Erro no Payment Brick", err),
-        onSubmit: ({ selectedPaymentMethod, formData }) => {
-          return new Promise((resolve, reject) => {
-            // envia ao backend para processar (card token flow)
-            fetch("https://saint-echo-backend.neuroniosgames.workers.dev/process-payment", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ ...formData, consent_id: consent.consent_id })
-            })
-            .then(r => r.json())
-            .then(paymentData => {
-              if (paymentData.id) {
-                // mostra statusScreen e redireciona para obrigado.html com collection_id quando concluído
-                bricksBuilder.create("statusScreen", "paymentBrick_container", {
-                  initialization: { paymentId: paymentData.id },
-                  callbacks: {
-                    onReady: () => { console.log("Status Screen carregado!"); resolve(); },
-                    onFormCompleted: () => {
-                      console.log("Pagamento finalizado pelo usuário!");
-                      // REDIRECT correto para obrigado.html com collection_id (txid)
-                      window.location.href = `https://saintsgs-hub.github.io/obrigado.html?collection_id=${paymentData.id}`;
-                    },
-                    onError: (error) => { console.error("Erro no Status Screen", error); reject(); }
-                  }
-                });
-              } else {
-                alert("Pagamento não pôde ser processado.");
-                reject();
-              }
-            })
-            .catch(err => { console.error("Erro no backend:", err); reject(); });
-          });
-        }
-      }
-    });
+    // 3) NÃO redirecionar para init_point — abrir modal Bricks sempre
+    await openBricksModal(pref.preference_id, valor, consent.consent_id);
 
   } catch (err) {
-    console.error("Erro geral:", err);
-    alert("Erro ao carregar o checkout.");
+    console.error("Erro no fluxo de checkout:", err);
+    alert("Erro ao iniciar o checkout. Tente novamente.");
+  } finally {
+    buttonEl.disabled = false;
+    buttonEl.textContent = buttonEl.getAttribute("data-label") || "Pagar";
   }
+}
+
+// Vincula ao botão #buy-btn (adicione o botão no seu HTML)
+document.addEventListener("DOMContentLoaded", () => {
+  const buyBtn = document.getElementById("buy-btn");
+  if (!buyBtn) {
+    console.warn("buy-btn não encontrado. Adicione: <button id=\"buy-btn\" class=\"btn-comprar\" data-label=\"Pagar R$ 11,45\">Pagar R$ 11,45</button>");
+    return;
+  }
+  // preserve label
+  if (!buyBtn.getAttribute("data-label")) buyBtn.setAttribute("data-label", buyBtn.textContent.trim());
+
+  buyBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    startCheckoutFlow(buyBtn).catch(()=>{});
+  });
 });
 </script>
 
