@@ -353,114 +353,226 @@ document.getElementById("support-form").addEventListener("submit", function(e){
 </footer>
 
 <script>
-// checkout-mercadopago.js
-// - Auto-open do Bricks no carregamento (sem botão necessario)
-// - NÃO redireciona para init_point em nenhum momento
-// - Usa /create-payment-bricks e /process-payment do seu worker
-// - Ao finalizar (statusScreen onFormCompleted) redireciona para /obrigado?collection_id=<id>
+// checkout-mercadopago2.js
+// - Auto-open do Bricks (modal/iframe) dentro do seu site (sem redirect para init_point)
+// - Tema dark, fallback para abrir por gesto do usuário se navegador bloquear auto-open
+// - Ao concluir (statusScreen onFormCompleted) redireciona para /obrigado.html?collection_id=<id>
+// - Usa endpoints do seu worker: /create-payment-bricks e /process-payment
+//
+// Incluir no HTML: <div id="paymentBrick_container"></div>
+// Opcional: um botão será criado automaticamente caso o navegador bloqueie abertura automática.
 
-(function(){
+(function () {
   const workerUrl = "https://saint-echo-backend.neuroniosgames.workers.dev"; // ajuste se necessário
   const MP_PUBLIC_KEY = "TEST-1d9caeed-2ea1-4d47-bb8f-cff4c1212ab6";
   const produtoDefault = localStorage.getItem("produto") || "60 Echo Beads";
   const valorDefault = Number(11.45);
 
+  if (typeof MercadoPago === "undefined") {
+    console.error("MercadoPago SDK não carregado. Adicione script src='https://sdk.mercadopago.com/js/v2'>script");
+    return;
+  }
+
   const mp = new MercadoPago(MP_PUBLIC_KEY, { locale: "pt-BR" });
 
   async function createPreferenceIfNeeded(produto, valor, consentId) {
-    // tenta reutilizar preference salva
+    // tenta reutilizar preference salva (evita criar prefs ao recarregar)
     try {
-      const saved = JSON.parse(localStorage.getItem('saint_pref') || 'null');
+      const saved = JSON.parse(localStorage.getItem("saint_pref") || "null");
       if (saved && saved.preference_id) {
         return saved;
       }
-    } catch(e){ /* ignore */ }
+    } catch (e) {
+      // ignore parsing errors
+    }
 
-    // cria nova preferencia no backend
     const res = await fetch(`${workerUrl}/create-payment-bricks`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ produto, valor, consent_id: consentId })
+      body: JSON.stringify({ produto, valor, consent_id: consentId }),
     });
-    const data = await res.json();
-    if (!data || !data.preference_id) throw new Error('Erro ao criar preference: ' + JSON.stringify(data));
-    try { localStorage.setItem('saint_pref', JSON.stringify({ preference_id: data.preference_id, produto, created_at: Date.now() })); } catch(e){/* ignore */ }
+
+    const data = await res.json().catch(() => null);
+    if (!data || !data.preference_id) {
+      throw new Error("Erro ao criar preference: " + JSON.stringify(data));
+    }
+
+    try {
+      localStorage.setItem("saint_pref", JSON.stringify({ preference_id: data.preference_id, produto, created_at: Date.now() }));
+    } catch (e) {
+      // ignore storage errors
+    }
+
     return { preference_id: data.preference_id, init_point: data.init_point || null };
   }
 
-  async function openBricks(preferenceId, amount, consentId) {
-    const bricksBuilder = mp.bricks();
-    bricksBuilder.create("payment", "paymentBrick_container", {
-      initialization: { preferenceId, amount },
-      customization: {
-        visual: { style: { theme: "dark" } }, // tema escuro
-        paymentMethods: { bankTransfer: "all", creditCard: "all", debitCard: "all", mercadoPago: "all" }
-      },
-      callbacks: {
-        onReady: () => console.log("🟢 Payment Brick pronto"),
-        onError: (err) => console.error("🔴 Erro no Payment Brick", err),
-        onSubmit: ({ selectedPaymentMethod, formData }) => {
-          // Se usa fluxo de token -> backend
-          return new Promise((resolve, reject) => {
-            fetch(`${workerUrl}/process-payment`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ ...formData, consent_id: consentId })
-            })
-            .then(r => r.json())
-            .then(paymentData => {
-              if (paymentData && paymentData.id) {
-                // cria statusScreen dentro do mesmo container
-                bricksBuilder.create("statusScreen", "paymentBrick_container", {
-                  initialization: { paymentId: paymentData.id },
-                  callbacks: {
-                    onReady: () => { console.log("Status Screen carregado!"); resolve(); },
-                    onFormCompleted: () => {
-                      console.log("Pagamento finalizado — redirecionando para entrega...");
-                      // redireciona somente AQUI, após usuário concluir no Bricks
-                      window.location.href = `https://saintsgs-hub.github.io/obrigado?collection_id=${paymentData.id}`;
-                    },
-                    onError: (error) => {
-                      console.error("Erro no Status Screen", error);
-                      reject();
-                    }
-                  }
-                });
-              } else {
-                console.error("process-payment sem payment id", paymentData);
-                reject();
-              }
-            })
-            .catch(err => { console.error("Erro no process-payment:", err); reject(); });
-          });
-        }
-      }
-    });
+  function ensureContainer() {
+    let el = document.getElementById("paymentBrick_container");
+    if (!el) {
+      el = document.createElement("div");
+      el.id = "paymentBrick_container";
+      // append in a reasonable place (end of body)
+      document.body.appendChild(el);
+    }
+    return el;
   }
 
-  // Inicializa automaticamente no carregamento da página de pagamento
-  document.addEventListener("DOMContentLoaded", async () => {
-    // checa consent
+  async function openBricks(preferenceId, amount, consentId) {
+    const container = ensureContainer();
+    // clear container (re-render)
+    container.innerHTML = "";
+
+    const bricksBuilder = mp.bricks();
+
+    // It's possible bricksBuilder.create throws synchronously in some environments,
+    // so we wrap in try/catch and rethrow to allow fallback to a user-gesture button.
+    try {
+      bricksBuilder.create("payment", "paymentBrick_container", {
+        initialization: { preferenceId: preferenceId, amount: amount },
+        customization: {
+          visual: { style: { theme: "dark" } }, // tema escuro
+          paymentMethods: { bankTransfer: "all", creditCard: "all", debitCard: "all", mercadoPago: "all" },
+        },
+        callbacks: {
+          onReady: () => console.log("🟢 Payment Brick pronto"),
+          onError: (err) => console.error("🔴 Erro no Payment Brick", err),
+          onSubmit: ({ selectedPaymentMethod, formData }) => {
+            return new Promise((resolve, reject) => {
+              fetch(`${workerUrl}/process-payment`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ ...formData, consent_id: consentId }),
+              })
+                .then((r) => r.json())
+                .then((paymentData) => {
+                  if (paymentData && (paymentData.id || paymentData.payment_id || paymentData.payment?.id)) {
+                    // Normalize id field name
+                    const paymentId = paymentData.id || paymentData.payment_id || (paymentData.payment && paymentData.payment.id);
+                    // create statusScreen inside same container
+                    try {
+                      bricksBuilder.create("statusScreen", "paymentBrick_container", {
+                        initialization: { paymentId },
+                        callbacks: {
+                          onReady: () => {
+                            console.log("Status Screen carregado!");
+                            resolve();
+                          },
+                          onFormCompleted: () => {
+                            console.log("DEBUG: onFormCompleted chamado, paymentId=", paymentId);
+                            // try top.location first (works when Bricks is in iframe)
+                            const targetUrl = `/obrigado.html?collection_id=${encodeURIComponent(paymentId)}`;
+                            try {
+                              if (top && top.location && top.location.href !== undefined) {
+                                top.location.href = targetUrl;
+                                return;
+                              }
+                            } catch (e) {
+                              console.warn("top.location não disponível, fallback para window.location", e);
+                            }
+                            // fallback
+                            window.location.href = targetUrl;
+                          },
+                          onError: (error) => {
+                            console.error("Erro no Status Screen", error);
+                            reject();
+                          },
+                        },
+                      });
+                    } catch (e) {
+                      console.error("Erro ao criar statusScreen:", e);
+                      // if statusScreen creation fails, still try redirect
+                      const paymentIdSafe = encodeURIComponent(paymentId);
+                      try {
+                        top.location.href = `/obrigado.html?collection_id=${paymentIdSafe}`;
+                      } catch (_) {
+                        window.location.href = `/obrigado.html?collection_id=${paymentIdSafe}`;
+                      }
+                    }
+                  } else {
+                    console.error("process-payment retornou sem payment id", paymentData);
+                    reject();
+                  }
+                })
+                .catch((err) => {
+                  console.error("Erro no process-payment:", err);
+                  reject();
+                });
+            });
+          },
+        },
+      });
+    } catch (err) {
+      console.error("Criação do Brick falhou (pode ser bloqueio por falta de user gesture):", err);
+      throw err;
+    }
+  }
+
+  function createOpenButton(container, onClick) {
+    // create a simple centered button that lets user open the checkout manually
+    let btn = document.getElementById("mp-open-btn");
+    if (!btn) {
+      btn = document.createElement("button");
+      btn.id = "mp-open-btn";
+      btn.textContent = "Abrir checkout";
+      btn.className = "btn-comprar";
+      // styles to ensure visibility
+      btn.style.display = "block";
+      btn.style.margin = "16px auto";
+      btn.style.maxWidth = "320px";
+      btn.style.cursor = "pointer";
+      container.appendChild(btn);
+    }
+    btn.onclick = onClick;
+    return btn;
+  }
+
+  // start flow (creates preference and opens Bricks)
+  async function startCheckoutAuto(openButtonFallback = true) {
     const consent = JSON.parse(localStorage.getItem("saint_consent") || "null");
     if (!consent?.consent_id) {
       console.warn("Consentimento não encontrado — não iniciando checkout automaticamente.");
-      // Se quer forçar que o modal abra mesmo sem consent, remova o return
       return;
     }
 
     try {
-      // cria ou reutiliza preference
+      // create or reuse preference
       const pref = await createPreferenceIfNeeded(produtoDefault, valorDefault, consent.consent_id);
 
-      // IMPORTANTE: NUNCA fazer window.location.href = pref.init_point
-      // Sempre abrir o modal Bricks dentro do site
+      // IMPORTANT: do NOT redirect to pref.init_point; always open modal
       await openBricks(pref.preference_id, valorDefault, consent.consent_id);
     } catch (err) {
       console.error("Erro ao abrir Bricks automaticamente:", err);
-      // Você pode opcionalmente mostrar um botão para tentar novamente
-      // ou exibir uma mensagem amigável ao usuário
+      // If opening failed due to browser blocking (requires gesture), provide a visible button
+      if (openButtonFallback) {
+        const container = ensureContainer();
+        const btn = createOpenButton(container, async () => {
+          try {
+            btn.disabled = true;
+            btn.textContent = "Aguarde...";
+            const pref = await createPreferenceIfNeeded(produtoDefault, valorDefault, JSON.parse(localStorage.getItem("saint_consent")).consent_id);
+            await openBricks(pref.preference_id, valorDefault, JSON.parse(localStorage.getItem("saint_consent")).consent_id);
+          } catch (e) {
+            console.error("Erro no fallback openBricks:", e);
+            alert("Não foi possível abrir o checkout automaticamente. Tente novamente.");
+            btn.disabled = false;
+            btn.textContent = "Abrir checkout";
+          }
+        });
+      }
     }
+  }
+
+  // Auto-open on DOMContentLoaded if consent present
+  document.addEventListener("DOMContentLoaded", () => {
+    // If the page should auto-open, call startCheckoutAuto.
+    // This keeps the old behaviour: auto-open Bricks inside page.
+    startCheckoutAuto(true).catch(() => {});
   });
+
+  // Expose a function on window to allow manual open via other scripts if needed
+  window.__saint_open_bricks = async function () {
+    await startCheckoutAuto(false);
+  };
 })();
 </script>
   
