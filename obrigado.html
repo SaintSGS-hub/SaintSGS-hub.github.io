@@ -292,64 +292,110 @@ const statusBox = document.getElementById("status-box");
 const retryBtn = document.getElementById("retry-btn");
 const confirmarBtn = document.getElementById("confirmar-entrega");
 
-const params = new URLSearchParams(window.location.search);
-const txid =
-  params.get("payment_id") ||
-  params.get("collection_id") ||
-  params.get("id");
+const workerUrl = 'https://saint-echo-backend.neuroniosgames.workers.dev';
 
-/* ================================
-   VALIDAÇÃO DE PAGAMENTO
-================================ */
-function validarPagamento() {
+// lê txid da URL (collection_id / payment_id / id)
+const params = new URLSearchParams(window.location.search);
+let txid = params.get("payment_id") || params.get("collection_id") || params.get("id") || null;
+
+// tenta preference_id do localStorage se txid ausente
+let preferenceId = null;
+try { const p = JSON.parse(localStorage.getItem('saint_pref') || 'null'); preferenceId = p?.preference_id || null; } catch(e){ preferenceId = null; }
+
+function setStatusPending() {
   statusBox.className = "status status-pending text-center";
   statusBox.innerText = "Pagamento em análise pelo Mercado Pago";
   retryBtn.classList.add("hidden");
+}
+function setStatusApproved() {
+  statusBox.className = "status status-approved text-center";
+  statusBox.innerText = "Pagamento aprovado ✔";
+  form.classList.remove("disabled");
+}
+function setStatusNotApproved() {
+  statusBox.className = "status status-pending text-center";
+  statusBox.innerText = "Pagamento ainda não confirmado. Verifique novamente.";
+  retryBtn.classList.remove("hidden");
+}
 
-  fetch("https://saint-echo-backend.neuroniosgames.workers.dev/submit-order", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ txid })
-  })
-  .then(r => {
-    if (!r.ok) throw new Error();
-    return r.json();
-  })
-  .then(data => {
-    if (data.status === "approved") {
-    statusBox.className = "status status-approved text-center";
-    statusBox.innerText = "Pagamento aprovado ✔";
-    form.classList.remove("disabled");
-  } else {
-    statusBox.className = "status status-pending text-center";
-    statusBox.innerText =
-      "Pagamento ainda não confirmado. Verifique novamente.";
-    retryBtn.classList.remove("hidden");
-    }
+async function checkPreference(prefId) {
+  const res = await fetch(`${workerUrl}/check-preference`, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ preference_id: prefId })
   });
+  return res.json();
+}
+
+async function validarPagamento() {
+  setStatusPending();
+
+  // Se não há txid, tenta descobrir via preference_id
+  if (!txid && preferenceId) {
+    const prefResp = await checkPreference(preferenceId);
+    if (prefResp.found && prefResp.mp_payment_id) {
+      txid = prefResp.mp_payment_id;
+    } else {
+      setStatusNotApproved();
+      return;
+    }
+  }
+
+  if (!txid) {
+    setStatusNotApproved();
+    return;
+  }
+
+  // Chama /submit-order apenas para validar (sem dados finais)
+  const consent = JSON.parse(localStorage.getItem("saint_consent") || 'null');
+  const consentId = consent?.consent_id || null;
+  if (!consentId) {
+    alert('Consentimento não encontrado. Volte à home e aceite os termos.');
+    return;
+  }
+
+  try {
+    const res = await fetch(`${workerUrl}/submit-order`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ txid, consent_id: consentId })
+    });
+
+    const j = await res.json();
+    // se backend retornou ok => pagamento confirmado e order criada (idempotente)
+    if (res.ok && j.ok) {
+      setStatusApproved();
+    } else {
+      // pagamento ainda não aprovado
+      setStatusNotApproved();
+    }
+  } catch (err) {
+    console.error('Erro validando pagamento:', err);
+    setStatusNotApproved();
+  }
 }
 
 retryBtn.addEventListener("click", validarPagamento);
-validarPagamento();
+validarPagamento(); // tentativa automática na carga
 
-/* ================================
-   CONFIRMAR ENTREGA (SEM FORM)
-================================ */
 confirmarBtn.addEventListener("click", async () => {
   try {
     confirmarBtn.disabled = true;
     confirmarBtn.innerText = "Processando...";
 
-    const consent = JSON.parse(localStorage.getItem("saint_consent"));
-    
+    const consent = JSON.parse(localStorage.getItem("saint_consent") || 'null');
+    const consentId = consent?.consent_id || null;
+    if (!consentId) throw new Error('Consent missing');
+
     const payload = {
       txid,
-      consent_id: consent.consent_id,
+      preference_id: preferenceId,
+      consent_id: consentId,
       nick: form.nick.value,
       jogador_id: form.id.value,
       whatsapp: form.telefone.value,
       email_cliente: form.email_cliente.value,
-      horario: new Date().toLocaleString("pt-BR"),
+      horario: new Date().toLocaleString("pt-BR")
     };
 
     if (!payload.nick || !payload.jogador_id || !payload.whatsapp || !payload.email_cliente) {
@@ -359,21 +405,19 @@ confirmarBtn.addEventListener("click", async () => {
       return;
     }
 
-    const res = await fetch(
-      "https://saint-echo-backend.neuroniosgames.workers.dev/submit-order",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      }
-    );
+    const res = await fetch(`${workerUrl}/submit-order`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
 
-    if (!res.ok) throw new Error();
+    if (!res.ok) throw new Error('submit failed');
 
+    // sucesso
     window.location.href = "confirmado.html";
-
   } catch (err) {
     alert("Erro ao confirmar entrega. Tente novamente.");
+    console.error(err);
     confirmarBtn.disabled = false;
     confirmarBtn.innerText = "Confirmar Entrega";
   }
