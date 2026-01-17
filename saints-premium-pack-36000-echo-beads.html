@@ -2,7 +2,8 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Saints Premium Pack • 12000 Echo Beads</title>
+<!-- EDITAR NOME AQUI -->
+<title>Premium Pack • 36000 Echo Beads</title>
 <link rel="icon" type="image/png" href="img/favicon.png">
 <script src="https://cdn.tailwindcss.com"></script>
 
@@ -12,18 +13,24 @@
 <style>
 /* Fundo premium com gradiente e textura */
 body {
-  background: linear-gradient(135deg, #000 0%, #111 50%, #1a1a1a 100%);
+  background: #000; /* fundo preto sólido */
   font-family: 'Segoe UI', sans-serif;
-  color: #fff;
 }
 
 /* Overlay elegante */
 body::before {
   content: "";
   position: fixed;
-  inset: 0;
-  background: radial-gradient(circle at top, rgba(255,215,0,0.08), transparent 70%);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+   radial-gradient(circle at top, rgba(255,200,0,0.04), transparent 80%),
+   url('img/fundo.png') center center / cover no-repeat;
+  opacity: 0.25;
   z-index: -1;
+  pointer-events: none;
 }
 
 /* Cartões com efeito vidro premium */
@@ -73,7 +80,55 @@ h2 {
   text-shadow: 0 0 10px rgba(255,215,0,0.6);
 }
 
-/* Botões premium */
+}
+@keyframes floatGlow {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-3px); }
+  100% { transform: translateY(0px); }
+}
+.btn-comprar {
+  background: #FFD700;
+  color: #000;
+  font-weight: bold;
+  padding: 14px;
+  border-radius: 14px;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.glow-float {
+  animation: floatGlow 3s ease-in-out infinite;
+  text-shadow: 0 0 6px rgba(255,255,255,0.3);
+}
+  
+/* Home discreto */
+.home-link {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  transition: color 0.2s;
+  z-index: 50;
+}
+.home-link:hover {
+  color: #fff;
+}
+
+.price-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.price-slash {
+  position: absolute;
+  top: -19px;
+  right: 43px;
+  width: 90px;
+  pointer-events: none;
+  }
+/* Botões premium
 .btn-comprar {
   background: linear-gradient(135deg, #FFD700, #eab308);
   color: #000;
@@ -88,26 +143,55 @@ h2 {
 .btn-comprar:hover {
   transform: scale(1.05);
   box-shadow: 0 0 28px rgba(255,215,0,0.75);
-}
+}*/
 
 /* Ícones fixos */
-#discord-icon, #support-btn {
+<style>
+#discord-icon {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  width: 56px;
-  height: 56px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   overflow: hidden;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   z-index: 1000;
 }
-#discord-icon:hover, #support-btn:hover {
-  transform: scale(1.12);
-  box-shadow: 0 0 24px rgba(255,215,0,0.6);
+#discord-icon:hover {
+  transform: scale(1.1);
 }
+</style>
 
+<!-- BOTÃO SUPORTE -->
+<div id="support-btn">
+  <img src="img/suporte.png" alt="Suporte" />
+</div>
+
+<style>
+#support-btn {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #FFD700;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0,0,0,.4);
+  z-index: 1000;
+}
+#support-btn:hover {
+  transform: scale(1.08);
+}
+</style>
+<style>
 /* Timer premium */
 #timer {
   font-weight: bold;
@@ -115,20 +199,49 @@ h2 {
   text-shadow: 0 0 12px rgba(255,215,0,0.9);
 }
 </style>
+<style>
+#support-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.7);
+  z-index: 1001;
+}
+#support-form {
+  background: #111;
+  color: #fff;
+  max-width: 400px;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+#support-form input,
+#support-form textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+
+  background: #fff;   /* fundo do campo */
+  color: #111;        /* texto que o cliente digita */
+}
+</style>
 </head>
 
 <body>
 
-<a href="https://saintsgs-hub.github.io/index.html" class="home-link text-gray-400 hover:text-white">← Voltar à Home</a>
+<a href="https://saintsgs-hub.github.io/index.html" class="home-link text-gray-400 hover:text-white">← Home</a>
 
 <div class="min-h-screen flex items-center justify-center p-8">
   <div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl w-full">
 
     <!-- Card Produto -->
     <div class="glass-card text-center">
-      <h1 class="mb-4">🦪 12000 Echo Beads 🦪</h1>
+      <h1 class="mb-4">🦪 36000 Echo Beads 🦪</h1>
       <p class="text-gray-300 mb-6">
-        Pacote premium com <strong>12000 Echo Beads</strong> para sua conta no jogo <em>Where Winds Meet</em>.
+        Pacote premium com <strong>36000 Echo Beads</strong> para sua conta no jogo <em>Where Winds Meet</em>.
       </p>
       <img src="img/echo9.png" class="mx-auto w-40 mb-6 rounded-lg shadow-lg">
       <div class="price-wrapper relative inline-block">
@@ -154,39 +267,141 @@ h2 {
   </div>
 </div>
 
-<!-- Ícones fixos -->
+<!-- DISCORD -->
 <a href="https://discordapp.com/users/715081298254888990" target="_blank" id="discord-icon">
-  <img src="img/discord.png" alt="Discord">
+  <img src="img/discord.png" alt="Discord" />
 </a>
 
+<style>
+#discord-icon {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 1000;
+}
+#discord-icon:hover {
+  transform: scale(1.1);
+}
+</style>
+
+<!-- BOTÃO SUPORTE -->
 <div id="support-btn">
-  <img src="img/suporte.png" alt="Suporte">
+  <img src="img/suporte.png" alt="Suporte" />
 </div>
 
-<!-- Modal Suporte -->
+<style>
+#support-btn {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #FFD700;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0,0,0,.4);
+  z-index: 1000;
+}
+#support-btn:hover {
+  transform: scale(1.08);
+}
+</style>
+
 <div id="support-modal">
   <form id="support-form">
-    <h2 class="text-xl font-bold mb-4">Contato com Suporte</h2>
+    <h2>Contato com Suporte</h2>
+
     <input name="name" placeholder="Nome completo" required>
     <input name="whatsapp" placeholder="WhatsApp" required>
     <input name="email" type="email" placeholder="Email" required>
     <input name="subject" placeholder="Assunto" required>
     <textarea name="message" placeholder="Mensagem" required></textarea>
-    <button type="submit" class="btn-comprar mt-4">Enviar</button>
+
+    <button type="submit">Enviar</button>
   </form>
 </div>
 
-<footer class="w-full mt-16 border-t border-gray-700 pt-8 pb-6 text-center text-sm text-gray-400">
-  <div class="flex flex-wrap justify-center gap-6 mb-4">
-    <img src="img/pix.png" alt="Pix" class="h-6">
-    <img src="img/visa.png" alt="Visa" class="h-6">
-    <img src="img/mastercard.png" alt="MasterCard" class="h-6">
-    <img src="img/mercadopago.png" alt="Mercado Pago" class="h-6">
-  </div>
-  <p class="valor-glow2">✔ Secure Digital Delivery • ✔ Verified Payment Flow • ✔ Manual In-Game Delivery</p>
-  <div class="mt-4 text-xs">
-    <a href="tos.html" class="underline">Termos de Uso</a> •
-    <a href="privacidade.html" class="underline">Política de Privacidade</a>
+<style>
+#support-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.7);
+  z-index: 1001;
+}
+#support-form {
+  background: #111;
+  color: #fff;
+  max-width: 400px;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+#support-form input,
+#support-form textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+
+  background: #fff;   /* fundo do campo */
+  color: #111;        /* texto que o cliente digita */
+}
+</style>
+
+<footer class="w-full mt-16 border-t border-gray-700 pt-8 pb-6">
+  <div class="max-w-5xl mx-auto text-center text-sm text-gray-300 space-y-4">
+
+    <!-- Linha 2: Métodos de pagamento -->
+    <div class="flex flex-wrap justify-center items-center gap-4 mt-4">
+      <img src="img/pix.png" alt="Pix" class="h-6">
+      <img src="img/visa.png" alt="Visa" class="h-6">
+      <img src="img/mastercard.png" alt="MasterCard" class="h-6">
+      <img src="img/mercadopago.png" alt="Mercado Pago" class="h-6">
+    </div>
+    
+    <!-- Linha 1: Segurança básica -->
+    <div class="flex flex-wrap justify-center font-semibold gap-6">
+      <span>🔒 Pagamento seguro</span>
+      <span>🧾 Compra protegida</span>
+      <span>⚡ Entrega digital automática / Verificação manual</span>
+    </div>
+
+    <!-- Linha 3: Selos textuais (subconsciente trabalha aqui) -->
+    <div class="flex flex-wrap justify-center gap-6 mt-4 text-xs font-semibold uppercase tracking-wide">
+      <span>🔐 SSL Secure Checkout</span>
+      <span>🧾 Terms Accepted</span>
+      <span>⚙️ Entrega manual após confirmação</span>
+      <span>⏱️ Atendimento 24 horas ON</span>
+    </div>
+
+    <!-- Linha 4: Claims de confiança (estilo marketplaces grandes) -->
+    <div class="valor-glow2 flex flex-wrap justify-center gap-6 mt-4 font-semibold">
+      <span>✔ Secure Digital Delivery</span>
+      <span>✔ Verified Payment Flow</span>
+      <span>✔ Manual In-Game Delivery</span>
+      <span>✔ Terms Accepted & Logged</span>
+    </div>
+
+    <!-- Linha 5: Legal -->
+    <div class="mt-6 text-xs text-gray-400">
+      <a href="https://saintsgs-hub.github.io/tos.html" class="underline">Termos de Uso</a> •
+      <a href="https://saintsgs-hub.github.io/privacidade.html" class="underline">Política de Privacidade</a>
+    </div>
+
   </div>
 </footer>
 
@@ -194,7 +409,18 @@ h2 {
 <script src="js/effects.js"></script>
 <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
 <script>
-(function(){ emailjs.init("fjXHE6FnezGdisp_s"); })();
+const btn = document.getElementById("support-btn");
+const modal = document.getElementById("support-modal");
+
+btn.onclick = () => modal.style.display = "block";
+modal.onclick = e => {
+  if (e.target === modal) modal.style.display = "none";
+};
+</script>
+<script>
+(function(){
+  emailjs.init("fjXHE6FnezGdisp_s");
+})();
 
 document.getElementById("support-form").addEventListener("submit", function(e){
   e.preventDefault();
@@ -212,6 +438,212 @@ document.getElementById("support-form").addEventListener("submit", function(e){
     console.error(err);
   });
 });
+</script>
+<script>
+// checkout-mercadopago2.js
+// - Auto-open do Bricks (modal/iframe) dentro do seu site (sem redirect para init_point)
+// - Tema dark, fallback para abrir por gesto do usuário se navegador bloquear auto-open
+// - Ao concluir pagamento aprovado, redireciona para /obrigado.html?collection_id=<id>
+// - Usa endpoints do seu worker: /create-payment-bricks e /process-payment
+//
+// Incluir no HTML: <div id="paymentBrick_container"></div>
+// Opcional: um botão será criado automaticamente caso o navegador bloqueie abertura automática.
+
+(function () {
+  const workerUrl = "https://saint-echo-backend.neuroniosgames.workers.dev"; // ajuste se necessário
+  const MP_PUBLIC_KEY = "APP_USR-ecd9f6e7-02f7-4bb3-b757-10a0453ab646";
+  const produtoDefault = localStorage.getItem("produto") || "12000 Echo Beads";
+  localStorage.setItem("produto", produtoDefault);
+  const valorDefault = Number(1543.40);
+
+  if (typeof MercadoPago === "undefined") {
+    console.error("MercadoPago SDK não carregado. Adicione script src='https://sdk.mercadopago.com/js/v2'>script");
+    return;
+  }
+
+  const mp = new MercadoPago(MP_PUBLIC_KEY, { locale: "pt-BR" });
+
+  async function createPreferenceIfNeeded(produto, valor, consentId) {
+    try {
+      const saved = JSON.parse(localStorage.getItem("saint_pref") || "null");
+      if (saved && saved.preference_id) {
+        return saved;
+      }
+    } catch (e) {}
+
+    const res = await fetch(`${workerUrl}/create-payment-bricks`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ produto, valor, consent_id: consentId }),
+    });
+
+    const data = await res.json().catch(() => null);
+    if (!data || !data.preference_id) {
+      throw new Error("Erro ao criar preference: " + JSON.stringify(data));
+    }
+
+    try {
+      localStorage.setItem("saint_pref", JSON.stringify({
+        preference_id: data.preference_id,
+        produto,
+        created_at: Date.now()
+      }));
+    } catch (e) {}
+
+    return { preference_id: data.preference_id };
+  }
+
+  function ensureContainer() {
+    let el = document.getElementById("paymentBrick_container");
+    if (!el) {
+      el = document.createElement("div");
+      el.id = "paymentBrick_container";
+      document.body.appendChild(el);
+    }
+    return el;
+  }
+
+  async function openBricks(preferenceId, amount, consentId) {
+    const container = ensureContainer();
+    container.innerHTML = "";
+
+    const bricksBuilder = mp.bricks();
+
+    try {
+      bricksBuilder.create("payment", "paymentBrick_container", {
+        initialization: { preferenceId, amount },
+        customization: {
+          visual: { style: { theme: "dark" } },
+          paymentMethods: { bankTransfer: "all", creditCard: "all", debitCard: "all", mercadoPago: "all" },
+        },
+        callbacks: {
+          onReady: () => console.log("🟢 Payment Brick pronto"),
+          onError: (err) => console.error("🔴 Erro no Payment Brick", err),
+          onSubmit: ({ formData }) => {
+            return new Promise((resolve, reject) => {
+              fetch(`${workerUrl}/process-payment`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ ...formData, consent_id: consentId }),
+              })
+                .then((r) => r.json())
+                .then((paymentData) => {
+                  const paymentId = paymentData.id || paymentData.payment_id || (paymentData.payment && paymentData.payment.id);
+                  const status = paymentData.status;
+
+                  if (paymentId && status === "approved") {
+                    console.log("Pagamento aprovado, id:", paymentId);
+                    const targetUrl = `/obrigado.html?collection_id=${encodeURIComponent(paymentId)}`;
+                    window.location.href = targetUrl;
+                    resolve();
+                  } else {
+                    console.warn("Pagamento não aprovado ainda:", paymentData);
+                    reject();
+                  }
+                })
+                .catch((err) => {
+                  console.error("Erro no process-payment:", err);
+                  reject();
+                });
+            });
+          },
+        },
+      });
+    } catch (err) {
+      console.error("Criação do Brick falhou:", err);
+      throw err;
+    }
+  }
+
+  function createOpenButton(container, onClick) {
+    let btn = document.getElementById("mp-open-btn");
+    if (!btn) {
+      btn = document.createElement("button");
+      btn.id = "mp-open-btn";
+      btn.textContent = "Abrir checkout";
+      btn.className = "btn-comprar";
+      btn.style.display = "block";
+      btn.style.margin = "16px auto";
+      btn.style.maxWidth = "320px";
+      btn.style.cursor = "pointer";
+      container.appendChild(btn);
+    }
+    btn.onclick = onClick;
+    return btn;
+  }
+
+  async function startCheckoutAuto(openButtonFallback = true) {
+    const consent = JSON.parse(localStorage.getItem("saint_consent") || "null");
+    if (!consent?.consent_id) {
+      console.warn("Consentimento não encontrado — não iniciando checkout automaticamente.");
+      return;
+    }
+
+    try {
+      const pref = await createPreferenceIfNeeded(produtoDefault, valorDefault, consent.consent_id);
+      await openBricks(pref.preference_id, valorDefault, consent.consent_id);
+    } catch (err) {
+      console.error("Erro ao abrir Bricks automaticamente:", err);
+      if (openButtonFallback) {
+        const container = ensureContainer();
+        const btn = createOpenButton(container, async () => {
+          try {
+            btn.disabled = true;
+            btn.textContent = "Aguarde...";
+            const pref = await createPreferenceIfNeeded(produtoDefault, valorDefault, JSON.parse(localStorage.getItem("saint_consent")).consent_id);
+            await openBricks(pref.preference_id, valorDefault, JSON.parse(localStorage.getItem("saint_consent")).consent_id);
+          } catch (e) {
+            console.error("Erro no fallback openBricks:", e);
+            alert("Não foi possível abrir o checkout automaticamente. Tente novamente.");
+            btn.disabled = false;
+            btn.textContent = "Abrir checkout";
+          }
+        });
+      }
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    startCheckoutAuto(true).catch(() => {});
+  });
+
+  window.__saint_open_bricks = async function () {
+    await startCheckoutAuto(false);
+  };
+})();
+</script>
+
+<script>
+  const DURATION = 7 * 60 * 60; // 7 horas em segundos
+  const STORAGE_KEY = "promoTimerStart";
+
+  function getStartTime() {
+    let start = localStorage.getItem(STORAGE_KEY);
+    if (!start) {
+      start = Date.now();
+      localStorage.setItem(STORAGE_KEY, start);
+    }
+    return parseInt(start, 10);
+  }
+
+  function updateTimer() {
+    const startTime = getStartTime();
+    const now = Date.now();
+
+    let elapsed = Math.floor((now - startTime) / 1000);
+    let remaining = DURATION - (elapsed % DURATION);
+
+    if (remaining <= 0) remaining = DURATION;
+
+    const h = String(Math.floor(remaining / 3600)).padStart(2, "0");
+    const m = String(Math.floor((remaining % 3600) / 60)).padStart(2, "0");
+    const s = String(remaining % 60).padStart(2, "0");
+
+    document.getElementById("timer").textContent = `${h}:${m}:${s}`;
+  }
+
+  updateTimer();
+  setInterval(updateTimer, 1000);
 </script>
 
 </body>
