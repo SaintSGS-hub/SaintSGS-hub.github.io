@@ -603,7 +603,10 @@ document.getElementById("support-form").addEventListener("submit", function(e){
       const consentPayload = {
         consent_version: "2026-01",
         accepted_at: new Date().toISOString(),
-        user_agent: navigator.userAgent
+        user_agent: navigator.userAgent,
+        cidade: localStorage.getItem("cidade"),
+        estado: localStorage.getItem("estado"),
+        pais: localStorage.getItem("pais")
       };
 
       const response = await fetch(
