@@ -31,9 +31,9 @@
     }
     .loader div {
       position: absolute;
-      border: 4px solid #f3f3f3;
+      border: 4px solid #ffbf00;
       opacity: 1;
-      border-radius: 50%;
+      border-radius: 70%;
       animation: loaderAnim 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
     }
     .loader div:nth-child(2) { animation-delay: -0.5s; }
@@ -152,7 +152,7 @@ document.querySelectorAll('.btn-comprar, .btn-confirmar').forEach(btn => {
       <div class="loader">
         <div></div><div></div><div></div><div></div>
       </div>
-      <p style="color:yellow; margin-top:20px; font-family:sans-serif;">Carregando...</p>
+      <p style="color:gold; margin-top:20px; font-family:sans-serif;">Carregando...</p>
     `;
     document.body.appendChild(overlay);
 
