@@ -1,3 +1,20 @@
+
+// Cria um elemento <style>
+const style = document.createElement("style");
+style.innerHTML = `
+  /* Cursor padrão da página */
+  body {
+    cursor: url("source/cursor.cur"), auto;
+  }
+
+  /* Cursor quando passa por cima de links e botões */
+  a, button {
+    cursor: url("source/pointer.cur"), pointer;
+  }
+`;
+
+// Adiciona no <head> da página
+document.head.appendChild(style);
 /* ================================
    FUNDO GLOBAL TRANSPARENTE
    (aplicado via JS em todas as páginas)
