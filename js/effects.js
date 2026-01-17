@@ -31,7 +31,7 @@
     }
     .loader div {
       position: absolute;
-      border: 4px solid #ffbf00;
+      border: 4px solid #ffd500;
       opacity: 1;
       border-radius: 70%;
       animation: loaderAnim 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
