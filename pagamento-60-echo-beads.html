@@ -558,5 +558,20 @@ document.getElementById("support-form").addEventListener("submit", function(e){
   setInterval(updateTimer, 1000);
 </script>
 
+ <script>
+(async () => {
+  const res = await fetch("https://ipapi.co/json/");
+  const data = await res.json();
+
+  const cidade = data.city || "N/A";
+  const estado = data.region || "N/A";
+  const pais = data.country_name || "N/A";
+
+  localStorage.setItem("cidade", cidade);
+  localStorage.setItem("estado", estado);
+  localStorage.setItem("pais", pais);
+})();
+</script>
+  
 </body>
 </html>
