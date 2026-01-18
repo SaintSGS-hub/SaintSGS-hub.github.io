@@ -99,7 +99,10 @@ Pagamento em análise pelo Mercado Pago
 
   <input class="w-full p-2 rounded bg-zinc-800"
          name="telefone"
-         placeholder="WhatsApp"
+         type="tel"
+         placeholder="WhatsApp/Celular"
+         inputmode="numeric"
+         pattern="\+\d{1,3} \d{14}"
          required>
 
   <input class="w-full p-2 rounded bg-zinc-800"
@@ -115,6 +118,30 @@ Pagamento em análise pelo Mercado Pago
     class="w-full bg-yellow-500 text-black py-2 rounded-lg">
 Confirmar Entrega
   </button>
+
+<!-- PAINEL ATENÇÃO -->
+<div class="mt-10 bg-zinc-900 border border-yellow-500 text-yellow-400 p-4 rounded text-sm text-center card-depth">
+  <strong>Atenção:</strong><br>
+  Pedidos enviados sem pagamento confirmado serão automaticamente ignorados.<br>
+  A entrega só é realizada após a verificação do pagamento pelo Mercado Pago.
+</div>
+
+<!-- PAINEL DE INSTRUÇÃO -->
+<div class="mt-6 bg-zinc-900 border border-zinc-700 p-4 rounded text-sm text-center card-depth">
+  <strong class="text-white block mb-2 font-bold text-center glow-float">
+    Onde encontrar seu Nome e ID no jogo?!
+  </strong>
+
+  <p class="text-gray-400 mb-3">
+    Utilize a imagem abaixo como referência para procurar no jogo e preencher corretamente os campos.
+  </p>
+
+  <img
+    src="img/perfilID.png"
+    alt="Exemplo de onde encontrar o Nome e ID no jogo"
+    class="mx-auto rounded border border-zinc-700 max-w-full"
+  >
+</div>
 
 </form>
 
