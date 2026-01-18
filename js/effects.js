@@ -24,21 +24,6 @@ document.head.appendChild(style);
 
   const style = document.createElement('style');
   style.innerHTML = `
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background:
-        radial-gradient(circle at top, rgba(255, 200, 0, 0.04), transparent 60%),
-        url('img/fundo.png') center center / cover no-repeat;
-      opacity: 0.25; /* ajuste a transparência aqui */
-      z-index: -1;
-      pointer-events: none;
-    }
-
     /* Loader CSS */
     .loader {
       display: inline-block;
