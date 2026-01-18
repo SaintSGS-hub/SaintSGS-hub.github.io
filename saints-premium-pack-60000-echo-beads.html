@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<!-- EDITAR NOME AQUI -->
+<title>Premium Pack • 60000 Echo Beads</title>
+<link rel="icon" type="image/png" href="img/favicon.png">
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Mercado Pago SDK -->
+<script src="https://sdk.mercadopago.com/js/v2"></script>
+
+<style>
+/* Fundo premium com gradiente e textura */
+body {
+  background: #000; /* fundo preto sólido */
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Overlay elegante */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+   radial-gradient(circle at top, rgba(255,200,0,0.04), transparent 80%),
+   url('img/fundo.png') center center / cover no-repeat;
+  opacity: 0.25;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Cartões com efeito vidro premium */
+.glass-card {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(14px);
+  border-radius: 24px;
+  border: 1px solid rgba(255,215,0,0.25);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+  padding: 32px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.glass-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 18px 60px rgba(255,215,0,0.35);
+}
+
+/* Tipografia premium */
+h1, h2 {
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+h1 {
+  font-size: 2.4rem;
+  background: linear-gradient(90deg, #FFD700, #eab308);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+h2 {
+  font-size: 1.6rem;
+  color: #FFD700;
+}
+
+/* Preço com destaque dourado */
+.valor-glow {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #FFD700;
+  text-shadow: 0 0 12px rgba(255,215,0,0.8);
+}
+.valor-glow2 {
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: #FFD700;
+  text-shadow: 0 0 10px rgba(255,215,0,0.6);
+}
+
+}
+@keyframes floatGlow {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-3px); }
+  100% { transform: translateY(0px); }
+}
+.btn-comprar {
+  background: #FFD700;
+  color: #000;
+  font-weight: bold;
+  padding: 14px;
+  border-radius: 14px;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.glow-float {
+  animation: floatGlow 3s ease-in-out infinite;
+  text-shadow: 0 0 6px rgba(255,255,255,0.3);
+}
+  
+/* Home discreto */
+.home-link {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  transition: color 0.2s;
+  z-index: 50;
+}
+.home-link:hover {
+  color: #fff;
+}
+
+.price-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.price-slash {
+  position: absolute;
+  top: -19px;
+  right: 43px;
+  width: 90px;
+  pointer-events: none;
+  }
+
+  .gif-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0; /* atrás dos cards */
+  pointer-events: none;
+}
+
+.gif {
+  position: absolute;
+  top: -60px;
+  width: 40px;
+  height: 40px;
+  background: url("img/echolive.gif") no-repeat center/contain;
+  animation: fall 8s linear infinite;
+}
+
+.gif:nth-child(1) { left: 10%; animation-delay: 0s; }
+.gif:nth-child(2) { left: 30%; animation-delay: 2s; }
+.gif:nth-child(3) { left: 50%; animation-delay: 4s; }
+.gif:nth-child(4) { left: 70%; animation-delay: 1s; }
+.gif:nth-child(5) { left: 85%; animation-delay: 3s; }
+.gif:nth-child(6) { left: 5%;  animation-delay: 0s; }
+.gif:nth-child(7) { left: 15%; animation-delay: 1s; }
+.gif:nth-child(8) { left: 25%; animation-delay: 2s; }
+.gif:nth-child(9) { left: 35%; animation-delay: 3s; }
+.gif:nth-child(10) { left: 39%; animation-delay: 4.8s; }
+.gif:nth-child(11) { left: 60%; animation-delay: 2.5s; }
+.gif:nth-child(12) { left: 75%; animation-delay: 1.8s; }
+.gif:nth-child(13) { left: 92%; animation-delay: 3.7s; }
+
+@keyframes fall {
+  0% { transform: translateY(-100px); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translateY(120vh); opacity: 0; }
+}
+/* Botões premium
+.btn-comprar {
+  background: linear-gradient(135deg, #FFD700, #eab308);
+  color: #000;
+  font-weight: bold;
+  padding: 14px;
+  border-radius: 18px;
+  width: 100%;
+  margin-top: 16px;
+  box-shadow: 0 0 20px rgba(255,215,0,0.45);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-comprar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 28px rgba(255,215,0,0.75);
+}*/
+
+<!-- BOTÃO SUPORTE -->
+<div id="support-btn">
+  <img src="img/suporte.png" alt="Suporte" />
+</div>
+
+<style>
+#support-btn {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #FFD700;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0,0,0,.4);
+  z-index: 1000;
+}
+#support-btn:hover {
+  transform: scale(1.08);
+}
+</style>
+<style>
+/* Timer premium */
+#timer {
+  font-weight: bold;
+  color: #FFD700;
+  text-shadow: 0 0 12px rgba(255,215,0,0.9);
+}
+</style>
+<style>
+#support-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.7);
+  z-index: 1001;
+}
+#support-form {
+  background: #111;
+  color: #fff;
+  max-width: 400px;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+#support-form input,
+#support-form textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+
+  background: #fff;   /* fundo do campo */
+  color: #111;        /* texto que o cliente digita */
+}
+</style>
+</head>
+
+<body>
+
+<a href="https://saintsgs-hub.github.io/index.html" class="home-link text-gray-400 hover:text-white">← Home</a>
+<div class="gif-layer">
+  <span class="gif"></span>
+  <span class="gif"></span>
+  <span class="gif"></span>
+  <span class="gif"></span>
+  <span class="gif"></span>
+  <span class="gif"></span>
+  <span class="gif"></span>
+  <span class="gif"></span>
+  <span class="gif"></span>
+  <span class="gif"></span>
+  <span class="gif"></span>
+  <span class="gif"></span>
+  <span class="gif"></span>
+</div>
+
+<div class="min-h-screen flex items-center justify-center p-8">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl w-full">
+
+    <!-- Card Produto -->
+   <div class="glass-card text-center glow-float">
+  <h1 class="text-2xl font-extrabold mb-4 flex items-center justify-center gap-4">
+    <!-- GIF à esquerda -->
+    <img src="img/echolive.gif" alt="Decorativo" class="w-10 h-10 inline-block">
+
+    60000 Echo Beads
+
+    <!-- GIF à direita -->
+    <img src="img/echolive.gif" alt="Decorativo" class="w-10 h-10 inline-block">
+  </h1>
+      <p class="text-gray-300 font-bold mb-6">
+        Se torne o rei dos jovens andarilhos com esse PACOTE PREMIUM que adiciona <strong>60000 Echo Beads</strong> diretamente na sua conta do jogo <em>Where Winds Meet</em>.
+      </p>
+      <img src="img/echopremium2.gif" class="mx-auto w-43 mb-6">
+      <div class="price-wrapper">
+        <span class="glow-float text-red-500 font-bold text-xl line-through">R$ 8.067,25</span><br>
+        <img src="img/knightwwm.gif" alt="Promoção" class="price-slash"/>
+        
+      <span class="valor-glow glow-float text-xl mb-2 font-extrabold text-center">R$ 7.365,75</span><br>
+      <span class="valor-glow">_______________________________ </span>
+        </div>
+      
+      <p class="valor-glow glow-float text-xl mt-4 font-bold text-center">MAIS DE 10% OFF comprando dentro de <span id="timer">03:00:00</span></p><br>
+
+<div>
+  <span class="valor-glow">_______________________________ </span>
+  </div>
+
+<!-- EDITAR DESCRICAO AQUI -->
+<p class="text-xs text-gray-200 font-semibold mt-4">
+        Comprando você obtem:<br>
+        • 60000 Echo Beads<br>
+        As Echo Beads podem ser utilizadas na loja interna do jogo para:<br>
+        • Desbloquear skins premium, montarias, armas, efeitos visuais e outros itens cosméticos.<br>
+        • Participar de sorteios (draws) com chance de obter itens cosméticos raros.<br>
+      </p>
+<p class="text-xs text-gray-500 mt-4">
+        Informações obtidas a partir dos materiais oficiais do jogo Where Winds Meet, desenvolvido pela Everstone Studio e publicado pela NetEase Games, criadora e distribuidora oficial das Echo Beads. Todos os direitos reservados.<br>
+      </p>
+
+      <span class="valor-glow">_______________________________ </span>
+      
+ <p class="text-xs text-gray-400 font-semibold mt-4">
+        • Entrega manual após confirmação do Mercado Pago<br>
+        • Pagamento 100% seguro<br>
+        • Produtos pagos em boleto não serão entregues e correm risco de não serem estornados<br>
+      </p>
+
+     <span class="valor-glow">_______________________________ </span>
+      
+    <p class="text-xs text-gray-300 mt-10">
+        Este pacote é exclusivo para a versão de PC/Computador/Laucher/Steam/EpicGames.<br>
+      Echo Beads compradas aqui não aparecerão no PlayStation 5, Android e nem IOS devido as restrições das plataformas.
+      </p>
+
+      <span class="valor-glow">_______________________________ </span><br>
+    </div>
+
+    <!-- Card Checkout -->
+    <div class="glass-card glow-float flex flex-col justify-center text-center">
+      <h2 class="mb-6">Escolher Método</h2>
+      <div id="paymentBrick_container"></div>
+      <p class="text-xs font-semibold text-gray-400 mt-4">PIX • Cartão • Saldo MP • E muito mais</p>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  /* Ícones fixos */
+#discord-icon {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 1000;
+}
+#discord-icon:hover {
+  transform: scale(1.1);
+}
+</style>
+  
+<!-- DISCORD -->
+<a href="https://discordapp.com/users/715081298254888990" target="_blank" id="discord-icon">
+  <img src="img/discord.png" alt="Discord" />
+</a>
+
+<style>
+#discord-icon {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 1000;
+}
+#discord-icon:hover {
+  transform: scale(1.1);
+}
+</style>
+
+<!-- BOTÃO SUPORTE -->
+<div id="support-btn">
+  <img src="img/suporte.png" alt="Suporte" />
+</div>
+
+<style>
+#support-btn {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #FFD700;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0,0,0,.4);
+  z-index: 1000;
+}
+#support-btn:hover {
+  transform: scale(1.08);
+}
+</style>
+
+<div id="support-modal">
+  <form id="support-form">
+    <h2>Contato com Suporte</h2>
+
+    <input name="name" placeholder="Nome completo" required>
+    <input name="whatsapp" placeholder="WhatsApp" required>
+    <input name="email" type="email" placeholder="Email" required>
+    <input name="subject" placeholder="Assunto" required>
+    <textarea name="message" placeholder="Mensagem" required></textarea>
+
+    <button type="submit">Enviar</button>
+  </form>
+</div>
+
+<style>
+#support-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.7);
+  z-index: 1001;
+}
+#support-form {
+  background: #111;
+  color: #fff;
+  max-width: 400px;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+#support-form input,
+#support-form textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+
+  background: #fff;   /* fundo do campo */
+  color: #111;        /* texto que o cliente digita */
+}
+</style>
+
+<footer class="w-full mt-16 border-t border-gray-700 pt-8 pb-6">
+  <div class="max-w-5xl mx-auto text-center text-sm text-gray-300 space-y-4">
+
+    <!-- Linha 2: Métodos de pagamento -->
+    <div class="flex flex-wrap justify-center items-center gap-4 mt-4">
+      <img src="img/pix.png" alt="Pix" class="h-6">
+      <img src="img/visa.png" alt="Visa" class="h-6">
+      <img src="img/mastercard.png" alt="MasterCard" class="h-6">
+      <img src="img/mercadopago.png" alt="Mercado Pago" class="h-6">
+    </div>
+    
+    <!-- Linha 1: Segurança básica -->
+    <div class="flex flex-wrap justify-center font-semibold gap-6">
+      <span>🔒 Pagamento seguro</span>
+      <span>🧾 Compra protegida</span>
+      <span>⚡ Entrega digital automática / Verificação manual</span>
+    </div>
+
+    <!-- Linha 3: Selos textuais (subconsciente trabalha aqui) -->
+    <div class="flex flex-wrap justify-center gap-6 mt-4 text-xs font-semibold uppercase tracking-wide">
+      <span>🔐 SSL Secure Checkout</span>
+      <span>🧾 Terms Accepted</span>
+      <span>⚙️ Entrega manual após confirmação</span>
+      <span>⏱️ Atendimento 24 horas ON</span>
+    </div>
+
+    <!-- Linha 4: Claims de confiança (estilo marketplaces grandes) -->
+    <div class="valor-glow2 flex flex-wrap justify-center gap-6 mt-4 font-semibold">
+      <span>✔ Secure Digital Delivery</span>
+      <span>✔ Verified Payment Flow</span>
+      <span>✔ Manual In-Game Delivery</span>
+      <span>✔ Terms Accepted & Logged</span>
+    </div>
+
+    <!-- Linha 5: Legal -->
+    <div class="mt-6 text-xs text-gray-400">
+      <a href="https://saintsgs-hub.github.io/tos.html" class="underline">Termos de Uso</a> •
+      <a href="https://saintsgs-hub.github.io/privacidade.html" class="underline">Política de Privacidade</a>
+    </div>
+
+  </div>
+</footer>
+
+<!-- Scripts originais mantidos -->
+<script src="js/effects.js"></script>
+<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script>
+const btn = document.getElementById("support-btn");
+const modal = document.getElementById("support-modal");
+
+btn.onclick = () => modal.style.display = "block";
+modal.onclick = e => {
+  if (e.target === modal) modal.style.display = "none";
+};
+</script>
+<script>
+(function(){
+  emailjs.init("fjXHE6FnezGdisp_s");
+})();
+
+document.getElementById("support-form").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  emailjs.sendForm(
+    "service_cuecopv",
+    "template_m4anla3",
+    this
+  ).then(() => {
+    alert("Mensagem enviada com sucesso!");
+    this.reset();
+    document.getElementById("support-modal").style.display = "none";
+  }, err => {
+    alert("Erro ao enviar mensagem");
+    console.error(err);
+  });
+});
+</script>
+<script>
+// checkout-mercadopago2.js
+// - Auto-open do Bricks (modal/iframe) dentro do seu site (sem redirect para init_point)
+// - Tema dark, fallback para abrir por gesto do usuário se navegador bloquear auto-open
+// - Ao concluir pagamento aprovado, redireciona para /obrigado.html?collection_id=<id>
+// - Usa endpoints do seu worker: /create-payment-bricks e /process-payment
+//
+// Incluir no HTML: <div id="paymentBrick_container"></div>
+// Opcional: um botão será criado automaticamente caso o navegador bloqueie abertura automática.
+
+(function () {
+  const workerUrl = "https://saint-echo-backend.neuroniosgames.workers.dev"; // ajuste se necessário
+  const MP_PUBLIC_KEY = "APP_USR-ecd9f6e7-02f7-4bb3-b757-10a0453ab646";
+  const produtoDefault = localStorage.getItem("produto") || "60000 Echo Beads";
+  localStorage.setItem("produto", produtoDefault);
+  const valorDefault = Number(7365.75);
+
+  if (typeof MercadoPago === "undefined") {
+    console.error("MercadoPago SDK não carregado. Adicione script src='https://sdk.mercadopago.com/js/v2'>script");
+    return;
+  }
+
+  const mp = new MercadoPago(MP_PUBLIC_KEY, { locale: "pt-BR" });
+
+  async function createPreferenceIfNeeded(produto, valor, consentId) {
+    try {
+      const saved = JSON.parse(localStorage.getItem("saint_pref") || "null");
+      if (saved && saved.preference_id) {
+        return saved;
+      }
+    } catch (e) {}
+
+    const res = await fetch(`${workerUrl}/create-payment-bricks`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ produto, valor, consent_id: consentId }),
+    });
+
+    const data = await res.json().catch(() => null);
+    if (!data || !data.preference_id) {
+      throw new Error("Erro ao criar preference: " + JSON.stringify(data));
+    }
+
+    try {
+      localStorage.setItem("saint_pref", JSON.stringify({
+        preference_id: data.preference_id,
+        produto,
+        created_at: Date.now()
+      }));
+    } catch (e) {}
+
+    return { preference_id: data.preference_id };
+  }
+
+  function ensureContainer() {
+    let el = document.getElementById("paymentBrick_container");
+    if (!el) {
+      el = document.createElement("div");
+      el.id = "paymentBrick_container";
+      document.body.appendChild(el);
+    }
+    return el;
+  }
+
+  async function openBricks(preferenceId, amount, consentId) {
+    const container = ensureContainer();
+    container.innerHTML = "";
+
+    const bricksBuilder = mp.bricks();
+
+    try {
+      bricksBuilder.create("payment", "paymentBrick_container", {
+        initialization: { preferenceId, amount },
+        customization: {
+          visual: { style: { theme: "dark" } },
+          paymentMethods: { bankTransfer: "all", creditCard: "all", debitCard: "all", mercadoPago: "all" },
+        },
+        callbacks: {
+          onReady: () => console.log("🟢 Payment Brick pronto"),
+          onError: (err) => console.error("🔴 Erro no Payment Brick", err),
+          onSubmit: ({ formData }) => {
+            return new Promise((resolve, reject) => {
+              fetch(`${workerUrl}/process-payment`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ ...formData, consent_id: consentId }),
+              })
+                .then((r) => r.json())
+                .then((paymentData) => {
+                  const paymentId = paymentData.id || paymentData.payment_id || (paymentData.payment && paymentData.payment.id);
+                  const status = paymentData.status;
+
+                  if (paymentId && status === "approved") {
+                    console.log("Pagamento aprovado, id:", paymentId);
+                    const targetUrl = `/obrigado.html?collection_id=${encodeURIComponent(paymentId)}`;
+                    window.location.href = targetUrl;
+                    resolve();
+                  } else {
+                    console.warn("Pagamento não aprovado ainda:", paymentData);
+                    reject();
+                  }
+                })
+                .catch((err) => {
+                  console.error("Erro no process-payment:", err);
+                  reject();
+                });
+            });
+          },
+        },
+      });
+    } catch (err) {
+      console.error("Criação do Brick falhou:", err);
+      throw err;
+    }
+  }
+
+  function createOpenButton(container, onClick) {
+    let btn = document.getElementById("mp-open-btn");
+    if (!btn) {
+      btn = document.createElement("button");
+      btn.id = "mp-open-btn";
+      btn.textContent = "Abrir checkout";
+      btn.className = "btn-comprar";
+      btn.style.display = "block";
+      btn.style.margin = "16px auto";
+      btn.style.maxWidth = "320px";
+      btn.style.cursor = "pointer";
+      container.appendChild(btn);
+    }
+    btn.onclick = onClick;
+    return btn;
+  }
+
+  async function startCheckoutAuto(openButtonFallback = true) {
+    const consent = JSON.parse(localStorage.getItem("saint_consent") || "null");
+    if (!consent?.consent_id) {
+      console.warn("Consentimento não encontrado — não iniciando checkout automaticamente.");
+      return;
+    }
+
+    try {
+      const pref = await createPreferenceIfNeeded(produtoDefault, valorDefault, consent.consent_id);
+      await openBricks(pref.preference_id, valorDefault, consent.consent_id);
+    } catch (err) {
+      console.error("Erro ao abrir Bricks automaticamente:", err);
+      if (openButtonFallback) {
+        const container = ensureContainer();
+        const btn = createOpenButton(container, async () => {
+          try {
+            btn.disabled = true;
+            btn.textContent = "Aguarde...";
+            const pref = await createPreferenceIfNeeded(produtoDefault, valorDefault, JSON.parse(localStorage.getItem("saint_consent")).consent_id);
+            await openBricks(pref.preference_id, valorDefault, JSON.parse(localStorage.getItem("saint_consent")).consent_id);
+          } catch (e) {
+            console.error("Erro no fallback openBricks:", e);
+            alert("Não foi possível abrir o checkout automaticamente. Tente novamente.");
+            btn.disabled = false;
+            btn.textContent = "Abrir checkout";
+          }
+        });
+      }
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    startCheckoutAuto(true).catch(() => {});
+  });
+
+  window.__saint_open_bricks = async function () {
+    await startCheckoutAuto(false);
+  };
+})();
+</script>
+
+<script>
+  const DURATION = 3 * 60 * 60; // 7 horas em segundos
+  const STORAGE_KEY = "promoTimerStart";
+
+  function getStartTime() {
+    let start = localStorage.getItem(STORAGE_KEY);
+    if (!start) {
+      start = Date.now();
+      localStorage.setItem(STORAGE_KEY, start);
+    }
+    return parseInt(start, 10);
+  }
+
+  function updateTimer() {
+    const startTime = getStartTime();
+    const now = Date.now();
+
+    let elapsed = Math.floor((now - startTime) / 1000);
+    let remaining = DURATION - (elapsed % DURATION);
+
+    if (remaining <= 0) remaining = DURATION;
+
+    const h = String(Math.floor(remaining / 3600)).padStart(2, "0");
+    const m = String(Math.floor((remaining % 3600) / 60)).padStart(2, "0");
+    const s = String(remaining % 60).padStart(2, "0");
+
+    document.getElementById("timer").textContent = `${h}:${m}:${s}`;
+  }
+
+  updateTimer();
+  setInterval(updateTimer, 1000);
+</script>
+
+</body>
+</html>
