@@ -155,7 +155,7 @@ h2 {
 .gif:nth-child(2) { left: 15%; animation-delay: 1s; }
 .gif:nth-child(3) { left: 25%; animation-delay: 2s; }
 .gif:nth-child(4) { left: 35%; animation-delay: 3s; }
-.gif:nth-child(5) { left: 45%; animation-delay: 4s; }
+.gif:nth-child(5) { left: 39%; animation-delay: 4.8s; }
 .gif:nth-child(6) { left: 60%; animation-delay: 2.5s; }
 .gif:nth-child(7) { left: 75%; animation-delay: 1.8s; }
 .gif:nth-child(8) { left: 92%; animation-delay: 3.7s; }
@@ -282,12 +282,12 @@ h2 {
       <p class="text-gray-300 font-bold mb-6">
         Se torne o rei dos jovens andarilhos com esse PACOTE PREMIUM que adiciona <strong>36000 Echo Beads</strong> diretamente na sua conta do jogo <em>Where Winds Meet</em>.
       </p>
-      <img src="img/echo9.png" class="mx-auto w-43 mb-6">
+      <img src="img/echopremium1.png" class="mx-auto w-43 mb-6">
       <div class="price-wrapper">
-        <span class="glow-float text-red-500 font-bold text-xl line-through">R$ 1.690,39</span><br>
+        <span class="glow-float text-red-500 font-bold text-xl line-through">R$ 4.610,35</span><br>
         <img src="img/knightwwm.gif" alt="Promoção" class="price-slash"/>
         
-      <span class="valor-glow glow-float text-xl mb-2 font-extrabold text-center">R$ 1.543,40</span><br>
+      <span class="valor-glow glow-float text-xl mb-2 font-extrabold text-center">R$ 4.209,45</span><br>
       <span class="valor-glow">_______________________________ </span>
         </div>
       
@@ -300,7 +300,7 @@ h2 {
 <!-- EDITAR DESCRICAO AQUI -->
 <p class="text-xs text-gray-200 font-semibold mt-4">
         Comprando você obtem:<br>
-        • 12000 Echo Beads<br>
+        • 36000 Echo Beads<br>
         As Echo Beads podem ser utilizadas na loja interna do jogo para:<br>
         • Desbloquear skins premium, montarias, armas, efeitos visuais e outros itens cosméticos.<br>
         • Participar de sorteios (draws) com chance de obter itens cosméticos raros.<br>
@@ -541,9 +541,9 @@ document.getElementById("support-form").addEventListener("submit", function(e){
 (function () {
   const workerUrl = "https://saint-echo-backend.neuroniosgames.workers.dev"; // ajuste se necessário
   const MP_PUBLIC_KEY = "APP_USR-ecd9f6e7-02f7-4bb3-b757-10a0453ab646";
-  const produtoDefault = localStorage.getItem("produto") || "12000 Echo Beads";
+  const produtoDefault = localStorage.getItem("produto") || "36000 Echo Beads";
   localStorage.setItem("produto", produtoDefault);
-  const valorDefault = Number(1543.40);
+  const valorDefault = Number(4209.45);
 
   if (typeof MercadoPago === "undefined") {
     console.error("MercadoPago SDK não carregado. Adicione script src='https://sdk.mercadopago.com/js/v2'>script");
