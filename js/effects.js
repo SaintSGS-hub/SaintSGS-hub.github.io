@@ -282,6 +282,11 @@ if (window.matchMedia("(max-width: 640px)").matches) {
 
 document.addEventListener("DOMContentLoaded", () => {
   let currentPage = window.location.pathname.split("/").pop();
+
+  // se estiver vazio, define como index.html
+  if (!currentPage) {
+    currentPage = "index.html";
+  }
   
   currentPage = currentPage.replace(/^(en-|fr-|de-|ru-)/, "");
   const langContainer = document.createElement("div");
