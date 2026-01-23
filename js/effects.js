@@ -154,7 +154,7 @@ document.querySelectorAll('.btn-comprar, .btn-confirmar').forEach(btn => {
       <div class="loader">
         <div></div><div></div><div></div><div></div>
       </div>
-      <p style="color:gold; margin-top:20px; font-family:sans-serif;">Carregando...</p>
+      <p style="color:gold; margin-top:20px; font-family:sans-serif;">Loading...</p>
     `;
     document.body.appendChild(overlay);
 
@@ -232,6 +232,8 @@ if (window.matchMedia("(max-width: 640px)").matches) {
 
 /* ================================
    DISCLAIMER + ToS + PRIVACIDADE (todas as páginas)
+         <li><a href="/de/de-${currentPage}">🇩🇪 EN-US⏳ / EUR</a></li>
+      <li><a href="/ru/ru-${currentPage}">🇷🇺 EN-US⏳ / RUB</a></li>
 ================================ */
 (function() {
   const disclaimer = document.createElement('div');
@@ -278,3 +280,70 @@ if (window.matchMedia("(max-width: 640px)").matches) {
   document.body.appendChild(disclaimer);
 })();
 
+document.addEventListener("DOMContentLoaded", () => {
+  let currentPage = window.location.pathname.split("/").pop();
+  
+  currentPage = currentPage.replace(/^(en-|fr-|de-|ru-)/, "");
+  const langContainer = document.createElement("div");
+  langContainer.id = "lang-container";
+  langContainer.innerHTML = `
+    <button id="lang-btn">🌐</button>
+    <ul id="lang-list">
+      <li><a href="/${currentPage}">🇧🇷 PT-BR✅ / BRL</a></li>
+      <li><a href="/en/en-${currentPage}">🇺🇸 EN-US✅ / USD</a></li>
+      <li><a href="/de/de-${currentPage}">🇩🇪/🇫🇷 EN-US⏳ / EUR</a></li>
+    </ul>
+  `;
+
+
+  // adiciona no body
+  document.body.appendChild(langContainer);
+
+  // estilo básico (pode mover para CSS se quiser)
+  const style = document.createElement("style");
+  style.textContent = `
+    #lang-container {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      font-family: sans-serif;
+      z-index: 9999;
+    }
+    #lang-btn {
+      background: #333;
+      color: #fff;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+    #lang-list {
+      display: none;
+      list-style: none;
+      margin: 5px 0 0 0;
+      padding: 0;
+      background: #5858587d;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    #lang-list li {
+      padding: 5px 10px;
+    }
+    #lang-list li a {
+      text-decoration: none;
+      color: #ffffff;
+      font-size: 14px;
+    }
+    #lang-list li:hover {
+      background: #ffa6006c;
+    }
+  `;
+  document.head.appendChild(style);
+
+  // abre/fecha lista ao clicar
+  document.getElementById("lang-btn").addEventListener("click", () => {
+    const list = document.getElementById("lang-list");
+    list.style.display = list.style.display === "block" ? "none" : "block";
+  });
+});
