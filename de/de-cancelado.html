@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Order canceled!</title>
+<link rel="icon" type="image/png" href="img/favicon.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body {
+  background: #000; /* fundo preto sólido */
+  font-family: sans-serif;
+}
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+   radial-gradient(circle at top, rgba(255,200,0,0.04), transparent 80%),
+   url('img/fundo.png') center center / cover no-repeat;
+  opacity: 0.25;
+  z-index: -1;
+  pointer-events: none;
+}
+
+  #parallax-wrapper {
+    perspective: 1200px;
+    transform-style: preserve-3d;
+  }
+
+  .card-depth {
+    transition: transform 0.2s ease-out;
+    will-change: transform;
+  }
+</style>
+</head>
+
+<body class="bg-black text-white font-sans">
+
+<!-- PARALLAX WRAPPER -->
+<div id="parallax-wrapper">
+
+<div class="min-h-screen flex items-center justify-center px-4 card-depth">
+
+<div class="max-w-lg w-full bg-zinc-900 border border-zinc-800 rounded-2xl p-8 text-center">
+
+<h1 class="text-3xl font-semibold mb-4 text-white">
+Order canceled!
+</h1>
+
+<p class="text-gray-400 mb-6">
+For some reason, your payment did not pass the review.
+</p>
+
+<div class="bg-black border border-yellow-500 rounded-xl p-4 mb-6 text-sm text-yellow-400">
+It may have been canceled or declined for security reasons.<br>
+But don't worry, your Echo Beads are just waiting for your payment.
+</div>
+
+<p class="text-gray-500 text-sm mb-8">
+Within <strong>1 minute</strong> You will be redirected by the system to the main page to try to complete the purchase again.
+</p>
+
+<a href="/de/de-index.html" class="inline-block bg-yellow-500 text-black px-6 py-2 rounded-full hover:bg-yellow-400 transition btn-comprar">
+Back to website
+</a>
+
+</div>
+</div>
+</div>
+
+ <!-- DISCORD -->
+<a href="https://discordapp.com/users/715081298254888990" target="_blank" id="discord-icon">
+  <img src="img/discord.png" alt="Discord" />
+</a>
+
+<style>
+#discord-icon {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 1000;
+}
+#discord-icon:hover {
+  transform: scale(1.1);
+}
+</style>
+
+<!-- BOTÃO SUPORTE -->
+<div id="support-btn">
+  <img src="img/suporte.png" alt="Suporte" />
+</div>
+
+<style>
+#support-btn {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #FFD700;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0,0,0,.4);
+  z-index: 1000;
+}
+#support-btn:hover {
+  transform: scale(1.08);
+}
+</style>
+
+<div id="support-modal">
+  <form id="support-form">
+    <h2>Contact Support</h2>
+
+    <input name="name" placeholder="Full name" required>
+    <input name="whatsapp" placeholder="WhatsApp/Number Phone" required>
+    <input name="email" type="email" placeholder="Email" required>
+    <input name="subject" placeholder="Subject" required>
+    <textarea name="message" placeholder="Message" required></textarea>
+
+    <button type="submit">Send</button>
+  </form>
+</div>
+
+<style>
+#support-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.7);
+  z-index: 1001;
+}
+#support-form {
+  background: #111;
+  color: #fff;
+  max-width: 400px;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+#support-form input,
+#support-form textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+
+  background: #fff;   /* fundo do campo */
+  color: #111;        /* texto que o cliente digita */
+}
+</style>
+
+<script>
+const btn = document.getElementById("support-btn");
+const modal = document.getElementById("support-modal");
+
+btn.onclick = () => modal.style.display = "block";
+modal.onclick = e => {
+  if (e.target === modal) modal.style.display = "none";
+};
+</script>
+
+<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script>
+(function(){
+  emailjs.init("fjXHE6FnezGdisp_s");
+})();
+
+document.getElementById("support-form").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  emailjs.sendForm(
+    "service_cuecopv",
+    "template_m4anla3",
+    this
+  ).then(() => {
+    alert("Mensagem enviada com sucesso!");
+    this.reset();
+    document.getElementById("support-modal").style.display = "none";
+  }, err => {
+    alert("Erro ao enviar mensagem");
+    console.error(err);
+  });
+});
+</script>
+
+<footer class="w-full mt-16 pt-8 pb-6">
+  <div class="max-w-5xl mx-auto text-center text-sm text-gray-300 space-y-4">
+
+    <!-- Linha 2: Métodos de pagamento -->
+    <div class="flex flex-wrap justify-center items-center gap-4 mt-4">
+      <img src="img/pix.png" alt="Pix" class="h-6">
+      <img src="img/visa.png" alt="Visa" class="h-6">
+      <img src="img/mastercard.png" alt="MasterCard" class="h-6">
+      <img src="img/mercadopago.png" alt="Mercado Pago" class="h-6">
+    </div>
+    
+    <!-- Linha 1: Segurança básica -->
+    <div class="flex flex-wrap justify-center font-semibold gap-6">
+      <span>🔒 Secure payment</span>
+      <span>🧾 Secure purchase</span>
+      <span>⚡ Automatic digital delivery / Manual verification</span>
+    </div>
+
+    <!-- Linha 3: Selos textuais (subconsciente trabalha aqui) -->
+    <div class="flex flex-wrap justify-center gap-6 mt-4 text-xs font-semibold uppercase tracking-wide">
+      <span>🔐 SSL Secure Checkout</span>
+      <span>🧾 Terms Accepted</span>
+      <span>⚙️ Manual delivery after confirmation</span>
+      <span>⏱️ 24-hour service ON</span>
+    </div>
+
+    <!-- Linha 4: Claims de confiança (estilo marketplaces grandes) -->
+    <div class="valor-glow2 flex flex-wrap justify-center gap-6 mt-4 font-semibold">
+      <span>✔ Secure Digital Delivery</span>
+      <span>✔ Verified Payment Flow</span>
+      <span>✔ Manual In-Game Delivery</span>
+      <span>✔ Terms Accepted & Logged</span>
+    </div>
+
+    <!-- Linha 5: Legal -->
+    <div class="mt-6 text-xs text-gray-400">
+      <a href="/de/de-tos.html" class="underline">Terms of Use</a> •
+      <a href="/de/de-privacidade.html" class="underline">Privacy Policy</a>
+    </div>
+
+  </div>
+</footer>
+
+<script>
+  // Verifica se o usuário já aceitou
+  const consent = localStorage.getItem("saint_consent");
+  if (consent && window.startBackgroundMusic) {
+    window.startBackgroundMusic();
+  }
+</script>
+  
+<script src="js/effects.js"></script>
+</body>
+</html>
