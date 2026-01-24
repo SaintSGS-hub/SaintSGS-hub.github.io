@@ -252,5 +252,34 @@ document.getElementById("support-form").addEventListener("submit", function(e){
 </script>
   
 <script src="js/effects.js"></script>
+
+<script>
+  // Detecta idioma salvo
+  const lang = localStorage.getItem("lang") || "pt";
+
+  // Se não for PT-BR, redireciona para a versão traduzida existente
+  if (lang !== "pt") {
+    // pega o nome da página atual (ex: obrigado.html)
+    let currentPage = window.location.pathname.split("/").pop() || "index.html";
+
+    // remove prefixos se houver
+    currentPage = currentPage.replace(/^(en-|fr-|de-|ru-)/, "");
+
+    // monta o redirect
+    const redirectMap = {
+      en: "/en/en-" + currentPage,
+      fr: "/fr/fr-" + currentPage,
+      de: "/de/de-" + currentPage,
+      ru: "/ru/ru-" + currentPage
+    };
+
+    const target = redirectMap[lang];
+    if (target) {
+      window.location.href = target + window.location.search; 
+      // mantém os parâmetros ?payment_id=... etc
+    }
+  }
+</script>
+
 </body>
 </html>
