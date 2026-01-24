@@ -4,12 +4,12 @@ const style = document.createElement("style");
 style.innerHTML = `
   /* Cursor padrão da página */
   body {
-    cursor: url("source/White-Katana-cursor-SweezyCursors.cur"), auto;
+    cursor: url("/source/White-Katana-cursor-SweezyCursors.cur"), auto;
   }
 
   /* Cursor quando passa por cima de links e botões */
   a, button {
-    cursor: url("source/White-Katana-pointer-SweezyCursors (1).cur"), pointer;
+    cursor: url("/source/White-Katana-pointer-SweezyCursors (1).cur"), pointer;
   }
 `;
 
@@ -52,7 +52,7 @@ document.head.appendChild(style);
 ================================ */
 (function () {
   const audio = document.createElement("audio");
-  audio.src = "source/musica.mp3";
+  audio.src = "/source/musica.mp3";
   audio.loop = true;
   audio.preload = "auto";
   audio.volume = 0;
