@@ -232,8 +232,6 @@ if (window.matchMedia("(max-width: 640px)").matches) {
 
 /* ================================
    DISCLAIMER + ToS + PRIVACIDADE (todas as páginas)
-         <li><a href="/de/de-${currentPage}">🇩🇪 EN-US⏳ / EUR</a></li>
-      <li><a href="/ru/ru-${currentPage}">🇷🇺 EN-US⏳ / RUB</a></li>
 ================================ */
 (function() {
   const disclaimer = document.createElement('div');
@@ -287,8 +285,19 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!currentPage) {
     currentPage = "index.html";
   }
+
+    // detecta prefixo de idioma
+  let lang = "pt"; // padrão
+  if (currentPage.startsWith("en-")) lang = "en";
+  else if (currentPage.startsWith("fr-")) lang = "fr";
+  else if (currentPage.startsWith("de-")) lang = "de";
+  else if (currentPage.startsWith("ru-")) lang = "ru";
+
+  // salva no localStorage  <li><a href="/de/de-${currentPage}">🇩🇪 EN-US⏳ / EUR</a></li> <li><a href="/ru/ru-${currentPage}">🇷🇺 EN-US⏳ / RUB</a></li>
+  localStorage.setItem("lang", lang);
   
   currentPage = currentPage.replace(/^(en-|fr-|de-|ru-)/, "");
+  
   const langContainer = document.createElement("div");
   langContainer.id = "lang-container";
   langContainer.innerHTML = `
@@ -300,6 +309,16 @@ document.addEventListener("DOMContentLoaded", () => {
     </ul>
   `;
 
+    // salva idioma no clique das bandeiras
+  document.querySelectorAll("#lang-list a").forEach(link => {
+    link.addEventListener("click", () => {
+      if (link.href.includes("/en/")) localStorage.setItem("lang", "en");
+      else if (link.href.includes("/fr/")) localStorage.setItem("lang", "fr");
+      else if (link.href.includes("/de/")) localStorage.setItem("lang", "de");
+      else if (link.href.includes("/ru/")) localStorage.setItem("lang", "ru");
+      else localStorage.setItem("lang", "pt");
+    });
+  });
 
   // adiciona no body
   document.body.appendChild(langContainer);
