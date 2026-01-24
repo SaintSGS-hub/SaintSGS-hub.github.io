@@ -345,17 +345,17 @@ try { const p = JSON.parse(localStorage.getItem('saint_pref') || 'null'); prefer
 
 function setStatusPending() {
   statusBox.className = "status status-pending text-center";
-  statusBox.innerText = "Pagamento em análise pelo Mercado Pago";
+  statusBox.innerText = "Payment being reviewed by Mercado Pago";
   retryBtn.classList.add("hidden");
 }
 function setStatusApproved() {
   statusBox.className = "status status-approved text-center";
-  statusBox.innerText = "Pagamento aprovado ✔";
+  statusBox.innerText = "Payment approved ✔";
   form.classList.remove("disabled");
 }
 function setStatusNotApproved() {
   statusBox.className = "status status-pending text-center";
-  statusBox.innerText = "Pagamento ainda não confirmado. Verifique novamente.";
+  statusBox.innerText = "Payment not yet confirmed. Please check again.";
   retryBtn.classList.remove("hidden");
 }
 
