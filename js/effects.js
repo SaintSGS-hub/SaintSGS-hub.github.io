@@ -293,7 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
   else if (currentPage.startsWith("de-")) lang = "de";
   else if (currentPage.startsWith("ru-")) lang = "ru";
 
-  // salva no localStorage  <li><a href="/de/de-${currentPage}">🇩🇪 EN-US⏳ / EUR</a></li> <li><a href="/ru/ru-${currentPage}">🇷🇺 EN-US⏳ / RUB</a></li>
+  // salva no localStorage  <li><a href="/de/de-${currentPage}">🇩🇪 EN-US⏳ / EUR</a></li>
   localStorage.setItem("lang", lang);
   
   currentPage = currentPage.replace(/^(en-|fr-|de-|ru-)/, "");
@@ -306,6 +306,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <li><a href="/${currentPage}">🇧🇷 PT-BR✅ / BRL</a></li>
       <li><a href="/en/en-${currentPage}">🇺🇸 EN-US✅ / USD</a></li>
       <li><a href="/de/de-${currentPage}">🇩🇪/🇫🇷 EN-US⏳ / EUR</a></li>
+      <li><a href="/ru/ru-${currentPage}">🇷🇺 EN-US⏳ / RUB</a></li>
     </ul>
   `;
 
