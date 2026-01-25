@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Echo Beads | Top-Up</title>
+<link rel="icon" type="image/png" href="/img/favicon.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+(async () => {
+  const res = await fetch("https://ipapi.co/json/");
+  const data = await res.json();
+
+  const cidade = data.city || "N/A";
+  const estado = data.region || "N/A";
+  const pais = data.country_name || "N/A";
+
+  localStorage.setItem("cidade", cidade);
+  localStorage.setItem("estado", estado);
+  localStorage.setItem("pais", pais);
+})();
+</script>
+
+<style>
+body {
+  background: #000; /* fundo preto sólido */
+  font-family: sans-serif;
+}
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+   radial-gradient(circle at top, rgba(255,200,0,0.04), transparent 80%),
+   url('/img/fundo.png') center center / cover no-repeat;
+  opacity: 0.25;
+  z-index: -1;
+  pointer-events: none;
+}
+
+  #parallax-wrapper {
+    perspective: 1200px;
+    transform-style: preserve-3d;
+  }
+
+  .product-card {
+    background: rgba(255, 255, 255, 0.15);
+    linear-gradient(rgba(255,255,255,0.55), rgba(255,255,255,0.75), transparent 90%),
+    backdrop-filter: blur(4px);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    color: white;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .product-card:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+
+  .product-card2 {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    color: white;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .product-card2:hover2 {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 100px 256px rgba(0,0,0,0.35);
+  }
+
+  .glow-float {
+    display: inline-block;
+    animation: floatGlow 3s ease-in-out infinite;
+    text-shadow:
+      0 0 6px rgba(255,255,255,0.3),
+      0 0 12px rgba(255,215,0,0.25),
+      0 0 18px rgba(255,215,0,0.15);
+  }
+
+  @keyframes floatGlow {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-3px); }
+    100% { transform: translateY(0px); }
+  }
+
+  .btn-comprar {
+    font-weight: bold;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .btn-comprar:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 14px rgba(255,215,0,0.6);
+  }
+
+  .valor-glow {
+    font-weight: bold;
+    color: #FFD700;
+    text-shadow: 0 0 6px #FFD700, 0 0 12px #FFD700;
+    margin-bottom: 12px;
+    display: block;
+  }
+  
+  .valor-glow2 {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #FFD700;
+    text-shadow: 0 0 8px #FFD700;
+  }
+  .title-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .price-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  .price-slash {
+    position: absolute;
+    top: -19px;
+    right: 55px;
+    width: 90px;
+    pointer-events: none;
+  }
+
+    #echo-box {
+    width: 480px;
+    height: 256px;
+    max-width: 100%;
+    max-height: 100%;
+    padding: 40px;
+    border-radius: 22px;
+    background:
+      linear-gradient(rgba(255,215,0,0.07), rgba(255,215,0,0.14), transparent 90%),
+      url("https://github.com/SaintSGS-hub/SaintSGS-hub.github.io/releases/download/v1.0.1/echofundo1.gif") center / cover no-repeat;
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,215,0,0.35);
+    box-shadow:
+      0 0 40px rgba(255,215,0,0.25),
+      inset 0 0 25px rgba(255,255,255,0.05);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #echo-box h1 {
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 10px;
+  }
+
+  #echo-box .gold {
+    color: #FFD700;
+    text-shadow: 0 0 12px rgba(255,215,0,0.9);
+  }
+
+  #echo-box .subtitle {
+    font-size: 15px;
+    color: #ddd;
+    margin-bottom: 24px;
+  }
+
+  #echo-box p {
+    font-size: 13px;
+    color: #ccc;
+    margin-bottom: 26px;
+  }
+
+  #echo-box a {
+    color: #000000;
+    text-decoration: none;
+  }
+
+  #echo-box a:hover {
+    transform: translateY(-20px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+
+  #echo-box:hover {
+    transform: translateY(-20px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+
+      #echo2-box {
+    width: 480px;
+    height: 256px;
+    max-width: 100%;
+    max-height: 100%;
+    padding: 40px;
+    border-radius: 22px;
+    background:
+      linear-gradient(rgba(255,215,0,0.07), rgba(255,215,0,0.14), transparent 90%),
+      url("https://github.com/SaintSGS-hub/SaintSGS-hub.github.io/releases/download/v1.0.1/echofundo2.gif") center / cover no-repeat;
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,215,0,0.35);
+    box-shadow:
+      0 0 40px rgba(255,215,0,0.25),
+      inset 0 0 25px rgba(255,255,255,0.05);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #echo2-box h1 {
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 10px;
+  }
+
+  #echo2-box .gold {
+    color: #FFD700;
+    text-shadow: 0 0 12px rgba(255,215,0,0.9);
+  }
+
+  #echo2-box .subtitle {
+    font-size: 15px;
+    color: #ddd;
+    margin-bottom: 24px;
+  }
+
+  #echo2-box p {
+    font-size: 13px;
+    color: #ccc;
+    margin-bottom: 26px;
+  }
+
+  #echo2-box a {
+    color: #000000;
+    text-decoration: none;
+  }
+
+  #echo2-box a:hover {
+    transform: translateY(-20px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+
+    #echo2-box:hover {
+    transform: translateY(-20px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+
+        #pass-box {
+    width: 480px;
+    height: 256px;
+    max-width: 100%;
+    max-height: 100%;
+    padding: 40px;
+    border-radius: 22px;
+    background:
+      linear-gradient(rgba(255,215,0,0.07), rgba(255,215,0,0.14), transparent 90%),
+      url("https://github.com/SaintSGS-hub/SaintSGS-hub.github.io/releases/download/v1.0.1/passfundoindex.gif") center / cover no-repeat;
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,215,0,0.35);
+    box-shadow:
+      0 0 40px rgba(255,215,0,0.25),
+      inset 0 0 25px rgba(255,255,255,0.05);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #pass-box h1 {
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 10px;
+  }
+
+  #pass-box .gold {
+    color: #FFD700;
+    text-shadow: 0 0 12px rgba(255,215,0,0.9);
+  }
+
+  #pass-box .subtitle {
+    font-size: 15px;
+    color: #ddd;
+    margin-bottom: 24px;
+  }
+
+  #pass-box p {
+    font-size: 13px;
+    color: #ccc;
+    margin-bottom: 26px;
+  }
+
+  #pass-box a {
+    color: #000000;
+    text-decoration: none;
+  }
+
+  #pass-box a:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+
+    #pass-box:hover {
+    transform: translateY(-20px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+  
+      #echomb-box {
+    width: 480px;
+    height: 256px;
+    max-width: 100%;
+    max-height: 100%;
+    padding: 40px;
+    border-radius: 22px;
+    background:
+      linear-gradient(rgba(255,215,0,0.07), rgba(255,215,0,0.14), transparent 90%),
+      url("/img/discordmb.png") center / cover no-repeat;
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,215,0,0.35);
+    box-shadow:
+      0 0 40px rgba(255,215,0,0.25),
+      inset 0 0 25px rgba(255,255,255,0.05);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #echomb-box h1 {
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 10px;
+  }
+
+  #echomb-box .gold {
+    color: #FFD700;
+    text-shadow: 0 0 12px rgba(255,215,0,0.9);
+  }
+
+  #echomb-box .subtitle {
+    font-size: 15px;
+    color: #ddd;
+    margin-bottom: 24px;
+  }
+
+  #echomb-box p {
+    font-size: 13px;
+    color: #ccc;
+    margin-bottom: 26px;
+  }
+
+  #echomb-box a {
+    color: #000000;
+    text-decoration: none;
+  }
+
+  #echomb-box a:hover {
+    transform: translateY(-20px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+
+  #echomb-box:hover {
+    transform: translateY(-20px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+
+      #echoof-box {
+    width: 480px;
+    height: 256px;
+    max-width: 100%;
+    max-height: 100%;
+    padding: 40px;
+    border-radius: 22px;
+    background:
+      linear-gradient(rgba(255,215,0,0.07), rgba(255,215,0,0.14), transparent 90%),
+      url("/img/discordoficial.png") center / cover no-repeat;
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,215,0,0.35);
+    box-shadow:
+      0 0 40px rgba(255,215,0,0.25),
+      inset 0 0 25px rgba(255,255,255,0.05);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #echoof-box h1 {
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 10px;
+  }
+
+  #echoof-box .gold {
+    color: #FFD700;
+    text-shadow: 0 0 12px rgba(255,215,0,0.9);
+  }
+
+  #echoof-box .subtitle {
+    font-size: 15px;
+    color: #ddd;
+    margin-bottom: 24px;
+  }
+
+  #echoof-box p {
+    font-size: 13px;
+    color: #ccc;
+    margin-bottom: 26px;
+  }
+
+  #echoof-box a {
+    color: #000000;
+    text-decoration: none;
+  }
+
+  #echoof-box a:hover {
+    transform: translateY(-20px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+
+  #echoof-box:hover {
+    transform: translateY(-20px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+
+      #echofr-box {
+    width: 480px;
+    height: 256px;
+    max-width: 100%;
+    max-height: 100%;
+    padding: 40px;
+    border-radius: 22px;
+    background:
+      linear-gradient(rgba(255,215,0,0.07), rgba(255,215,0,0.14), transparent 90%),
+      url("/img/discordfr.jpg") center / cover no-repeat;
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,215,0,0.35);
+    box-shadow:
+      0 0 40px rgba(255,215,0,0.25),
+      inset 0 0 25px rgba(255,255,255,0.05);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #echofr-box h1 {
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 10px;
+  }
+
+  #echofr-box .gold {
+    color: #FFD700;
+    text-shadow: 0 0 12px rgba(255,215,0,0.9);
+  }
+
+  #echofr-box .subtitle {
+    font-size: 15px;
+    color: #ddd;
+    margin-bottom: 24px;
+  }
+
+  #echofr-box p {
+    font-size: 13px;
+    color: #ccc;
+    margin-bottom: 26px;
+  }
+
+  #echofr-box a {
+    color: #000000;
+    text-decoration: none;
+  }
+
+  #echofr-box a:hover {
+    transform: translateY(-20px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+
+  #echofr-box:hover {
+    transform: translateY(-20px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+
+      #echofl-box {
+    width: 480px;
+    height: 256px;
+    max-width: 100%;
+    max-height: 100%;
+    padding: 40px;
+    border-radius: 22px;
+    background:
+      linear-gradient(rgba(255,215,0,0.07), rgba(255,215,0,0.14), transparent 90%),
+      url("/img/discordfirefly.png") center / cover no-repeat;
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,215,0,0.35);
+    box-shadow:
+      0 0 40px rgba(255,215,0,0.25),
+      inset 0 0 25px rgba(255,255,255,0.05);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #echofl-box h1 {
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 10px;
+  }
+
+  #echofl-box .gold {
+    color: #FFD700;
+    text-shadow: 0 0 12px rgba(255,215,0,0.9);
+  }
+
+  #echofl-box .subtitle {
+    font-size: 15px;
+    color: #ddd;
+    margin-bottom: 24px;
+  }
+
+  #echofl-box p {
+    font-size: 13px;
+    color: #ccc;
+    margin-bottom: 26px;
+  }
+
+  #echofl-box a {
+    color: #000000;
+    text-decoration: none;
+  }
+
+  #echofl-box a:hover {
+    transform: translateY(-20px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+
+  #echofl-box:hover {
+    transform: translateY(-20px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+
+      #echorv-box {
+    width: 480px;
+    height: 256px;
+    max-width: 100%;
+    max-height: 100%;
+    padding: 40px;
+    border-radius: 22px;
+    background:
+      linear-gradient(rgba(255,215,0,0.07), rgba(255,215,0,0.14), transparent 90%),
+      url("/img/discordriver.png") center / cover no-repeat;
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,215,0,0.35);
+    box-shadow:
+      0 0 40px rgba(255,215,0,0.25),
+      inset 0 0 25px rgba(255,255,255,0.05);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #echorv-box h1 {
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 10px;
+  }
+
+  #echorv-box .gold {
+    color: #FFD700;
+    text-shadow: 0 0 12px rgba(255,215,0,0.9);
+  }
+
+  #echorv-box .subtitle {
+    font-size: 15px;
+    color: #ddd;
+    margin-bottom: 24px;
+  }
+
+  #echorv-box p {
+    font-size: 13px;
+    color: #ccc;
+    margin-bottom: 26px;
+  }
+
+  #echorv-box a {
+    color: #000000;
+    text-decoration: none;
+  }
+
+  #echorv-box a:hover {
+    transform: translateY(-20px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+
+  #echorv-box:hover {
+    transform: translateY(-20px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+
+      #echoru-box {
+    width: 480px;
+    height: 256px;
+    max-width: 100%;
+    max-height: 100%;
+    padding: 40px;
+    border-radius: 22px;
+    background:
+      linear-gradient(rgba(255,215,0,0.07), rgba(255,215,0,0.14), transparent 90%),
+      url("/img/discordru.png") center / cover no-repeat;
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,215,0,0.35);
+    box-shadow:
+      0 0 40px rgba(255,215,0,0.25),
+      inset 0 0 25px rgba(255,255,255,0.05);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #echoru-box h1 {
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 10px;
+  }
+
+  #echoru-box .gold {
+    color: #FFD700;
+    text-shadow: 0 0 12px rgba(255,215,0,0.9);
+  }
+
+  #echoru-box .subtitle {
+    font-size: 15px;
+    color: #ddd;
+    margin-bottom: 24px;
+  }
+
+  #echoru-box p {
+    font-size: 13px;
+    color: #ccc;
+    margin-bottom: 26px;
+  }
+
+  #echoru-box a {
+    color: #000000;
+    text-decoration: none;
+  }
+
+  #echoru-box a:hover {
+    transform: translateY(-20px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+
+  #echoru-box:hover {
+    transform: translateY(-20px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+
+      #echovc-box {
+    width: 480px;
+    height: 256px;
+    max-width: 100%;
+    max-height: 100%;
+    padding: 40px;
+    border-radius: 22px;
+    background:
+      linear-gradient(rgba(255,215,0,0.07), rgba(255,215,0,0.14), transparent 90%),
+      url("/img/discordvcchat.png") center / cover no-repeat;
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,215,0,0.35);
+    box-shadow:
+      0 0 40px rgba(255,215,0,0.25),
+      inset 0 0 25px rgba(255,255,255,0.05);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #echovc-box h1 {
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 10px;
+  }
+
+  #echovc-box .gold {
+    color: #FFD700;
+    text-shadow: 0 0 12px rgba(255,215,0,0.9);
+  }
+
+  #echovc-box .subtitle {
+    font-size: 15px;
+    color: #ddd;
+    margin-bottom: 24px;
+  }
+
+  #echovc-box p {
+    font-size: 13px;
+    color: #ccc;
+    margin-bottom: 26px;
+  }
+
+  #echovc-box a {
+    color: #000000;
+    text-decoration: none;
+  }
+
+  #echovc-box a:hover {
+    transform: translateY(-20px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+
+  #echovc-box:hover {
+    transform: translateY(-20px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+
+      #echode-box {
+    width: 480px;
+    height: 256px;
+    max-width: 100%;
+    max-height: 100%;
+    padding: 40px;
+    border-radius: 22px;
+    background:
+      linear-gradient(rgba(255,215,0,0.07), rgba(255,215,0,0.14), transparent 90%),
+      url("/img/discordde.png") center / cover no-repeat;
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,215,0,0.35);
+    box-shadow:
+      0 0 40px rgba(255,215,0,0.25),
+      inset 0 0 25px rgba(255,255,255,0.05);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #echode-box h1 {
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 10px;
+  }
+
+  #echode-box .gold {
+    color: #FFD700;
+    text-shadow: 0 0 12px rgba(255,215,0,0.9);
+  }
+
+  #echode-box .subtitle {
+    font-size: 15px;
+    color: #ddd;
+    margin-bottom: 24px;
+  }
+
+  #echode-box p {
+    font-size: 13px;
+    color: #ccc;
+    margin-bottom: 26px;
+  }
+
+  #echode-box a {
+    color: #000000;
+    text-decoration: none;
+  }
+
+  #echode-box a:hover {
+    transform: translateY(-20px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+
+  #echode-box:hover {
+    transform: translateY(-20px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+
+      #echolfg-box {
+    width: 480px;
+    height: 256px;
+    max-width: 100%;
+    max-height: 100%;
+    padding: 40px;
+    border-radius: 22px;
+    background:
+      linear-gradient(rgba(255,215,0,0.07), rgba(255,215,0,0.14), transparent 90%),
+      url("/img/discordlfghub.png") center / cover no-repeat;
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,215,0,0.35);
+    box-shadow:
+      0 0 40px rgba(255,215,0,0.25),
+      inset 0 0 25px rgba(255,255,255,0.05);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #echolfg-box h1 {
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 10px;
+  }
+
+  #echolfg-box .gold {
+    color: #FFD700;
+    text-shadow: 0 0 12px rgba(255,215,0,0.9);
+  }
+
+  #echolfg-box .subtitle {
+    font-size: 15px;
+    color: #ddd;
+    margin-bottom: 24px;
+  }
+
+  #echolfg-box p {
+    font-size: 13px;
+    color: #ccc;
+    margin-bottom: 26px;
+  }
+
+  #echolfg-box a {
+    color: #000000;
+    text-decoration: none;
+  }
+
+  #echolfg-box a:hover {
+    transform: translateY(-20px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+
+  #echolfg-box:hover {
+    transform: translateY(-20px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+
+  /* ================================
+     CONSENT GATE
+  ================================ */
+
+  #consent-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+
+  #consent-box {
+    width: 720px;
+    height: 480px;
+    max-width: 92%;
+    max-height: 90%;
+    padding: 40px;
+    border-radius: 22px;
+    background:
+      linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.75)),
+      url("/img/fundo2.png") center / cover no-repeat;
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,215,0,0.35);
+    box-shadow:
+      0 0 40px rgba(255,215,0,0.25),
+      inset 0 0 25px rgba(255,255,255,0.05);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #consent-box h1 {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 10px;
+  }
+
+  #consent-box .gold {
+    color: #FFD700;
+    text-shadow: 0 0 12px rgba(255,215,0,0.9);
+  }
+
+  #consent-box .subtitle {
+    font-size: 15px;
+    color: #ddd;
+    margin-bottom: 24px;
+  }
+
+  #consent-box p {
+    font-size: 13px;
+    color: #ccc;
+    margin-bottom: 26px;
+  }
+
+  #consent-box a {
+    color: #FFD700;
+    text-decoration: none;
+  }
+
+  #consent-box a:hover {
+    text-decoration: underline;
+  }
+
+  #accept-consent {
+    padding: 14px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #FFD700, #eab308);
+    color: #000;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(255,215,0,0.45);
+  }
+
+  #accept-consent:hover {
+    box-shadow: 0 0 28px rgba(255,215,0,0.75);
+  }
+</style>
+</head>
+
+<body class="bg-black text-white font-sans">
+
+<!-- CONSENT MODAL -->
+<div id="consent-overlay">
+  <div id="consent-box">
+    <h1 class="glow-float">
+      Saint<span class="gold">WWM</span>
+    </h1>
+    <div class="subtitle">Top Up of Echo Beads</div>
+
+    <p>
+      To view the products, you must accept the
+      <a href="/ru/ru-tos.html" target="_blank">Terms of Service</a>
+      and the
+      <a href="/ru/ru-privacidade.html" target="_blank">Privacy Policy</a>.
+    </p>
+
+    <button id="accept-consent">
+      Disclose products and accept terms
+    </button>
+  </div>
+  
+</div>
+
+<!-- SITE REAL -->
+<div id="site-content" style="display:none;">
+
+<div id="parallax-wrapper" class="max-w-6xl mx-auto p-6">
+
+<div class="title-wrapper">
+  <h1 class="text-4xl font-bold text-center glow-float">Echo Beads • Top-Up</h1>
+</div>
+
+<div class="title-wrapper">
+  <h2 class="text-4xl font-bold text-center glow-float">
+    Saint<span style="color:#FFD700;">WWM</span>
+  </h2>
+</div>
+
+<p class="text-center text-gray-400 mb-10">
+Payment via PIX • Manual delivery • Safe and reliable
+</p>
+
+<p class="text-center text-gray-200 font-black mb-10">
+The BEST option for those who want to buy Echo Beads for themselves or send Gift Echo Beads to another user. 🎁🦪
+</p>
+
+<div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+
+<!-- PRODUTOS (inalterados) -->
+<!-- 60 -->
+<!-- Cards de produtos continuam iguais -->
+<div class="product-card text-center">
+  <h2 class="text-xl mb-2 font-bold glow-float">🦪 60 Echo Beads 🦪</h2><br>
+  <div class="price-wrapper">
+  <span class="glow-float text-center font-bold text-red-500">₽ 190,00</span><br>
+    <img
+      src="/img/knightwwm.gif"
+      alt="10% OFF"
+      class="price-slash"
+    />
+  </div>
+  <span class="valor-glow glow-float text-xl mb-2 font-bold text-center">₽ 180,00</span><br>
+  <a href="/ru/ru-pagamento-60-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar glow-float">[BUY]</a>
+</div>
+
+<div class="product-card text-center">
+  <h2 class="text-xl mb-2 font-bold glow-float">🦪 180 Echo Beads 🦪</h2><br>
+  <div class="price-wrapper">
+  <span class="glow-float text-center font-bold text-red-500">₽ 600,00</span><br>
+    <img
+      src="/img/knightwwm.gif"
+      alt="10% OFF"
+      class="price-slash"
+    />
+  </div>
+  <span class="valor-glow glow-float text-xl mb-2 font-bold text-center">₽ 500,00</span><br>
+  <a href="/ru/ru-pagamento-180-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar glow-float">[BUY]</a>
+</div>
+
+<div class="product-card text-center">
+  <h2 class="text-xl mb-2 font-bold glow-float">🦪 300 Echo Beads 🦪</h2><br>
+  <div class="price-wrapper">
+  <span class="glow-float text-center font-bold text-red-500">₽ 800,00</span><br>
+    <img
+      src="/img/knightwwm.gif"
+      alt="10% OFF"
+      class="price-slash"
+    />
+  </div>
+  <span class="valor-glow glow-float text-xl mb-2 font-bold text-center">₽ 700,00</span><br>
+  <a href="/ru/ru-pagamento-300-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar glow-float">[BUY]</a>
+</div>
+
+<div class="product-card text-center">
+  <h2 class="text-xl mb-2 font-bold glow-float">🦪 600 Echo Beads 🦪</h2><br>
+  <div class="price-wrapper">
+  <span class="glow-float text-center font-bold text-red-500">₽ 1.500,00</span><br>
+    <img
+      src="/img/knightwwm.gif"
+      alt="10% OFF"
+      class="price-slash"
+    />
+  </div>
+  <span class="valor-glow glow-float text-xl mb-2 font-bold text-center">₽ 1.300,00</span><br>
+  <a href="/ru/ru-pagamento-600-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar glow-float">[BUY]</a>
+</div>
+
+<div class="product-card text-center">
+  <h2 class="text-xl mb-2 font-bold glow-float">🦪 900 Echo Beads 🦪</h2><br>
+  <div class="price-wrapper">
+  <span class="glow-float text-center font-bold text-red-500">₽ 2.200,00</span><br>
+    <img
+      src="/img/knightwwm.gif"
+      alt="10% OFF"
+      class="price-slash"
+    />
+  </div>
+  <span class="valor-glow glow-float text-xl mb-2 font-bold text-center">₽ 1.900,00</span><br>
+  <a href="/ru/ru-pagamento-900-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar glow-float">[BUY]</a>
+</div>
+
+<div class="product-card text-center">
+  <h2 class="text-xl mb-2 font-bold glow-float">🦪 1800 Echo Beads 🦪</h2><br>
+  <div class="price-wrapper">
+  <span class="glow-float text-center font-bold text-red-500">₽ 4.000,00</span><br>
+    <img
+      src="/img/knightwwm.gif"
+      alt="10% OFF"
+      class="price-slash"
+    />
+  </div>
+  <span class="valor-glow glow-float text-xl mb-2 font-bold text-center">₽ 3.600,00</span><br>
+  <a href="/ru/ru-pagamento-1800-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar glow-float">[BUY]</a>
+</div>
+
+<div class="product-card text-center">
+  <h2 class="text-xl mb-2 font-extrabold valor-glow glow-float">🦪 3000 Echo Beads 🦪</h2><br>
+  <div class="price-wrapper">
+  <span class="glow-float text-center font-bold text-red-500">₽ 6.600,00</span><br>
+    <img
+      src="/img/knightwwm.gif"
+      alt="10% OFF"
+      class="price-slash"
+    />
+  </div>
+  <span class="valor-glow glow-float text-xl mb-2 font-bold text-center">₽ 6.000,00</span><br>
+  <a href="/ru/ru-pagamento-3000-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar glow-float">[SEE DETAILS]</a>
+</div>
+
+<div class="product-card text-center">
+  <h2 class="text-xl mb-2 font-extrabold valor-glow glow-float">🦪 6000 Echo Beads 🦪</h2><br>
+  <div class="price-wrapper">
+  <span class="glow-float text-center font-bold text-red-500">₽ 12.700,00</span><br>
+    <img
+      src="/img/knightwwm.gif"
+      alt="10% OFF"
+      class="price-slash"
+    />
+  </div>
+  <span class="valor-glow glow-float text-xl mb-2 font-bold text-center">₽ 11.700,00</span><br>
+  <a href="/ru/ru-pagamento-6000-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar glow-float">[SEE DETAILS]</a>
+</div>
+
+<div class="product-card text-center">
+  <h2 class="text-xl mb-2 font-extrabold valor-glow glow-float">🦪 12000 Echo Beads 🦪</h2><br>
+  <div class="price-wrapper">
+  <span class="glow-float text-center font-bold text-red-500">₽ 24.400,00</span><br>
+    <img
+      src="/img/knightwwm.gif"
+      alt="10% OFF"
+      class="price-slash"
+    />
+  </div>
+  <span class="valor-glow glow-float text-xl mb-2 font-bold text-center">₽ 22.200,00</span><br>
+  <a href="/ru/ru-pagamento-12000-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar glow-float">[SEE DETAILS]</a>
+</div>
+<!-- (demais cards continuam exatamente iguais ao seu original) -->
+</div>
+</div>
+</div>
+<div class="text-center">
+  <span class="valor-glow">____________________________________________________________________________________________________________________________________________________________________________________________ </span>
+</div>
+<!-- <div class="product-card2 text-center">
+  <span class="text-xl valor-glow font-bold glow-float text-center">EM BREVE.. PASSES DE BATALHA E MAIS!</span>
+</div> -->
+</div>
+<div id="parallax-wrapper" class="max-w-6xl mx-auto p-6">
+<div class="flex items-center justify-center">
+<div class="grid sm:grid-cols-2 md:grid-cols-2 gap-14">
+  <div id="echo-box">
+    <h1 class="glow-float font-bold">
+      MEGA<span class="gold">PACK</span>
+    </h1>
+    <h2 class="text-xl mb-2 font-black glow-float">🦪 36000 <span class="gold">Echo Beads</span> 🦪</h2><br>
+    <span class="glow-float text-center font-extrabold text-red-500">₽ 66.000,00</span><br>
+    <span class="valor-glow glow-float text-xl mb-2 font-black text-center">₽ 60.300,00</span><br>
+    <div>
+   <a href="/ru/ru-saints-premium-pack-36000-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar glow-float">[SEE DETAILS]</a>
+    </div>
+  </div>
+  <div id="echo2-box">
+    <h1 class="glow-float font-bold">
+      MEGA<span class="gold">PACK</span>
+    </h1>
+    <h2 class="text-xl mb-2 font-black glow-float">🦪 60000 <span class="gold">Echo Beads</span> 🦪</h2><br>
+    <span class="glow-float text-center font-extrabold text-red-500">₽ 120.000,00</span><br>
+    <span class="valor-glow glow-float text-xl mb-2 font-black text-center">₽ 110.000,00</span><br>
+    
+   <a href="/ru/ru-saints-premium-pack-60000-echo-beads.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar glow-float">[SEE DETAILS]</a>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="text-center">
+  <span class="valor-glow">____________________________________________________________________________________________________________________________________________________________________________________________ </span><br>
+</div>
+</div>
+<div id="parallax-wrapper" class="max-w-6xl mx-auto p-6">
+<div class="flex items-center justify-center">
+<div class="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
+  <div id="pass-box">
+    <h1 class="glow-float font-bold">
+    <span class="gold font-bold">MONTHLY</span> PASS
+    </h1>
+    <h2 class="text-xl mb-2 font-extrabold glow-float">🎖️ Monthly 🎖️</h2><br>
+    <span class="glow-float text-center font-extrabold text-red-500">₽ 800,00</span><br>
+    <span class="valor-glow glow-float text-xl mb-2 font-black text-center">₽ 600,00</span><br>
+    <div>
+   <a href="/ru/ru-monthly-pass-pagamento.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar glow-float">[BUY]</a>
+    </div>
+  </div>
+  <div id="pass-box">
+    <h1 class="glow-float font-bold">
+    <span class="gold font-bold">ELITE</span> BATTLE PASS
+    </h1>
+    <h2 class="text-xl mb-2 font-extrabold glow-float">🥇 Elite 🎖️</h2><br>
+    <span class="glow-float text-center font-extrabold text-red-500">₽ 1.400,00</span><br>
+    <span class="valor-glow glow-float text-xl mb-2 font-black text-center">₽ 1.200,00</span><br>
+    
+   <a href="/ru/ru-elite-battle-pass-pagamento.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar glow-float">[BUY]</a>
+  </div>
+    <div id="pass-box">
+    <h1 class="glow-float font-bold">
+    <span class="gold font-bold">PREMIUM</span> BATTLE PASS
+    </h1>
+    <h2 class="text-xl mb-2 font-extrabold glow-float">🏆 Premium 🏆</h2><br>
+    <span class="glow-float text-center font-extrabold text-red-500">₽ 2.400,00</span><br>
+    <span class="valor-glow glow-float text-xl mb-2 font-black text-center">₽ 2.100,00</span><br>
+    
+   <a href="/ru/ru-premium-battle-pass-pagamento.html" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar glow-float">[BUY]</a>
+  </div>
+</div>
+</div>
+</div>
+  <div class="text-center">
+  <span class="valor-glow">____________________________________________________________________________________________________________________________________________________________________________________________ </span><br>
+</div>
+
+<div id="parallax-wrapper" class="max-w-6xl mx-auto p-6">
+<div class="min-h-screen">
+
+    <div class="title-wrapper">
+  <h2 class="text-4xl font-extrabold text-center glow-float">
+    DISCORD<span style="color:#FFD700;">SERVER</span>PARTNERS<br>
+  </h2>
+</div>
+
+<div class="flex items-center justify-center">
+  <div class="grid grid-cols-3 gap-6">
+
+  <div id="echomb-box">
+    <h1 class="glow-float font-bold">
+      RECOMMENDED<span class="gold">DISCORD</span>
+    </h1>
+    <h2 class="text-xl mb-2 font-black glow-float">THE OG <span class="gold">MIRAGE</span> BOAT</h2><br>
+    <span class="glow-float text-center font-extrabold text-white-500">SERVER TAG DESCRIPTION</span><br>
+    <span class="valor-glow glow-float text-xl mb-2 font-black text-center">Community Message</span><br>
+    <div>
+   <a href="https://discord.gg/mirageboat" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar glow-float">[JOIN TO SERVER]</a>
+    </div>
+  </div>
+  <div id="echoof-box">
+    <h1 class="glow-float font-bold">
+      RECOMMENDED<span class="gold">DISCORD</span>
+    </h1>
+    <h2 class="text-xl mb-2 font-black glow-float">OFFICIAL <span class="gold">WWM</span> DISCORD</h2><br>
+    <span class="glow-float text-center font-extrabold text-white-500">Official Server</span><br>
+    <span class="valor-glow glow-float text-xl mb-2 font-black text-center">come on young wanderer!</span><br>
+    
+   <a href="https://discord.gg/zr2RGms2jF" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar glow-float">[JOIN TO SERVER]</a>
+  </div>
+    <div id="echofr-box">
+    <h1 class="glow-float font-bold">
+      RECOMMENDED<span class="gold">DISCORD</span>
+    </h1>
+    <h2 class="text-xl mb-2 font-black glow-float">WWM <span class="gold">FRANCE</span> SERVER</h2><br>
+    <span class="glow-float text-center font-extrabold text-white-500">SERVER TAG DESCRIPTION</span><br>
+    <span class="valor-glow glow-float text-xl mb-2 font-black text-center">Community Message</span><br>
+    
+   <a href="https://discord.gg/YxFK4mxvXn" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar glow-float">[JOIN TO SERVER]</a>
+  </div>
+
+    <div id="echofl-box">
+    <h1 class="glow-float font-bold">
+      RECOMMENDED<span class="gold">DISCORD</span>
+    </h1>
+    <h2 class="text-xl mb-2 font-black glow-float">The <span class="gold">Firefly</span></h2><br>
+    <span class="glow-float text-center font-extrabold text-white-500">SERVER TAG DESCRIPTION</span><br>
+    <span class="valor-glow glow-float text-xl mb-2 font-black text-center">Community Message</span><br>
+    <div>
+   <a href="https://discord.gg/7vKkSaPz4Y" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar glow-float">[JOIN TO SERVER]</a>
+    </div>
+  </div>
+  <div id="echorv-box">
+    <h1 class="glow-float font-bold">
+      RECOMMENDED<span class="gold">DISCORD</span>
+    </h1>
+    <h2 class="text-xl mb-2 font-black glow-float"><span class="gold">RIVER</span> SERVER</h2><br>
+    <span class="glow-float text-center font-extrabold text-white-500">SERVER TAG DESCRIPTION</span><br>
+    <span class="valor-glow glow-float text-xl mb-2 font-black text-center">Community Message</span><br>
+    
+   <a href="https://discord.gg/river" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar glow-float">[JOIN TO SERVER]</a>
+  </div>
+    <div id="echoru-box">
+    <h1 class="glow-float font-bold">
+      RECOMMENDED<span class="gold">DISCORD</span>
+    </h1>
+    <h2 class="text-xl mb-2 font-black glow-float">WWM <span class="gold">RU</span> SERVER</h2><br>
+    <span class="glow-float text-center font-extrabold text-white-500">SERVER TAG DESCRIPTION</span><br>
+    <span class="valor-glow glow-float text-xl mb-2 font-black text-center">Community Message</span><br>
+    
+   <a href="https://discord.gg/7APpyTkCCQ" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar glow-float">[JOIN TO SERVER]</a>
+  </div>
+
+    <div id="echovc-box">
+    <h1 class="glow-float font-bold">
+      RECOMMENDED<span class="gold">DISCORD</span>
+    </h1>
+    <h2 class="text-xl mb-2 font-black glow-float">WWM <span class="gold">VC & CHAT</span> SERVER</h2><br>
+    <span class="glow-float text-center font-extrabold text-white-500">SERVER TAG DESCRIPTION</span><br>
+    <span class="valor-glow glow-float text-xl mb-2 font-black text-center">Community Message</span><br>
+    <div>
+   <a href="https://discord.gg/nZaqUWH3QV" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar glow-float">[JOIN TO SERVER]</a>
+    </div>
+  </div>
+  <div id="echode-box">
+    <h1 class="glow-float font-bold">
+      RECOMMENDED<span class="gold">DISCORD</span>
+    </h1>
+    <h2 class="text-xl mb-2 font-black glow-float">WWM <span class="gold">DEUTSCH</span> SERVER</h2><br>
+    <span class="glow-float text-center font-extrabold text-white-500">SERVER TAG DESCRIPTION</span><br>
+    <span class="valor-glow glow-float text-xl mb-2 font-black text-center">Community Message</span><br>
+    
+   <a href="https://discord.gg/PbeTAnsMT7" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar glow-float">[JOIN TO SERVER]</a>
+  </div>
+    <div id="echolfg-box">
+    <h1 class="glow-float font-bold">
+      RECOMMENDED<span class="gold">DISCORD</span>
+    </h1>
+    <h2 class="text-xl mb-2 font-black glow-float">WWM <span class="gold">LFG & Hub</span> SERVER</h2><br>
+    <span class="glow-float text-center font-extrabold text-white-500">SERVER TAG DESCRIPTION</span><br>
+    <span class="valor-glow glow-float text-xl mb-2 font-black text-center">Community Message</span><br>
+    
+   <a href="https://discord.gg/U8DqnhqfTT" class="block bg-yellow-500 text-black py-2 rounded-lg hover:opacity-90 btn-comprar glow-float">[JOIN TO SERVER]</a>
+  </div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- DISCORD -->
+<a href="https://discordapp.com/users/715081298254888990" target="_blank" id="discord-icon">
+  <img src="/img/discord.png" alt="Discord" />
+</a>
+
+<style>
+#discord-icon {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 1000;
+}
+#discord-icon:hover {
+  transform: scale(1.1);
+}
+</style>
+
+<!-- BOTÃO SUPORTE -->
+<div id="support-btn">
+  <img src="/img/suporte.png" alt="Suporte" />
+</div>
+
+<style>
+#support-btn {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #FFD700;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0,0,0,.4);
+  z-index: 1000;
+}
+#support-btn:hover {
+  transform: scale(1.08);
+}
+</style>
+
+<div id="support-modal">
+  <form id="support-form">
+    <h2>Contato com Suporte</h2>
+
+    <input name="name" placeholder="Nome completo" required>
+    <input name="whatsapp" placeholder="WhatsApp" required>
+    <input name="email" type="email" placeholder="Email" required>
+    <input name="subject" placeholder="Assunto" required>
+    <textarea name="message" placeholder="Mensagem" required></textarea>
+
+    <button type="submit">Enviar</button>
+  </form>
+</div>
+
+<style>
+#support-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.7);
+  z-index: 1001;
+}
+#support-form {
+  background: #111;
+  color: #fff;
+  max-width: 400px;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+#support-form input,
+#support-form textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+
+  background: #fff;   /* fundo do campo */
+  color: #111;        /* texto que o cliente digita */
+}
+</style>
+
+<p class="text-center text-gray-500 mt-10 text-sm">
+CNPJ • Payment via Mercado Pago • Delivery after manual confirmation
+</p>
+  
+<script src="/js/effects.js"></script>
+
+<footer class="w-full mt-16 pt-8 pb-6">
+  <div class="max-w-5xl mx-auto text-center text-sm text-gray-500 space-y-4">
+
+    <!-- Linha 2: Métodos de pagamento -->
+    <div class="flex flex-wrap justify-center items-center gap-4 mt-4">
+      <img src="/img/pix.png" alt="Pix" class="h-6">
+      <img src="/img/visa.png" alt="Visa" class="h-6">
+      <img src="/img/mastercard.png" alt="MasterCard" class="h-6">
+      <img src="/img/mercadopago.png" alt="Mercado Pago" class="h-6">
+    </div>
+    
+    <!-- Linha 1: Segurança básica -->
+    <div class="flex flex-wrap justify-center font-semibold gap-6">
+      <span>🔒 Secure payment</span>
+      <span>🧾 Secure purchase</span>
+      <span>⚡ Automatic digital delivery / Manual verification</span>
+    </div>
+
+    <!-- Linha 3: Selos textuais (subconsciente trabalha aqui) -->
+    <div class="flex flex-wrap justify-center gap-6 mt-4 text-xs font-semibold uppercase tracking-wide">
+      <span>🔐 SSL Secure Checkout</span>
+      <span>🧾 Terms Accepted</span>
+      <span>⚙️ Manual delivery after confirmation</span>
+      <span>⏱️ 24-hour service ON</span>
+    </div>
+
+    <!-- Linha 4: Claims de confiança (estilo marketplaces grandes) -->
+    <div class="valor-glow2 flex flex-wrap justify-center gap-6 mt-4 font-semibold">
+      <span>✔ Secure Digital Delivery</span>
+      <span>✔ Verified Payment Flow</span>
+      <span>✔ Manual In-Game Delivery</span>
+      <span>✔ Terms Accepted & Logged</span>
+    </div>
+
+    <!-- Linha 5: Legal -->
+    <div class="mt-6 text-xs text-gray-400">
+      <a href="/ru/ru-tos.html" class="underline">Terms of Use</a> •
+      <a href="/ru/ru-privacidade.html" class="underline">Privacy Policy</a>
+    </div>
+
+  </div>
+</footer>
+  
+<script>
+const btn = document.getElementById("support-btn");
+const modal = document.getElementById("support-modal");
+
+btn.onclick = () => modal.style.display = "block";
+modal.onclick = e => {
+  if (e.target === modal) modal.style.display = "none";
+};
+</script>
+
+<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script>
+(function(){
+  emailjs.init("fjXHE6FnezGdisp_s");
+})();
+
+document.getElementById("support-form").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  emailjs.sendForm(
+    "service_cuecopv",
+    "template_m4anla3",
+    this
+  ).then(() => {
+    alert("Mensagem enviada com sucesso!");
+    this.reset();
+    document.getElementById("support-modal").style.display = "none";
+  }, err => {
+    alert("Erro ao enviar mensagem");
+    console.error(err);
+  });
+});
+</script>
+
+<script>
+(function () {
+  const consentKey = "saint_consent";
+  const overlay = document.getElementById("consent-overlay");
+  const site = document.getElementById("site-content");
+  const button = document.getElementById("accept-consent");
+
+  // Já aceitou antes
+  if (localStorage.getItem(consentKey)) {
+    overlay.style.display = "none";
+    site.style.display = "block";
+    if (window.startBackgroundMusic) window.startBackgroundMusic();
+    return;
+  }
+
+  // Clique único
+  button.addEventListener("click", async () => {
+    try {
+      const consentPayload = {
+        consent_version: "2026-01",
+        accepted_at: new Date().toISOString(),
+        user_agent: navigator.userAgent,
+        cidade: localStorage.getItem("cidade"),
+        estado: localStorage.getItem("estado"),
+        pais: localStorage.getItem("pais")
+      };
+
+      const response = await fetch(
+        "https://saint-echo-backend.neuroniosgames.workers.dev/register-consent",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(consentPayload)
+        }
+      );
+
+      const data = await response.json();
+
+      localStorage.setItem(consentKey, JSON.stringify(data));
+
+      overlay.style.display = "none";
+      site.style.display = "block";
+      if (window.startBackgroundMusic) window.startBackgroundMusic();
+
+    } catch (err) {
+      alert("Erro ao registrar consentimento. Tente novamente.");
+      console.error(err);
+    }
+  }, { once: true });
+})();
+</script>
+  
+</body>
+</html>
+
